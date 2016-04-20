@@ -23,6 +23,29 @@ void pcloud_io::cloud_txt(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::P
 
 }
 
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud(std::string path)
+{
+    std::string ext;    // files extension
+
+    size_t i = path.rfind('.', path.length());
+
+    if (i != string::npos)
+      ext = path.substr(i+1, path.length() - i);
+
+    if (ext == "pcd")
+
+    {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc;
+        pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *pc);
+        return pc;
+    }
+
+    else if (ext = "txt")
+    {
+        return pcloud_io::cloud_txt(path, pc);
+    }
+}
+
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloudtxt(std::string pathname)
 {
     QFile fichier( QString(pathname.c_str()) );

@@ -13,13 +13,15 @@ SOURCES += main.cpp \
     geom_op.cpp \
     vector3.cpp \
     segm.cpp \
-    pcloud_io.cpp
+    pcloud_io.cpp \
+    test_lib.cpp
 
 HEADERS += \
     geom_op.h \
     vector3.h \
     segm.h \
-    pcloud_io.h
+    pcloud_io.h \
+    test_lib.h
 
 HEADERS +=
 
