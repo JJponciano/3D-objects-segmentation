@@ -1,8 +1,8 @@
 #include <QCoreApplication>
 
 #include "segm.h"
-
-#include "pcloud_io.h"
+#include "../io/pcloud_io.h"
+#include "test_lib.h"
 
 #include <iostream>
 #include <time.h>
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
     // init_cloud();
 
-    cloud = pcloud_io::load_cloudtxt("/home/vlad-adrian/3D-objects-segmentation/data/table.txt");
+    /*cloud = pcloud_io::load_cloudtxt("/home/vlad-adrian/3D-objects-segmentation/data/table.txt");
     std::cout << cloud->at(5).rgb << std::endl;
 
     std::vector<std::pair<pcl::PointXYZRGB *, std::string>> cn = geom::estim_normals(cloud);
@@ -76,7 +76,9 @@ int main(int argc, char *argv[])
 
     pcloud_io::cloud_txt("/home/vlad-adrian/Documents/txt_tabtest.txt", cloud);
 
-    std::cout << "done" << std::endl;
+    std::cout << "done" << std::endl;*/
+
+    test_geom::test_crossprod();
 
     return a.exec();
 }

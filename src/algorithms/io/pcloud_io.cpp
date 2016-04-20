@@ -1,4 +1,4 @@
-#include "pcloud_io.h"
+#include "../io/pcloud_io.h"
 
 void pcloud_io::cloud_txt(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc)
 {
@@ -29,10 +29,10 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud(std::string path)
 
     size_t i = path.rfind('.', path.length());
 
-    if (i != string::npos)
+    if (i != std::string::npos)
       ext = path.substr(i+1, path.length() - i);
 
-    if (ext == "pcd")
+    if (ext.compare("pcd") == 0)
 
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc;
@@ -40,9 +40,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud(std::string path)
         return pc;
     }
 
-    else if (ext = "txt")
+    else if (ext.compare("txt") == 0)
     {
-        return pcloud_io::cloud_txt(path, pc);
+        return pcloud_io::load_cloudtxt(path);
     }
 }
 

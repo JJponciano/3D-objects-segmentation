@@ -13,21 +13,20 @@ SOURCES += main.cpp \
     geom_op.cpp \
     vector3.cpp \
     segm.cpp \
-    pcloud_io.cpp \
-    test_lib.cpp
+    test_lib.cpp \
+    ../io/pcloud_io.cpp
 
 HEADERS += \
     geom_op.h \
     vector3.h \
     segm.h \
-    pcloud_io.h \
-    test_lib.h
+    test_lib.h \
+    ../io/pcloud_io.h
 
 HEADERS +=
 
     target.path = /usr/lib
     INSTALLS += target
-
 
 # -------------------- PCL --------------------
 INCLUDEPATH += /usr/include/pcl-1.7

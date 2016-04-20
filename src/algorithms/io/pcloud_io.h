@@ -25,7 +25,7 @@ namespace pcloud_io
 
     // input functions
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr load_cloudtxt(std::string path);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr load_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr load_cloud(std::string path);
 }
 
 #endif // PCLOUD_IO_H
