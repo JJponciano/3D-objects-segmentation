@@ -19,7 +19,7 @@ namespace clstr{
         clustering();
         //This method returns a vector of the clouds obtained with the colored cloud input as a parameter
         static std::vector<std::vector<pcl::PointCloud<clstr::PointBool>::Ptr>> getCloudsByColor(pcl::PointCloud<clstr::PointBool>::Ptr base_cloud, double radius);
-
+        static void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool);
 
     private:
         static std::map<uint32_t, pcl::PointCloud<clstr::PointBool>::Ptr> color_map;

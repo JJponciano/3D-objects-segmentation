@@ -32,10 +32,13 @@ std::vector<std::vector<pcl::PointCloud<clstr::PointBool>::Ptr>> clstr::clusteri
      * We also set a radius so we can easily find the neighbours of each points
      * And finally we add the neighbourhood in their own cloud
      */
+    int counter = 0;
     for(map_it = color_map.begin(); map_it != color_map.end(); map_it++)
     {
+        std::cout << "Creating and segmenting KDtree number " << counter << std::endl;
         pcl::KdTreeFLANN<clstr::PointBool> kdtree = getCorrespondingKdTree(map_it->second);
         resulting_clouds.push_back(getCloudsFromKDTree(kdtree, radius));
+        counter++;
     }
     std::cout << "Finished finding clouds" << std::endl;
     int total_clouds = 0;
@@ -87,14 +90,23 @@ std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clstr::clustering::getClouds
     for(cloud_iterator=kdtree.getInputCloud()->begin(); cloud_iterator!=kdtree.getInputCloud()->end(); cloud_iterator++)
     {
         crtPointID.clear();
+        not_useful.clear();
+        pcl::PointCloud<clstr::PointBool>::Ptr final_cloud (new pcl::PointCloud<clstr::PointBool>);
         kdtree.radiusSearch(*cloud_iterator,1,crtPointID,not_useful,1);
         if(!(color_map[kdtree.getInputCloud()->points[crtPointID[0]].rgb])->points[crtPointID[0]].getVisited())
         {
+            std::cout << "Found a new cloud." << std::endl;
             pcl::PointCloud<clstr::PointBool>::Ptr new_cloud (new pcl::PointCloud<clstr::PointBool>);
             addSurroundingPointsToCloud(crtPointID[0], search_radius, kdtree, color_map[kdtree.getInputCloud()->points[crtPointID[0]].rgb], new_cloud);
-            clouds_found.push_back(new_cloud);
+            if(new_cloud->size()>=1000) clouds_found.push_back(new_cloud);
         }
     }
+    crtPointID.clear();
+    crtPointID.shrink_to_fit();
+    not_useful.clear();
+    not_useful.shrink_to_fit();
+    //kdtree.~KdTreeFLANN();
+
     return clouds_found;
 }
 
@@ -103,17 +115,34 @@ void clstr::clustering::addSurroundingPointsToCloud(int PointID, double search_r
     new_cloud->push_back(base_colored_cloud->points[PointID]);
     base_colored_cloud->points[PointID].setVisited(true);
 
-    std::vector<int> PointsID;
-    std::vector<float> not_useful;
+    std::vector<int> *PointsID = new std::vector<int>();
+    std::vector<float> *not_useful = new std::vector<float>();
 
-    if(kdtree.radiusSearch(base_colored_cloud->points[PointID], search_radius, PointsID, not_useful) > 1)
+    if(kdtree.radiusSearch(base_colored_cloud->points[PointID], search_radius, *PointsID, *not_useful) > 1)
     {
-        for(size_t i=1; i<PointsID.size(); i++)
+        for(std::vector<int>::iterator it = PointsID->begin(); it != PointsID->end(); it++)
         {
-            if(!kdtree.getInputCloud()->points[PointsID[i]].getVisited())
+            if(!kdtree.getInputCloud()->points[*it].getVisited())
             {
-                addSurroundingPointsToCloud(PointsID[i], search_radius, kdtree, base_colored_cloud, new_cloud);
+                addSurroundingPointsToCloud(*it, search_radius, kdtree, base_colored_cloud, new_cloud);
             }
         }
+    }
+    delete(PointsID);
+    delete(not_useful);
+}
+
+void clstr::clustering::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool)
+{
+    cloud_bool->width = cloud_RGB->width;
+    cloud_bool->height = cloud_RGB->height;
+    cloud_bool->resize(cloud_bool->width * cloud_bool->height);
+    for(size_t i=0; i<cloud_RGB->points.size(); i++)
+    {
+        cloud_bool->points[i].x = cloud_RGB->points[i].x;
+        cloud_bool->points[i].y = cloud_RGB->points[i].y;
+        cloud_bool->points[i].z = cloud_RGB->points[i].z;
+        cloud_bool->points[i].rgb = cloud_RGB->points[i].rgb;
+        cloud_bool->points[i].setVisited(false);
     }
 }

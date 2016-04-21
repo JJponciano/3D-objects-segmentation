@@ -18,10 +18,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
            clustering.cpp\
-           pointbool.cpp
+           pointbool.cpp\
+           pcloud_io.cpp
 
 HEADERS += clustering.h\
-           pointbool.h
+           pointbool.h\
+           pcloud_io.h
 
     target.path = /usr/lib
     INSTALLS += target
