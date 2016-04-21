@@ -63,7 +63,22 @@ float geom::vectors::dist(vector3 vect1, vector3 vect2)
     return std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
 }
 
-float geom::calc_angle3p(float x1, float y1, float x2, float y2, float x3, float y3)
+float geom::aux::calc_avg(std::vector<float> floats)
+{
+    float sum = 0;  // sum
+    float avg = 0;  // average
+
+    for (auto f : floats)
+    {
+        sum += f;
+    }
+
+    avg = sum / floats.size();
+
+    return avg;
+}
+
+float geom::aux::calc_angle3p(float x1, float y1, float x2, float y2, float x3, float y3)
 {
     float dist12;   // distance from point 1 to point 2
     float dist13;   // distance from point 1 to point 3
@@ -80,18 +95,35 @@ float geom::calc_angle3p(float x1, float y1, float x2, float y2, float x3, float
     return val_ang;
 }
 
-std::vector<std::pair<pcl::PointXYZRGB *, std::string>> geom::estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc)
+std::vector<float> geom::aux::calc_sphcoord(vectors::vector3 vect)
 {
-    // in order to find the value of a normal for the point, 3 points from that plane are needed
-    // of which 1 source and two neighbours in our case
-    const int num_neighb = 3;
+    // spherical coordinates
+    float r;    // radius; the distance from the origin to the point in the YZ plane
+    float theta;    // polar angle; the angle that the radius forms with the Z axis
+    float phi;  // azimuth; the angle that the projection of the radius onto the XY axis forms with the X axis
+    std::vector<float> sph_coord;   // regroups the 3 other variables
 
+    // calculating r, phi and theta with a precision of 2 digits after the decimal point
+    r = std::sqrt(pow(vect.get_x(), 2) + pow(vect.get_y(), 2) +pow(vect.get_z(), 2));
+    theta = std::acos(vect.get_z() / r);
+    phi = std::atan(vect.get_y() / vect.get_z());
+
+    // adding values to the vector
+    sph_coord.push_back(r);
+    sph_coord.push_back(theta);
+    sph_coord.push_back(phi);
+
+    return sph_coord;
+}
+
+std::vector<std::pair<pcl::PointXYZRGB *, std::string>> geom::estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, int range)
+{
     // kd-tree used for finding neighbours
     pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt;
 
     // auxilliary vectors for the k-tree nearest search
-    std::vector<int> pointIdxNKNSearch(num_neighb); // neighbours ids
-    std::vector<float> pointNKNSquaredDistance(num_neighb); // distances from the source to the neighbours
+    std::vector<int> pointIdxNKNSearch(range); // neighbours ids
+    std::vector<float> pointNKNSquaredDistance(range); // distances from the source to the neighbours
 
     // the vectors of which the cross product calculates the normal
     geom::vectors::vector3 *vect1;
@@ -101,14 +133,22 @@ std::vector<std::pair<pcl::PointXYZRGB *, std::string>> geom::estim_normals(pcl:
     geom::vectors::vector3 *normal;
     geom::vectors::vector3 *translated_normal;
 
-    // spherical coordinates
-    float r;    // radius; the distance from the origin to the point in the YZ plane
-    float theta;    // polar angle; the angle that the radius forms with the Z axis
-    float phi;  // azimuth; the angle that the projection of the radius onto the XY axis forms with the X axis
+    // spherical coordinates of the point found at the arrow of a vector
+    std::vector<float> norm_sphcoord;
+
+    // calculating the normal vector to the planes that the currently treated point
+    // makes with its n other neighbours
+    std::vector<float> r_vals;
+    std::vector<float> theta_vals;
+    std::vector<float> phi_vals;
+
+    // averaging the obtained values
+    float theta_avg;
+    float phi_avg;
+
 
     // float to string conversion
-    std::string str_theta;
-    std::string str_phi;
+    std::stringstream etrval_ss;
     std::string entry_value;  // the value that corresponds to the key given by the point
 
     // the resulting dictionary
@@ -120,45 +160,77 @@ std::vector<std::pair<pcl::PointXYZRGB *, std::string>> geom::estim_normals(pcl:
     // initializing tree
     kdt.setInputCloud(pc);
 
-    // initializing vectors
+    // initializing vectors for the cross product
     vect1 = new geom::vectors::vector3();
     vect2 = new geom::vectors::vector3();
 
     for (cloud_it = pc->points.begin(); cloud_it < pc->points.end(); cloud_it++)
     {
         // if there are neighbours left
-        if (kdt.nearestKSearch(*cloud_it, num_neighb, pointIdxNKNSearch, pointNKNSquaredDistance) > 0)
+        if (kdt.nearestKSearch(*cloud_it, range, pointIdxNKNSearch, pointNKNSquaredDistance) > 0)
         {
-           /// defining the first vector
-            vect1->set_x((*cloud_it).x - pc->at(pointIdxNKNSearch[1]).x);
-            vect1->set_y((*cloud_it).y - pc->at(pointIdxNKNSearch[1]).y);
-            vect1->set_z((*cloud_it).z - pc->at(pointIdxNKNSearch[1]).z);
 
-            // defining the second vector
-            vect2->set_x((*cloud_it).x - pc->at(pointIdxNKNSearch[2]).x);
-            vect2->set_y((*cloud_it).y - pc->at(pointIdxNKNSearch[2]).y);
-            vect2->set_z((*cloud_it).z - pc->at(pointIdxNKNSearch[2]).z);
+            for (int pt_index = 0; pt_index < (pointIdxNKNSearch.size() - 1); pt_index++)
+            {
+                if (pt_index == pointIdxNKNSearch.size() - 2)
+                {
+                    // defining the first vector
+                     vect1->set_x((*cloud_it).x - pc->at(pointIdxNKNSearch[pt_index + 1]).x);
+                     vect1->set_y((*cloud_it).y - pc->at(pointIdxNKNSearch[pt_index + 1]).y);
+                     vect1->set_z((*cloud_it).z - pc->at(pointIdxNKNSearch[pt_index + 1]).z);
 
-            // calculating normal
-            normal = geom::vectors::cross_product(*vect1, *vect2);
-            translated_normal = geom::vectors::translate_origin((*cloud_it).x, (*cloud_it).y, (*cloud_it).z, normal->get_x(), normal->get_y(), normal->get_z());
+                     // defining the second vector
+                     vect2->set_x((*cloud_it).x - pc->at(pointIdxNKNSearch[1]).x);
+                     vect2->set_y((*cloud_it).y - pc->at(pointIdxNKNSearch[1]).y);
+                     vect2->set_z((*cloud_it).z - pc->at(pointIdxNKNSearch[1]).z);
+                }
 
-            // calculating r, phi and theta with a precision of 2 digits after the decimal point
-            r = std::ceil(std::sqrt(pow(translated_normal->get_x(), 2) + pow(translated_normal->get_y(), 2) +pow(translated_normal->get_z(), 2)) * 100) / 100;
 
-            theta = std::ceil(std::acos(translated_normal->get_z() / r) * 100) / 100;
-            phi = std::ceil(std::atan(translated_normal->get_y() / translated_normal->get_z()) * 100) / 100;
+                else
+                {
+                    // defining the first vector
+                     vect1->set_x((*cloud_it).x - pc->at(pointIdxNKNSearch[pt_index + 1]).x);
+                     vect1->set_y((*cloud_it).y - pc->at(pointIdxNKNSearch[pt_index + 1]).y);
+                     vect1->set_z((*cloud_it).z - pc->at(pointIdxNKNSearch[pt_index + 1]).z);
+
+                     // defining the second vector
+                     vect2->set_x((*cloud_it).x - pc->at(pointIdxNKNSearch[pt_index + 2]).x);
+                     vect2->set_y((*cloud_it).y - pc->at(pointIdxNKNSearch[pt_index + 2]).y);
+                     vect2->set_z((*cloud_it).z - pc->at(pointIdxNKNSearch[pt_index + 2]).z);
+                }
+
+                // calculating normal
+                normal = geom::vectors::cross_product(*vect1, *vect2);
+                translated_normal = geom::vectors::translate_origin((*cloud_it).x, (*cloud_it).y, (*cloud_it).z, normal->get_x(), normal->get_y(), normal->get_z());
+
+                // calculating spherical coordinates
+                norm_sphcoord = geom::aux::calc_sphcoord(*translated_normal);
+
+                // storing those values
+                r_vals.push_back(norm_sphcoord[0]);
+                theta_vals.push_back(norm_sphcoord[1]);
+                phi_vals.push_back(norm_sphcoord[2]);
+            }
+
+            // calculating an average of the obtained spherical coordinates
+            theta_avg = geom::aux::calc_avg(theta_vals);
+            phi_avg = geom::aux::calc_avg(phi_vals);
 
             // converting phi and theta and creating an entry value
             // lexical_cast as used below performs the float to string cast in an efficient manner
-            str_theta = boost::lexical_cast<std::string>(theta);
-            str_phi = boost::lexical_cast<std::string>(phi);
-            entry_value = str_theta + str_phi;
-
-            pcl::PointXYZRGB *p_test = &(*cloud_it);
+            etrval_ss << std::fixed << std::setprecision(0) << theta_avg << phi_avg;
+            entry_value = etrval_ss.str();
+            etrval_ss.str(std::string());
+            etrval_ss.flush();
 
             // adding the new entry to the dictionary
             cloud_normals.push_back(std::pair<pcl::PointXYZRGB *, std::string>(&(*cloud_it), entry_value));
+
+            // resetting vectors
+            r_vals.clear();
+            theta_vals.clear();
+            phi_vals.clear();
+            norm_sphcoord.clear();
 
             // resetting neighbours
             pointIdxNKNSearch.clear();
