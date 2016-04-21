@@ -1,5 +1,5 @@
-#ifndef LINEFINDING_H
-#define LINEFINDING_H
+#ifndef MODELDETECTION_H
+#define MODELDETECTION_H
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -14,7 +14,6 @@ namespace ModelDetection{
      */
     void coloringProcess(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> inliers, std::vector<int> color);
 
-
     /**
      * @brief getBestPlan Get the best plan in a cloud
      * @param cloud original point cloud
@@ -22,6 +21,7 @@ namespace ModelDetection{
      * @return list of point index of the best plan
      */
     std::vector<int> getBestPlan(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,double distanceThreshold=0.01);
+    
     /**
      * @brief colorPlans Color all plans in a cloud
      * @param cloud original point cloud
@@ -36,6 +36,7 @@ namespace ModelDetection{
      * @return list of point index of the best line
      */
     std::vector<int> getBestLine(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,double distanceThreshold=0.01);
+    
     /**
      * @brief colorPlans Color all lines in a cloud
      * @param cloud original point cloud
@@ -56,10 +57,6 @@ namespace ModelDetection{
      * @return random color in RGB
      */
     std::vector<int> colorRandomizer();
-
-
-   
-
 }
 
-#endif // LINEFINDING_H
+#endif // MODELDETECTION_H
