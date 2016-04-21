@@ -1,5 +1,10 @@
 #include "geom_op.h"
 
+geom::vectors::vector3* geom::vectors::create_vect2p(pcl::PointXYZRGB pt1, pcl::PointXYZRGB pt2)
+{
+    return new geom::vectors::vector3(pt1.x - pt2.x, pt1.y - pt2.y, pt1.z - pt2.z);
+}
+
 geom::vectors::vector3* geom::vectors::cross_product(geom::vectors::vector3 vect1, geom::vectors::vector3 vect2)
 {
     geom::vectors::vector3 *cross_product;   // the result of the cross product between the two parameter vectors
@@ -61,6 +66,27 @@ float geom::vectors::dist(vector3 vect1, vector3 vect2)
     z = vect1.get_z() - vect2.get_z();
 
     return std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
+}
+
+geom::vectors::vector3*  geom::vectors::normalize_normal(vector3 normal)
+{
+    // norm of the normal
+    float length;
+
+    // normalized normal
+    geom::vectors::vector3 *normalized_normal;
+
+    // initializing the norm
+    if (normal.get_magn() == 0.0f)
+        length = 1.0f;
+
+    else
+        length = normal.get_magn();
+
+    // normalizing normal
+    normalized_normal = new geom::vectors::vector3(normal.get_x() / 3, normal.get_y() / 3, normal.get_z() / 3);
+
+    return normalized_normal;
 }
 
 geom::vectors::vector3* geom::vectors::vect_avg(std::vector<geom::vectors::vector3> vectors)
@@ -137,6 +163,13 @@ bool geom::aux::cmp_norm(vectors::vector3 vect1, vectors::vector3 vect2)
     return similar;
 }
 
+void geom::aux::norm_toPtRGB(pcl::PointXYZRGB *pt, geom::vectors::vector3 normal)
+{
+    pt->x = normal.get_x() * 255;
+    pt->y = normal.get_y() * 255;
+    pt->z = normal.get_z() * 255;
+}
+
 std::vector<float> geom::aux::calc_sphcoord(vectors::vector3 vect)
 {
     // cartesian coordinates
@@ -177,8 +210,11 @@ bool geom::aux::cmp_angles(std::vector<float> vect1, std::vector<float> vect2, f
     return true;
 }
 
-std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range)
+void geom::vectors::estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range)
 {
+    // test
+    int counter = 0;
+
     // kd-tree used for finding neighbours
     pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt;
 
@@ -186,28 +222,15 @@ std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::estim_norma
     std::vector<int> pointIdxRadiusSearch; // neighbours ids
     std::vector<float> pointRadiusSquaredDistance; // distances from the source to the neighbours
 
-    // point index in the cloud
-    int pt_ind = 0;
-
     // the vectors of which the cross product calculates the normal
     geom::vectors::vector3 *vect1;
     geom::vectors::vector3 *vect2;
 
+    // vectors to average
+    std::vector<geom::vectors::vector3> vct_toavg;
+
     // the result of the cross product of the two previous vectors
     geom::vectors::vector3 *normal;
-    geom::vectors::vector3 *translated_normal;
-
-    // vector of vector3
-    std::vector<geom::vectors::vector3> normal_toavg;
-
-    // normal vectors average
-    geom::vectors::vector3 *avged_vector;
-
-    // theta and phi
-    std::vector<float> sph_coord;
-
-    // the resulting dictionary
-    std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> cloud_normals;
 
     // cloud iterator
     pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it;
@@ -227,63 +250,38 @@ std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::estim_norma
 
             for (int pt_index = 0; pt_index < (pointIdxRadiusSearch.size() - 1); pt_index++)
             {
-                if (pt_index == pointIdxRadiusSearch.size() - 2)
-                {
-                    // defining the first vector
-                     vect1->set_x((*cloud_it).x - pc->at(pointIdxRadiusSearch[pt_index + 1]).x);
-                     vect1->set_y((*cloud_it).y - pc->at(pointIdxRadiusSearch[pt_index + 1]).y);
-                     vect1->set_z((*cloud_it).z - pc->at(pointIdxRadiusSearch[pt_index + 1]).z);
+                // defining the first vector
+                vect1 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[pt_index + 1]]);
 
-                     // defining the second vector
-                     vect2->set_x((*cloud_it).x - pc->at(pointIdxRadiusSearch[1]).x);
-                     vect2->set_y((*cloud_it).y - pc->at(pointIdxRadiusSearch[1]).y);
-                     vect2->set_z((*cloud_it).z - pc->at(pointIdxRadiusSearch[1]).z);
-                }
+                // defining the second vector; making sure there is no 'out of bounds' error
+                if (pt_index == pointIdxRadiusSearch.size() - 2)
+                    vect2 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[1]]);
 
 
                 else
-                {
-                    // defining the first vector
-                     vect1->set_x((*cloud_it).x - pc->at(pointIdxRadiusSearch[pt_index + 1]).x);
-                     vect1->set_y((*cloud_it).y - pc->at(pointIdxRadiusSearch[pt_index + 1]).y);
-                     vect1->set_z((*cloud_it).z - pc->at(pointIdxRadiusSearch[pt_index + 1]).z);
+                    vect2 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[pt_index + 2]]);
 
-                     // defining the second vector
-                     vect2->set_x((*cloud_it).x - pc->at(pointIdxRadiusSearch[pt_index + 2]).x);
-                     vect2->set_y((*cloud_it).y - pc->at(pointIdxRadiusSearch[pt_index + 2]).y);
-                     vect2->set_z((*cloud_it).z - pc->at(pointIdxRadiusSearch[pt_index + 2]).z);
-                }
-
-                // calculating normal
-                normal = geom::vectors::cross_product(*vect1, *vect2);
-                translated_normal = geom::vectors::translate_origin((*cloud_it).x, (*cloud_it).y, (*cloud_it).z, normal->get_x(), normal->get_y(), normal->get_z());
-
-                normal_toavg.push_back(*translated_normal);
+                // adding the cross product of the two previous vectors to our list
+                vct_toavg.push_back(*(geom::vectors::cross_product(*vect1, *vect2)));
             }
 
-            // averaging vectors
-            avged_vector = geom::vectors::vect_avg(normal_toavg);
+            // calculating the normalized normal
+            normal = geom::vectors::normalize_normal(*(geom::vectors::vect_avg(vct_toavg)));
 
-            // calculating phi and theta for the average vector
-            sph_coord = geom::aux::calc_sphcoord(*avged_vector);
-
-            // adding the new entry to the dictionary
-            cloud_normals.push_back(std::pair<pcl::PointXYZRGB *, std::vector<float>>(&(*cloud_it), sph_coord));
-
-            // resetting vectors
-            sph_coord.clear();
-            normal_toavg.clear();
-
-            // resetting neighbours
-            pointIdxRadiusSearch.clear();
-            pointRadiusSquaredDistance.clear();
+            // calculating point colors and adding it to the result list
+            geom::aux::norm_toPtRGB(&(*(cloud_it)), *normal);
         }
+
+        std::cout << counter << std::endl;
     }
 
-    return cloud_normals;
+    // freeing memory
+    delete(vect1);
+    delete(vect2);
+    delete(normal);
 }
 
-void pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc)
+void geom::vectors::pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc)
 {
       // Create the normal estimation class, and pass the input dataset to it
       pcl::NormalEstimation<pcl::PointXYZRGB, pcl::Normal> ne;

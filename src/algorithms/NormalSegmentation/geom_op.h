@@ -22,6 +22,9 @@ namespace geom
 {
     namespace vectors
     {
+        // creates vector using 2 points
+        vector3 *create_vect2p(pcl::PointXYZRGB pt1, pcl::PointXYZRGB pt2);
+
         // function that calculates the cross product of two vector3s; limited to R^3
         //  vect1 and vect2 are the two vectors of the cross product
         vector3 *cross_product(vector3 vect1, vector3 vect2);
@@ -42,6 +45,21 @@ namespace geom
 
         // returns the averages of parameter vectors
         vector3 *vect_avg(std::vector<vector3> vectors);
+
+        // calculates the normal to a plan using two vectors
+        vector3 *normalize_normal(vector3 normal);
+
+        // function that calculates the angles theta and phi of the normal calculated in each point
+        // of the point cloud;
+        // the function returns a dictionary containing the points and the values
+        // of the angles of their respective normal; the values of the angles will be stored into a string for easily performing
+        // comparisons between points;
+        // the result of this function will serve as a manner of grouping points that are alike together;
+        // the only parameter of this function is the point cloud
+        void estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range);
+
+        // pcl library that allows estimating the normals in the paramater cloud
+        void pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc);
     }
 
     namespace aux
@@ -63,22 +81,10 @@ namespace geom
 
         // compares the angles of two vectors
         bool cmp_angles(std::vector<float> vect1, std::vector<float> vect2, float epsilon);
+
+        // calculates the rgb colors of a point using the normal in that point
+        void norm_toPtRGB(pcl::PointXYZRGB *pt, geom::vectors::vector3 normal);
     }
-
-
-
-    // function that calculates the angles theta and phi of the normal calculated in each point
-    // of the point cloud;
-    // the function returns a dictionary containing the points and the values
-    // of the angles of their respective normal; the values of the angles will be stored into a string for easily performing
-    // comparisons between points;
-    // the result of this function will serve as a manner of grouping points that are alike together;
-    // the only parameter of this function is the point cloud
-    std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range);
-
-    // pcl library that allows estimating the normals in the paramater cloud
-    void pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc);
-
 }
 
 #endif // GEOM_OP_H

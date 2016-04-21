@@ -57,7 +57,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloudtxt(std::string path
        std::vector<float> px;
        std::vector<float> py;
        std::vector<float> pz;
-       //std::vector<int> pintensity;
+       std::vector<uint32_t> prgb;
 
        while(!flux.atEnd())
        {
@@ -74,8 +74,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloudtxt(std::string path
                py.push_back(r.toFloat());
                r=result.at(2);
                pz.push_back(r.toFloat());
-               //r=result.at(3);
-               //pintensity.push_back(r.toInt());
+               // prgb.push_back((uint32_t)result.at(3).toInt() << 16 | (uint32_t)result.at(4).toInt() << 8 | (uint32_t)result.at(5).toInt());
 
            }
        }
@@ -92,11 +91,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloudtxt(std::string path
            p.x=px[i];
            p.y=py[i];
            p.z=pz[i];
-//           p.r = 255;
-//           p.g = 255;
-//           p.b = 255;
+           // p.rgb = prgb[i];
 
-           //p.intensity=pintensity[i];
            cloud->push_back(p);
        }
        return cloud;
