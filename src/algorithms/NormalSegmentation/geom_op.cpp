@@ -212,9 +212,6 @@ bool geom::aux::cmp_angles(std::vector<float> vect1, std::vector<float> vect2, f
 
 void geom::vectors::estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range)
 {
-    // test
-    int counter = 0;
-
     // kd-tree used for finding neighbours
     pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt;
 
@@ -271,8 +268,6 @@ void geom::vectors::estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, flo
             // calculating point colors and adding it to the result list
             geom::aux::norm_toPtRGB(&(*(cloud_it)), *normal);
         }
-
-        std::cout << counter << std::endl;
     }
 
     // freeing memory
