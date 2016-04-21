@@ -3,21 +3,18 @@
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl/common/io.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/sample_consensus/ransac.h>
-#include <pcl/sample_consensus/model_types.h>
-#include <pcl/sample_consensus/sac_model_line.h>
-#include <pcl/PointIndices.h>
-#include <Eigen/StdVector>
 #include <boost/shared_ptr.hpp>
-#include <pcl/cloud_iterator.h>
-#include <iterator>
 
 namespace lineFinding{
     boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineColoring(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud);
 
     void coloringOneLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> inliers, std::vector<int> color);
+
+    std::vector<int> findBestLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud);
+
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > removeSetOfIndices(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices);
+
+    std::vector<int> colorRandomizer();
 }
 
 #endif // LINEFINDING_H
