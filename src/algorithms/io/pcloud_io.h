@@ -20,7 +20,11 @@
 
 namespace pcloud_io
 {
-    // output functions
+    /**
+     * @brief Write the point cloud in a text file.
+     * @param path Path and name of the file which will be created.
+     * @param pc The point cloud which will be saved.
+     **/ 
     void cloud_txt(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc);
 
     // input functions
