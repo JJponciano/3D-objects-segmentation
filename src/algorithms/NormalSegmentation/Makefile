@@ -49,14 +49,12 @@ SOURCES       = main.cpp \
 		geom_op.cpp \
 		vector3.cpp \
 		segm.cpp \
-		pcloud_io.cpp \
 		test_lib.cpp \
 		../io/pcloud_io.cpp 
 OBJECTS       = main.o \
 		geom_op.o \
 		vector3.o \
 		segm.o \
-		pcloud_io.o \
 		test_lib.o \
 		pcloud_io.o
 DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -283,7 +281,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/3DObjectsBoundriesDetection1.0.0 || mkdir -p .tmp/3DObjectsBoundriesDetection1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents geom_op.h vector3.h segm.h pcloud_io.h test_lib.h ../io/pcloud_io.h .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents main.cpp geom_op.cpp vector3.cpp segm.cpp pcloud_io.cpp test_lib.cpp ../io/pcloud_io.cpp .tmp/3DObjectsBoundriesDetection1.0.0/ && (cd `dirname .tmp/3DObjectsBoundriesDetection1.0.0` && $(TAR) 3DObjectsBoundriesDetection1.0.0.tar 3DObjectsBoundriesDetection1.0.0 && $(COMPRESS) 3DObjectsBoundriesDetection1.0.0.tar) && $(MOVE) `dirname .tmp/3DObjectsBoundriesDetection1.0.0`/3DObjectsBoundriesDetection1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/3DObjectsBoundriesDetection1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents geom_op.h vector3.h segm.h test_lib.h ../io/pcloud_io.h .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents main.cpp geom_op.cpp vector3.cpp segm.cpp test_lib.cpp ../io/pcloud_io.cpp .tmp/3DObjectsBoundriesDetection1.0.0/ && (cd `dirname .tmp/3DObjectsBoundriesDetection1.0.0` && $(TAR) 3DObjectsBoundriesDetection1.0.0.tar 3DObjectsBoundriesDetection1.0.0 && $(COMPRESS) 3DObjectsBoundriesDetection1.0.0.tar) && $(MOVE) `dirname .tmp/3DObjectsBoundriesDetection1.0.0`/3DObjectsBoundriesDetection1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/3DObjectsBoundriesDetection1.0.0
 
 
 clean:compiler_clean 
@@ -5538,9 +5536,6 @@ segm.o: segm.cpp /usr/include/stdint.h \
 		/usr/include/pcl-1.7/pcl/common/impl/centroid.hpp \
 		/usr/include/pcl-1.7/pcl/features/impl/normal_3d.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o segm.o segm.cpp
-
-pcloud_io.o: pcloud_io.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pcloud_io.o pcloud_io.cpp
 
 test_lib.o: test_lib.cpp test_lib.h \
 		geom_op.h \

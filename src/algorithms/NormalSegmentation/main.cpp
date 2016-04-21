@@ -1,3 +1,5 @@
+#define RANGE 0.1
+
 #include <QCoreApplication>
 
 #include "segm.h"
@@ -14,6 +16,7 @@
 #include <pcl/features/normal_3d.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/console/parse.h>
+
 
 /* global variables */
 // point cloud to be examined
@@ -65,10 +68,11 @@ int main(int argc, char *argv[])
 
     // init_cloud();
 
-    /*cloud = pcloud_io::load_cloudtxt("/home/vlad-adrian/3D-objects-segmentation/data/table.txt");
+    cloud = pcloud_io::load_cloud("/home/vlad-adrian/3D-objects-segmentation/data/table.txt");
+    std::cout << cloud->size() << std::endl;
     std::cout << cloud->at(5).rgb << std::endl;
 
-    std::vector<std::pair<pcl::PointXYZRGB *, std::string>> cn = geom::estim_normals(cloud);
+    std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> cn = geom::estim_normals(cloud, RANGE);
     std::vector<std::vector<pcl::PointXYZRGB *> *> pt_grp = segm::pts_regrp(cn);
     segm::pts_colsegm(pt_grp);
 
@@ -76,9 +80,10 @@ int main(int argc, char *argv[])
 
     pcloud_io::cloud_txt("/home/vlad-adrian/Documents/txt_tabtest.txt", cloud);
 
-    std::cout << "done" << std::endl;*/
+    std::cout << "done" << std::endl;
 
-    test_geom::test_crossprod();
+    // test_geom::test_crossprod();
+    // test_geom::test_translation();
 
     return a.exec();
 }
@@ -162,12 +167,12 @@ void test_menu()
 
 void test_ownnormest()
 {
-    std::vector<std::pair<pcl::PointXYZRGB *, std::string>> cn = geom::estim_normals(cloud);
+    std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> cn = geom::estim_normals(cloud, RANGE);
 }
 
 void test_pclnormest()
 {
-    geom::estim_normals(cloud);
+    geom::estim_normals(cloud, RANGE);
 }
 
 void printr()

@@ -1,47 +1,51 @@
 #include <stdint.h>
+#include <iostream>
 #include "segm.h"
 
-std::vector<std::vector<pcl::PointXYZRGB *> *> segm::pts_regrp(std::vector<std::pair<pcl::PointXYZRGB *, std::string>> cloud_normals)
+std::vector<std::vector<pcl::PointXYZRGB *> *> segm::pts_regrp(std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> cloud_normals)
 {
     std::vector<std::vector<pcl::PointXYZRGB *> *> gr_pts;    // contains the different groups of points by their value
-    std::map<std::string, int> ptval_dict;  // contains the values added to the dictionary; auxilliary variable for creating the categories
-    bool str_found; // true if value found in the dictionary
+    std::map<std::vector<float>, int> ptval_dict;  // contains the values added to the dictionary; auxilliary variable for creating the categories
+    bool categ_found; // true if value found in the dictionary
     int num_categ = 0;  // the number of the category to add the point to; represents an index in the biggest vector
     pcl::PointXYZRGB *curr_pt;   // the key of the pair currently treated
-    std::string curr_val;   // the value of the pair currently treated
+    std::vector<float> curr_vals;   // the value of the pair currently treated
 
     // we want to add each point of the cloud to a category based on its string value
     for (auto curr_pair : cloud_normals)
     {
-        str_found = false;
+        categ_found = false;
 
         // getting the values of the pair
         curr_pt = curr_pair.first;
-        curr_val = curr_pair.second;
+        curr_vals = curr_pair.second;
 
         // looking for whether the string represents a category or not
         for (auto curr_ptval : ptval_dict)
         {
             // true when the two strings are equal
-            if (!curr_ptval.first.compare(curr_val))
+            if (geom::aux::cmp_angles(curr_ptval.first, curr_vals, 0.3))
             {
-                str_found = true;
+                categ_found = true;
                 num_categ = curr_ptval.second;
                 break;
             }
         }
 
         // if there is already a category then we add our point to that category
-        if (str_found)
+        if (categ_found)
             gr_pts[num_categ]->push_back(curr_pt);
 
         // else we create the new category and then add our point to it
         else
         {
-            ptval_dict.insert(std::pair<std::string, int>(curr_val, gr_pts.size()));
+            ptval_dict.insert(std::pair<std::vector<float>, int>(curr_vals, gr_pts.size()));
             gr_pts.push_back(new std::vector<pcl::PointXYZRGB *>());
             gr_pts.back()->push_back(curr_pt);
         }
+
+        // std::cout << test_counter << std::endl;
+        // test_counter++;
     }
 
     return gr_pts;
@@ -55,6 +59,9 @@ void segm::pts_colsegm(std::vector<std::vector<pcl::PointXYZRGB *> *> gr_pts)
     std::vector<uint32_t> used_cols;
     int range = 255;
     bool used;
+
+    // resetting rand
+    std::srand(std::time(NULL));
 
     // iterating through the vector of categories
     for (auto curr_cat : gr_pts)

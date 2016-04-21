@@ -39,6 +39,9 @@ namespace geom
 
         // function that calculates the distance between two vectors vect1 and vect2
         float dist(vector3 vect1, vector3 vect2);
+
+        // returns the averages of parameter vectors
+        vector3 *vect_avg(std::vector<vector3> vectors);
     }
 
     namespace aux
@@ -54,6 +57,12 @@ namespace geom
 
         // function that calculates the spherical coordinates of a point using its cartesian coordinates
         std::vector<float> calc_sphcoord(vectors::vector3 vect);
+
+        // function that compares two normal; returns true if the normal is similar enough
+        bool cmp_norm(vectors::vector3 vect1, vectors::vector3 vect2);
+
+        // compares the angles of two vectors
+        bool cmp_angles(std::vector<float> vect1, std::vector<float> vect2, float epsilon);
     }
 
 
@@ -65,7 +74,7 @@ namespace geom
     // comparisons between points;
     // the result of this function will serve as a manner of grouping points that are alike together;
     // the only parameter of this function is the point cloud
-    std::vector<std::pair<pcl::PointXYZRGB *, std::string>> estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, int range);
+    std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range);
 
     // pcl library that allows estimating the normals in the paramater cloud
     void pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc);
