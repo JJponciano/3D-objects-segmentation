@@ -5,6 +5,7 @@
 #include <pcl/sample_consensus/ransac.h>
 #include <pcl/sample_consensus/model_types.h>
 #include <pcl/sample_consensus/sac_model_line.h>
+#include <pcl/sample_consensus/sac_model_plane.h>
 #include <pcl/PointIndices.h>
 #include <Eigen/StdVector>
 #include <pcl/cloud_iterator.h>
@@ -19,7 +20,7 @@ boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::lineColoring(
     *temp = *cloud;
 
 
-    for(int i=0; i<15; i++){
+    for(int i=0; i<10; i++){
         std::vector<int> inliers = findBestLine(temp);
         temp = removeSetOfIndices(temp, inliers);
 
@@ -44,20 +45,20 @@ void lineFinding::coloringOneLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXY
 
 std::vector<int> lineFinding::findBestLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
 
-    pcl::SampleConsensusModelLine<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelLine<pcl::PointXYZRGB> (cloud));
+    pcl::SampleConsensusModelPlane<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> (cloud));
     pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
     std::vector<int> inliers;
     ransac.setDistanceThreshold(.02);
     ransac.computeModel();
     ransac.getInliers(inliers);
-
+    /*
     Eigen::VectorXf coef;
     Eigen::VectorXf coefRefined;
     ransac.getModelCoefficients(coef);
     model->optimizeModelCoefficients(inliers, coef, coefRefined);
-    model->selectWithinDistance(coefRefined, .01, inliers);
+    model->selectWithinDistance(coefRefined, .01, inliers);*/
 
-    std::cout << coefRefined << std::endl;
+    //std::cout << coefRefined << std::endl;
     std::cout << inliers.size() << std::endl;
 
     return inliers;
