@@ -16,21 +16,35 @@
 
 boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::lineColoring(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
 
+    srand(time(NULL));
+
     boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > temp (new pcl::PointCloud<pcl::PointXYZRGB>);
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > colored (new pcl::PointCloud<pcl::PointXYZRGB>);
     *temp = *cloud;
+    colored->clear();
 
+    int i = 0;
+    while( i<10 && temp->size()>1000){
+        std::vector<int> inliers = findBestPlane(temp);
+        std::vector<int> color = colorRandomizer();
+        boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > tempPlane (new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    for(int i=0; i<10; i++){
-        std::vector<int> inliers = findBestLine(temp);
+        tempPlane = findOnePlane(temp, inliers);
         temp = removeSetOfIndices(temp, inliers);
 
-        std::vector<int> color = colorRandomizer();
+        std::cout << "step #" <<i+1<< " | # of points in temp:"<<temp->size() << std::endl;
+        std::cout << "# of inliers:" << inliers.size() << std::endl;
 
-        coloringOneLine(cloud, inliers, color);
+        if(inliers.size()>1000){
+            colorEntirePlane(tempPlane, color);
+            *colored += *tempPlane;
+        }
+
+
+        i++;
     }
 
-
-    return cloud;
+    return colored;
 }
 
 void lineFinding::coloringOneLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> inliers, std::vector<int> color){
@@ -43,23 +57,14 @@ void lineFinding::coloringOneLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXY
 }
 
 
-std::vector<int> lineFinding::findBestLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
+std::vector<int> lineFinding::findBestPlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
 
     pcl::SampleConsensusModelPlane<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> (cloud));
     pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
     std::vector<int> inliers;
-    ransac.setDistanceThreshold(.02);
+    ransac.setDistanceThreshold(0.01);
     ransac.computeModel();
     ransac.getInliers(inliers);
-    /*
-    Eigen::VectorXf coef;
-    Eigen::VectorXf coefRefined;
-    ransac.getModelCoefficients(coef);
-    model->optimizeModelCoefficients(inliers, coef, coefRefined);
-    model->selectWithinDistance(coefRefined, .01, inliers);*/
-
-    //std::cout << coefRefined << std::endl;
-    std::cout << inliers.size() << std::endl;
 
     return inliers;
 }
@@ -68,29 +73,46 @@ boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::removeSetOfIn
 
     boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > temp (new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::IndicesPtr indicesPtr (new std::vector<int>(indices));
-    std::cout << "test : " << cloud->size() << " | " << indicesPtr->size() << std::endl;
     pcl::ExtractIndices<pcl::PointXYZRGB> filter;
     filter.setNegative(true);
     filter.setInputCloud(cloud);
     filter.setIndices(indicesPtr);
     filter.filter(*temp);
 
-    std::cout << temp->size() << std::endl;
-
     return temp;
 }
 
+boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::findOnePlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices){
+
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > res (new pcl::PointCloud<pcl::PointXYZRGB>);
+    for(int i=0; i<indices.size(); i++){
+        res->points.push_back(cloud->at(indices[i]));
+    }
+    return res;
+}
+
+void lineFinding::colorEntirePlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> color){
+    pcl::PointCloud<pcl::PointXYZRGB>::iterator it;
+
+    for(it=cloud->begin(); it<cloud->end(); it++){
+        (*it).r = color[0];
+        (*it).g = color[1];
+        (*it).b = color[2];
+    }
+}
+
 std::vector<int> lineFinding::colorRandomizer(){
-    srand(time(NULL));
+
     int r = rand()%256;
     int g = rand()%256;
     int b = rand()%256;
 
     std::vector<int> color;
-    color.push_back(b);
-    color.push_back(g);
     color.push_back(r);
+    color.push_back(g);
+    color.push_back(b);
 
+    std::cout <<"r:"<<color[0]<<" g:"<<color[1]<<" b:"<<color[2]<< std::endl;
     return color;
 
 }

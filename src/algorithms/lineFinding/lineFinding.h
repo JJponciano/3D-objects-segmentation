@@ -10,9 +10,13 @@ namespace lineFinding{
 
     void coloringOneLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> inliers, std::vector<int> color);
 
-    std::vector<int> findBestLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud);
+    std::vector<int> findBestPlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud);
 
     boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > removeSetOfIndices(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices);
+
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > findOnePlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices);
+
+    void colorEntirePlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> color);
 
     std::vector<int> colorRandomizer();
 }
