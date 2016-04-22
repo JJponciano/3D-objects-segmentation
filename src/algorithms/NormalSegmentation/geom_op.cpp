@@ -84,7 +84,7 @@ geom::vectors::vector3*  geom::vectors::normalize_normal(vector3 normal)
         length = normal.get_magn();
 
     // normalizing normal
-    normalized_normal = new geom::vectors::vector3(normal.get_x() / 3, normal.get_y() / 3, normal.get_z() / 3);
+    normalized_normal = new geom::vectors::vector3(normal.get_x() / length, normal.get_y() / length, normal.get_z() / length);
 
     return normalized_normal;
 }
@@ -165,9 +165,9 @@ bool geom::aux::cmp_norm(vectors::vector3 vect1, vectors::vector3 vect2)
 
 void geom::aux::norm_toPtRGB(pcl::PointXYZRGB *pt, geom::vectors::vector3 normal)
 {
-    pt->x = normal.get_x() * 255;
-    pt->y = normal.get_y() * 255;
-    pt->z = normal.get_z() * 255;
+    pt->r = normal.get_x() * 255;
+    pt->g = normal.get_y() * 255;
+    pt->b = normal.get_z() * 255;
 }
 
 std::vector<float> geom::aux::calc_sphcoord(vectors::vector3 vect)
@@ -242,7 +242,7 @@ void geom::vectors::estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, flo
     for (cloud_it = pc->points.begin(); cloud_it < pc->points.end(); cloud_it++)
     {
         // if there are neighbours left
-        if (kdt.radiusSearch(*cloud_it, range, pointIdxRadiusSearch, pointRadiusSquaredDistance, 7) > 0)
+        if (kdt.radiusSearch(*cloud_it, range, pointIdxRadiusSearch, pointRadiusSquaredDistance) > 0)
         {
 
             for (int pt_index = 0; pt_index < (pointIdxRadiusSearch.size() - 1); pt_index++)
