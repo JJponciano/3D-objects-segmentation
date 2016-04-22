@@ -49,15 +49,6 @@ namespace geom
         // calculates the normal to a plan using two vectors
         vector3 *normalize_normal(vector3 normal);
 
-        // function that calculates the angles theta and phi of the normal calculated in each point
-        // of the point cloud;
-        // the function returns a dictionary containing the points and the values
-        // of the angles of their respective normal; the values of the angles will be stored into a string for easily performing
-        // comparisons between points;
-        // the result of this function will serve as a manner of grouping points that are alike together;
-        // the only parameter of this function is the point cloud
-        void estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range);
-
         std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> estim_normals_spherical(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range);
 
         // pcl library that allows estimating the normals in the paramater cloud

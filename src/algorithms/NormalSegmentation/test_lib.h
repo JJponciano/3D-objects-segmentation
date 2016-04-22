@@ -1,22 +1,11 @@
 #ifndef TEST_LIB_H
 #define TEST_LIB_H
 
-#include "geom_op.h"
-#include "segm.h"
+#include "normal_estimation.h"
+#include "../io/pcloud_io.h"
 
-#include <iostream>
+#define RADIUS 0.01
 
-namespace test_geom
-{
-    void test_crossprod();
-    void test_translation();
-    void test_phicalc();
-    void test_thetacalc();
-}
-
-namespace test_segm
-{
-
-}
+void test_normal_estimation();
 
 #endif // TEST_LIB_H

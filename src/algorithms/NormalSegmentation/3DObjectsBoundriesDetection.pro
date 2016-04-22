@@ -14,14 +14,16 @@ SOURCES += main.cpp \
     vector3.cpp \
     segm.cpp \
     test_lib.cpp \
-    ../io/pcloud_io.cpp
+    ../io/pcloud_io.cpp \
+    normal_estimation.cpp
 
 HEADERS += \
     geom_op.h \
     vector3.h \
     segm.h \
     test_lib.h \
-    ../io/pcloud_io.h
+    ../io/pcloud_io.h \
+    normal_estimation.h
 
 HEADERS +=
 
