@@ -58,6 +58,8 @@ namespace geom
         // the only parameter of this function is the point cloud
         void estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range);
 
+        std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> estim_normals_spherical(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range);
+
         // pcl library that allows estimating the normals in the paramater cloud
         void pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc);
     }
@@ -84,6 +86,9 @@ namespace geom
 
         // calculates the rgb colors of a point using the normal in that point
         void norm_toPtRGB(pcl::PointXYZRGB *pt, geom::vectors::vector3 normal);
+
+        // calculates the absolute value of a normal
+        geom::vectors::vector3 *abs_vector(geom::vectors::vector3 vect);
     }
 }
 

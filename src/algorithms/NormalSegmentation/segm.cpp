@@ -2,7 +2,7 @@
 #include <iostream>
 #include "segm.h"
 
-std::vector<std::vector<pcl::PointXYZRGB *> *> segm::pts_regrp(std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> cloud_normals)
+std::vector<std::vector<pcl::PointXYZRGB *> *> segm::pts_regrp(std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> cloud_normals, float eps)
 {
     std::vector<std::vector<pcl::PointXYZRGB *> *> gr_pts;    // contains the different groups of points by their value
     std::map<std::vector<float>, int> ptval_dict;  // contains the values added to the dictionary; auxilliary variable for creating the categories
@@ -24,7 +24,7 @@ std::vector<std::vector<pcl::PointXYZRGB *> *> segm::pts_regrp(std::vector<std::
         for (auto curr_ptval : ptval_dict)
         {
             // true when the two strings are equal
-            if (geom::aux::cmp_angles(curr_ptval.first, curr_vals, 0.3))
+            if (geom::aux::cmp_angles(curr_ptval.first, curr_vals, eps))
             {
                 categ_found = true;
                 num_categ = curr_ptval.second;

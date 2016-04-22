@@ -1,4 +1,4 @@
-#define RANGE 0.1
+#define RANGE 0.01
 
 #include <QCoreApplication>
 
@@ -46,6 +46,12 @@ int main(int argc, char *argv[])
     cloud = pcloud_io::load_cloud("/home/vlad-adrian/3D-objects-segmentation/data/table.txt");
     std::cout << cloud->size() << std::endl;
     std::cout << cloud->at(5).rgb << std::endl;
+
+    /*
+    std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> ens = geom::vectors::estim_normals_spherical(cloud, RANGE);
+    std::vector<std::vector<pcl::PointXYZRGB *> *> rgr_pt = segm::pts_regrp(ens, eps);
+    segm::pts_colsegm(rgr_pt);
+    */
 
     geom::vectors::estim_normals(cloud, RANGE);
 
