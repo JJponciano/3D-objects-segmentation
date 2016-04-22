@@ -1,6 +1,6 @@
 #include "normal_estimation.h"
 
-void estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range)
+void estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl, float radius)
 {
     // kd-tree used for finding neighbours
     pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt;
@@ -26,25 +26,25 @@ void estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range)
     pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it;
 
     // initializing tree
-    kdt.setInputCloud(pc);
+    kdt.setInputCloud(pt_cl);
 
-    for (cloud_it = pc->points.begin(); cloud_it < pc->points.end(); cloud_it++)
+    for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
     {
         // if there are neighbours left
-        if (kdt.radiusSearch(*cloud_it, range, pointIdxRadiusSearch, pointRadiusSquaredDistance, 100) > 0)
+        if (kdt.radiusSearch(*cloud_it, radius, pointIdxRadiusSearch, pointRadiusSquaredDistance, 100) > 0)
         {
 
             for (int pt_index = 0; pt_index < (pointIdxRadiusSearch.size() - 1); pt_index++)
             {
                 // defining the first vector
-                vect1 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[pt_index + 1]]);
+                vect1 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[pt_index + 1]]);
 
                 // defining the second vector; making sure there is no 'out of bounds' error
                 if (pt_index == pointIdxRadiusSearch.size() - 2)
-                    vect2 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[1]]);
+                    vect2 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[1]]);
 
                 else
-                    vect2 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[pt_index + 2]]);
+                    vect2 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[pt_index + 2]]);
 
                 // adding the cross product of the two previous vectors to our list
                 cross_prod = geom::vectors::cross_product(*vect1, *vect2);

@@ -2,7 +2,7 @@
 #include <iostream>
 #include "segm.h"
 
-std::vector<std::vector<pcl::PointXYZRGB *> *> segm::pts_regrp(std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> cloud_normals, float eps)
+std::vector<std::vector<pcl::PointXYZRGB *> *> segm::pts_regrp(std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> spherical_coords, float eps)
 {
     std::vector<std::vector<pcl::PointXYZRGB *> *> gr_pts;    // contains the different groups of points by their value
     std::map<std::vector<float>, int> ptval_dict;  // contains the values added to the dictionary; auxilliary variable for creating the categories
@@ -12,7 +12,7 @@ std::vector<std::vector<pcl::PointXYZRGB *> *> segm::pts_regrp(std::vector<std::
     std::vector<float> curr_vals;   // the value of the pair currently treated
 
     // we want to add each point of the cloud to a category based on its string value
-    for (auto curr_pair : cloud_normals)
+    for (auto curr_pair : spherical_coords)
     {
         categ_found = false;
 

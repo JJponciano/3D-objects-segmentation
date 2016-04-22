@@ -1,3 +1,8 @@
+/**
+  * @brief library that contains function allowing the segmentation of a point cloud by category of points and colors
+  * @author Vlad-Adrian Moglan
+  */
+
 #ifndef SEGM_H
 #define SEGM_H
 
@@ -5,14 +10,18 @@
 
 namespace segm
 {
-    // function that groups the points of a cloud by their value
-    // each category is represented by a vector
-    // the categories are added to a vector which is returned at the end
-    // cloud_normals is the parameter that contains the pairs of points and normals
-    std::vector<std::vector<pcl::PointXYZRGB *> *> pts_regrp(std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> cloud_normals, float eps);
+    /**
+     * @brief pts_regrp regroups points in function of their respective spherical coordinates
+     * @param spherical_coords is a vector of pairs formed by one point and one vector containing the point's spherical coordinates
+     * @param eps is the degree of precision used for comparing spherical coordinates
+     * @return an array of categories created in function of the points' coordinates
+     */
+    std::vector<std::vector<pcl::PointXYZRGB *> *> pts_regrp(std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> spherical_coords, float eps);
 
-    // procedure that colors every point of the graph, the criterion being the category of the point
-    // gr_pts is a 'set' of all the different categories categories
+    /**
+     * @brief pts_colsegm colors points in function of their category
+     * @param gr_pts is an array of categories containing points
+     */
     void pts_colsegm(std::vector<std::vector<pcl::PointXYZRGB *> *> gr_pts);
 }
 

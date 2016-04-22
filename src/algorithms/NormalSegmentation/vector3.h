@@ -1,3 +1,8 @@
+/**
+  * @brief a class representing the blueprints for vector3
+  * @author Vlad-Adrian Moglan
+  */
+
 #ifndef VECTOR3_H
 #define VECTOR3_H
 #define _USE_MATH_DEFINES

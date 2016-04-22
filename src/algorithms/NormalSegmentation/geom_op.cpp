@@ -46,29 +46,6 @@ geom::vectors::vector3* geom::vectors::translate_origin(float x1, float y1, floa
     return temp_vect;
 }
 
-geom::vectors::vector3* geom::vectors::scale(vector3 vect1, vector3 vect2)
-{
-    vector3 *temp_vect;
-
-    temp_vect = new vector3(vect1.get_x(), vect1.get_y(), vect1.get_z());
-    temp_vect->set_x(vect1.get_x() * vect2.get_x());
-    temp_vect->set_y(vect1.get_y() * vect2.get_y());
-    temp_vect->set_z(vect1.get_z() * vect2.get_z());
-
-    return temp_vect;
-}
-
-float geom::vectors::dist(vector3 vect1, vector3 vect2)
-{
-    float x, y, z;  // coordinates
-
-    x = vect1.get_x() - vect2.get_x();
-    y = vect1.get_y() - vect2.get_y();
-    z = vect1.get_z() - vect2.get_z();
-
-    return std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
-}
-
 geom::vectors::vector3*  geom::vectors::normalize_normal(vector3 normal)
 {
     // norm of the normal
@@ -120,7 +97,7 @@ geom::vectors::vector3* geom::vectors::vect_avg(std::vector<geom::vectors::vecto
     return avg_vect;
 }
 
-std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::vectors::estim_normals_spherical(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, float range)
+std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::vectors::estim_normals_spherical(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl, float radius, int max_neighbs)
 {
    // the dictionary to be returned
     std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> normal_vects;
@@ -149,26 +126,26 @@ std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::vectors::es
     pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it;
 
     // initializing tree
-    kdt.setInputCloud(pc);
+    kdt.setInputCloud(pt_cl);
 
-    for (cloud_it = pc->points.begin(); cloud_it < pc->points.end(); cloud_it++)
+    for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
     {
         // if there are neighbours left
-        if (kdt.radiusSearch(*cloud_it, range, pointIdxRadiusSearch, pointRadiusSquaredDistance, 100) > 0)
+        if (kdt.radiusSearch(*cloud_it, radius, pointIdxRadiusSearch, pointRadiusSquaredDistance, max_neighbs) > 0)
         {
 
             for (int pt_index = 0; pt_index < (pointIdxRadiusSearch.size() - 1); pt_index++)
             {
                 // defining the first vector
-                vect1 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[pt_index + 1]]);
+                vect1 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[pt_index + 1]]);
 
                 // defining the second vector; making sure there is no 'out of bounds' error
                 if (pt_index == pointIdxRadiusSearch.size() - 2)
-                    vect2 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[1]]);
+                    vect2 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[1]]);
 
 
                 else
-                    vect2 = geom::vectors::create_vect2p((*cloud_it), pc->points[pointIdxRadiusSearch[pt_index + 2]]);
+                    vect2 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[pt_index + 2]]);
 
                 // adding the cross product of the two previous vectors to our list
                 cross_prod = geom::vectors::cross_product(*vect1, *vect2);
@@ -209,11 +186,11 @@ std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::vectors::es
     return normal_vects;
 }
 
-void geom::vectors::pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc)
+void geom::vectors::pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
 {
       // Create the normal estimation class, and pass the input dataset to it
       pcl::NormalEstimation<pcl::PointXYZRGB, pcl::Normal> ne;
-      ne.setInputCloud(pc);
+      ne.setInputCloud(pt_cl);
 
       // Create an empty kdtree representation, and pass it to the normal estimation object.
       // Its content will be filled inside the object, based on the given input dataset (as no other search surface is given).
@@ -232,7 +209,7 @@ void geom::vectors::pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc)
 
 
 /** AUX **/
-float geom::aux::calc_avg(std::vector<float> floats)
+float geom::aux::float_avg(std::vector<float> floats)
 {
     float sum = 0;  // sum
     float avg = 0;  // average
@@ -245,35 +222,6 @@ float geom::aux::calc_avg(std::vector<float> floats)
     avg = sum / floats.size();
 
     return avg;
-}
-
-float geom::aux::calc_angle3p(float x1, float y1, float x2, float y2, float x3, float y3)
-{
-    float dist12;   // distance from point 1 to point 2
-    float dist13;   // distance from point 1 to point 3
-    float dist23;   // distance from point 2 to point 3
-    float val_ang;  // the value of the angle calculated using arccos
-
-    // establishing the distances between the different points
-    dist12 = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-    dist13 = sqrt(pow(x3 - x1, 2) + pow(y3 - y1, 2));
-    dist23 = sqrt(pow(x3 - x2, 2) + pow(y3 - y2, 2));
-
-    // calculating angle value
-    val_ang = std::acos((pow(dist12, 2) + pow(dist23, 2) - pow(dist13,2)) / (2 * dist12 * dist13)) * 180/PI;
-    return val_ang;
-}
-
-bool geom::aux::cmp_norm(vectors::vector3 vect1, vectors::vector3 vect2)
-{
-    bool similar = true;
-
-    if ((std::abs(vect1.get_x()) > std::abs(vect2.get_x() + 35))
-            || (std::abs(vect1.get_y()) > std::abs(vect2.get_y() + 35))
-            || (std::abs(vect1.get_z()) > std::abs(vect2.get_z() + 35)))
-        similar = false;
-
-    return similar;
 }
 
 void geom::aux::norm_toPtRGB(pcl::PointXYZRGB *pt, geom::vectors::vector3 normal)
@@ -312,12 +260,12 @@ std::vector<float> geom::aux::calc_sphcoord(vectors::vector3 vect)
     return sph_coord;
 }
 
-bool geom::aux::cmp_angles(std::vector<float> vect1, std::vector<float> vect2, float epsilon)
+bool geom::aux::cmp_angles(std::vector<float> coords1, std::vector<float> coords2, float eps)
 {
-    if ((std::abs(vect1[1]) < (std::abs(vect2[1])- epsilon)) || (std::abs(vect1[1]) > (std::abs(vect2[1]) + epsilon)))
+    if ((std::abs(coords1[1]) < (std::abs(coords2[1])- eps)) || (std::abs(coords1[1]) > (std::abs(coords2[1]) + eps)))
         return false;
 
-    if ((std::abs(vect1[2]) < (std::abs(vect2[2])- epsilon)) || (std::abs(vect1[2]) > (std::abs(vect2[2]) + epsilon)))
+    if ((std::abs(coords1[2]) < (std::abs(coords2[2])- eps)) || (std::abs(coords1[2]) > (std::abs(coords2[2]) + eps)))
         return false;
 
     return true;
