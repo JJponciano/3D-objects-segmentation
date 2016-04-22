@@ -6,8 +6,11 @@ void test_normal_estimation()
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
 \
     // loading cloud from file
-    cloud = pcloud_io::load_cloud("perfectTable.txt");
+    cloud = pcloud_io::load_cloud("./table.txt");
 
     // estimating normals
-    estim_normals(cloud, RANGE);
+    estim_normals(cloud, RADIUS);
+
+    // writing cloud to file
+    pcloud_io::cloud_txt("./table_rgbTest.txt", cloud);
 }

@@ -4,9 +4,6 @@
 
 #include "test_lib.h"
 
-// pcd file path
-std::string pcd_path;
-
 /* function implementation */
 int main(int argc, char *argv[])
 {
