@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    test_normal_estimation();
+    test_scaling();
 
     return a.exec();
 }
