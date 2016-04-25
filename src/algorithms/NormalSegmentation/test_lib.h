@@ -9,7 +9,8 @@
 #include "cloud_manip.h"
 #include "../io/pcloud_io.h"
 
-#define RADIUS 0.01
+#define RADIUS 0.01 /** recommended for the table test **/
+#define RADIUS_WIDOP 0.05   /** recommended for the widop test **/
 
 void test_normal_estimation();
 void test_scaling();

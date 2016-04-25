@@ -7,7 +7,7 @@ void cloud_manip::widop_to_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
 
     // scaling cloud
     for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
-        (*cloud_it).x /= X_SCALE;
+        (*cloud_it).y /= Y_SCALE;
 }
 
 void cloud_manip::cloud_to_widop(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
@@ -17,5 +17,5 @@ void cloud_manip::cloud_to_widop(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
 
     // scaling cloud
     for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
-        (*cloud_it).x *= X_SCALE;
+        (*cloud_it).y *= Y_SCALE;
 }

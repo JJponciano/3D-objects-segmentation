@@ -4,7 +4,7 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
-#define X_SCALE 10
+#define Y_SCALE 100.0f
 
 namespace cloud_manip
 {

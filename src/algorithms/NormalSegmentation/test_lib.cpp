@@ -49,7 +49,7 @@ void test_scaling()
     std::cout << "> estimating normals..." << std::endl;
 
     // estimating normals
-    estim_normals(cloud, RADIUS);
+    estim_normals(cloud, RADIUS_WIDOP);
 
     std::cout << "> done estimating normals;" << std::endl;
 
