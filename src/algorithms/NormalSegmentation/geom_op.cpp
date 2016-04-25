@@ -97,14 +97,9 @@ geom::vectors::vector3* geom::vectors::vect_avg(std::vector<geom::vectors::vecto
     return avg_vect;
 }
 
-std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::vectors::estim_normals_spherical(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl, float radius, int max_neighbs)
+void geom::vectors::find_normal(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl, pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it,
+                                               pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt, float radius, int max_neighbs)
 {
-   // the dictionary to be returned
-    std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> normal_vects;
-
-    // kd-tree used for finding neighbours
-    pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt;
-
     // auxilliary vectors for the k-tree nearest search
     std::vector<int> pointIdxRadiusSearch; // neighbours ids
     std::vector<float> pointRadiusSquaredDistance; // distances from the source to the neighbours
@@ -115,75 +110,63 @@ std::vector<std::pair<pcl::PointXYZRGB *, std::vector<float>>> geom::vectors::es
     geom::vectors::vector3 *cross_prod;
     geom::vectors::vector3 *abs_cross_prod;
     geom::vectors::vector3 *normal;
+    geom::vectors::vector3 *normalized_normal;
 
     // vectors to average
     std::vector<geom::vectors::vector3> vct_toavg;
 
-    // the result of the cross product of the two previous vectors
-    std::vector<float> spherical_coords;
-
-    // cloud iterator
-    pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it;
-
-    // initializing tree
-    kdt.setInputCloud(pt_cl);
-
-    for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
+    // if there are neighbours left
+    if (kdt.radiusSearch(*cloud_it, radius, pointIdxRadiusSearch, pointRadiusSquaredDistance, max_neighbs) > 0)
     {
-        // if there are neighbours left
-        if (kdt.radiusSearch(*cloud_it, radius, pointIdxRadiusSearch, pointRadiusSquaredDistance, max_neighbs) > 0)
+
+        for (int pt_index = 0; pt_index < (pointIdxRadiusSearch.size() - 1); pt_index++)
         {
+            // defining the first vector
+            vect1 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[pt_index + 1]]);
 
-            for (int pt_index = 0; pt_index < (pointIdxRadiusSearch.size() - 1); pt_index++)
-            {
-                // defining the first vector
-                vect1 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[pt_index + 1]]);
-
-                // defining the second vector; making sure there is no 'out of bounds' error
-                if (pt_index == pointIdxRadiusSearch.size() - 2)
-                    vect2 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[1]]);
+            // defining the second vector; making sure there is no 'out of bounds' error
+            if (pt_index == pointIdxRadiusSearch.size() - 2)
+                vect2 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[1]]);
 
 
-                else
-                    vect2 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[pt_index + 2]]);
+            else
+                vect2 = geom::vectors::create_vect2p((*cloud_it), pt_cl->points[pointIdxRadiusSearch[pt_index + 2]]);
 
-                // adding the cross product of the two previous vectors to our list
-                cross_prod = geom::vectors::cross_product(*vect1, *vect2);
-                abs_cross_prod = geom::aux::abs_vector(*cross_prod);
-                vct_toavg.push_back(*abs_cross_prod);
-
-                // freeing memory
-                delete vect1;
-                delete vect2;
-                delete cross_prod;
-                delete abs_cross_prod;
-            }
-
-            // calculating the normalized normal
-            normal = geom::vectors::vect_avg(vct_toavg);
-
-            // calculating spherical coords
-            spherical_coords = geom::aux::calc_sphcoord(*normal);
-
-            // adding the result to the dictionary
-            normal_vects.push_back(std::pair<pcl::PointXYZRGB *, std::vector<float>>(&(*cloud_it), spherical_coords));
+            // adding the cross product of the two previous vectors to our list
+            cross_prod = geom::vectors::cross_product(*vect1, *vect2);
+            abs_cross_prod = geom::aux::abs_vector(*cross_prod);
+            vct_toavg.push_back(*abs_cross_prod);
 
             // freeing memory
-            delete normal;
-
-            // clearing vectors
-            vct_toavg.clear();
-            pointIdxRadiusSearch.clear();
-            pointRadiusSquaredDistance.clear();
-
-            // shrinking vectors
-            vct_toavg.shrink_to_fit();
-            pointIdxRadiusSearch.shrink_to_fit();
-            pointRadiusSquaredDistance.shrink_to_fit();
+            delete vect1;
+            delete vect2;
+            delete cross_prod;
+            delete abs_cross_prod;
         }
-    }
 
-    return normal_vects;
+        // calculating the normal
+        normal = geom::vectors::vect_avg(vct_toavg);
+
+        // calculating the normalized normal
+        normalized_normal = geom::vectors::normalize_normal(*normal);
+
+        // coloring the point
+        geom::aux::norm_toPtRGB(&(*cloud_it), *normalized_normal);
+
+        // freeing memory
+        delete normal;
+        delete normalized_normal;
+
+        // clearing vectors
+        vct_toavg.clear();
+        pointIdxRadiusSearch.clear();
+        pointRadiusSquaredDistance.clear();
+
+        // shrinking vectors
+        vct_toavg.shrink_to_fit();
+        pointIdxRadiusSearch.shrink_to_fit();
+        pointRadiusSquaredDistance.shrink_to_fit();
+    }
 }
 
 void geom::vectors::pcl_estim_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)

@@ -84,7 +84,7 @@ namespace geom
          * @return the resulting normal
          */
         void find_normal(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl, pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it,
-                                                       pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt, float radius, int max_neighbs);
+                                            pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt, float radius, int max_neighbs);
 
         /**
          * @brief pcl_estim_normals is a function that estimates the normals of the parameter cloud using the standard pcl library
