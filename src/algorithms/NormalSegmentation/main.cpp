@@ -9,7 +9,11 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+<<<<<<< HEAD
     test_normal_estimation();
+=======
+    test_scaling();
+>>>>>>> NormalSegmentation
 
     return a.exec();
 }

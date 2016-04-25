@@ -15,7 +15,12 @@ SOURCES += main.cpp \
     segm.cpp \
     test_lib.cpp \
     ../io/pcloud_io.cpp \
+<<<<<<< HEAD
     normal_estimation.cpp
+=======
+    normal_estimation.cpp \
+    cloud_manip.cpp
+>>>>>>> NormalSegmentation
 
 HEADERS += \
     geom_op.h \
@@ -23,7 +28,12 @@ HEADERS += \
     segm.h \
     test_lib.h \
     ../io/pcloud_io.h \
+<<<<<<< HEAD
     normal_estimation.h
+=======
+    normal_estimation.h \
+    cloud_manip.h
+>>>>>>> NormalSegmentation
 
 HEADERS +=
 
