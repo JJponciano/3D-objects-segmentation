@@ -6,11 +6,6 @@ void test_normal_estimation()
 
     // point cloud to be examined
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-<<<<<<< HEAD
-\
-    // loading cloud from file
-    cloud = pcloud_io::load_cloud("./table.txt", false);
-=======
 
     std::cout << "> loading cloud from file..." << std::endl;
 
@@ -18,17 +13,10 @@ void test_normal_estimation()
     cloud = pcloud_io::load_cloud("../../../data/table.txt", false);
 
     std::cout << "> estimating normals..." << std::endl;
->>>>>>> NormalSegmentation
 
     // estimating normals
-    estim_normals(cloud, RADIUS);
+    estim_normals(cloud, RADIUS, 100);
 
-<<<<<<< HEAD
-    // writing cloud to file
-    pcloud_io::cloud_to_txt("./table_rgbTest.txt", cloud);
-
-    std::cout << "> done testing the normal estimation function." << std::endl;
-=======
     std::cout << "> dones estimating normals..." << std::endl;
 
     std::cout << "> writing cloud to file..." << std::endl;
@@ -39,44 +27,27 @@ void test_normal_estimation()
     std::cout << "> done testing the normal estimation function." << std::endl << std::endl;
 }
 
-void test_scaling()
+void test_eff_norm_est()
 {
-    std::cout << "> scaling function test start..." << std::endl;
-
     // point cloud to be examined
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-\
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud;
+
+    std::cout << "> efficient normal estimation function test start..." << std::endl;
+
     std::cout << "> loading cloud from file..." << std::endl;
-
-    // loading cloud from file
     cloud = pcloud_io::load_cloud("../../../data/widop_test.txt", false);
+    std::cout << "> finished loading cloud." << std::endl;
 
-    std::cout << "> scaling cloud..." << std::endl;
+    clock_t t_start = clock();
+    std::cout << "> launching eff_norm_est function..." << std::endl;
+    colored_cloud = eff_norm_est(cloud, RADIUS_WIDOP, 50, 100);
+    std::cout << "> eff_norm_est function finished executing. execution time: "
+              << (float)(clock() - t_start)/CLOCKS_PER_SEC << " seconds." << std::endl;
 
-    // scaling cloud
-    cloud_manip::widop_to_cloud(cloud);
+    std::cout << "> writing results to text file..." << std::endl;
+    pcloud_io::cloud_to_txt("../../../data/test_results/widop_testeff.txt", colored_cloud);
+    std::cout << "> done writing." << std::endl;
 
-    std::cout << "> done scaling the widop cloud;" << std::endl;
-
-    std::cout << "> estimating normals..." << std::endl;
-
-    // estimating normals
-    estim_normals(cloud, RADIUS_WIDOP);
-
-    std::cout << "> done estimating normals;" << std::endl;
-
-    std::cout << "> descaling cloud..." << std::endl;
-
-    // descaling cloud
-    cloud_manip::cloud_to_widop(cloud);
-
-    std::cout << "> done descaling the widop cloud;" << std::endl;
-
-    std::cout << "> writing cloud to file..." << std::endl;
-
-    // writing cloud to file
-    pcloud_io::cloud_to_txt("../../../data/test_results/widop_testres.txt", cloud);
-
-    std::cout << "> done testing the scaling function." << std::endl << std::endl;
->>>>>>> NormalSegmentation
+    std::cout << "> efficient normal estimation function test ended." << std::endl << std::endl;
 }

@@ -57,7 +57,6 @@ void segm::pts_colsegm(std::vector<std::vector<pcl::PointXYZRGB *> *> gr_pts)
     uint8_t r, g, b;
     uint32_t rgb;
     std::vector<uint32_t> used_cols;
-    int range = 255;
     bool used;
 
     // resetting rand
