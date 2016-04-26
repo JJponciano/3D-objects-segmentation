@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    test_scaling();
+    test_eff_norm_est();
 
     return a.exec();
 }

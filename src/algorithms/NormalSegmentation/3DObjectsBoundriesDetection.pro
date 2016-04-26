@@ -1,6 +1,9 @@
 QT += core
 QT -= gui
 
+QMAKE_CXXFLAGS += -fopenmp
+QMAKE_LFLAGS += -fopenmp
+
 CONFIG += c++11
 
 TARGET = 3DObjectsBoundriesDetection
@@ -16,7 +19,8 @@ SOURCES += main.cpp \
     test_lib.cpp \
     ../io/pcloud_io.cpp \
     normal_estimation.cpp \
-    cloud_manip.cpp
+    cloud_manip.cpp \
+    eff_norm_est.cpp
 
 HEADERS += \
     geom_op.h \
@@ -25,7 +29,8 @@ HEADERS += \
     test_lib.h \
     ../io/pcloud_io.h \
     normal_estimation.h \
-    cloud_manip.h
+    cloud_manip.h \
+    eff_norm_est.h
 
 HEADERS +=
 

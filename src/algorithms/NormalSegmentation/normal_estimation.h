@@ -8,8 +8,6 @@
 
 #include "geom_op.h"
 
-#include <boost/thread.hpp>
-
 /**
  * @brief estim_normals is a function that estimates the normal vectors of a point cloud
  * @param pt_cl is the point cloud to estimates the normal vectors of
