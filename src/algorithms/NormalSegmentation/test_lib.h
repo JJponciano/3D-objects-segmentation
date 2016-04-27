@@ -13,7 +13,11 @@
 #include <time.h>
 
 #define RADIUS 0.01 /** recommended for the table test **/
-#define RADIUS_WIDOP 0.05   /** recommended for the widop test **/
+#define RADIUS_WIDOP 0.5   /** recommended for the widop test **/
+
+#define MAX_NEIGHBS 100
+
+#define Y_SCALE 1000
 
 // test functions
 void test_normal_estimation();
