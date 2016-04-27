@@ -56,8 +56,9 @@ namespace ModelDetection{
      * @brief colorPlans Color all lines in a cloud
      * @param cloud original point cloud
      * @param distanceThreshold distance threshold to the plan detection
+     * @param pointsPerLine minimum number of points to classify a part of the cloud as a line
      */
-    void colorLines(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,double distanceThreshold=0.01);
+    void colorLines(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,double distanceThreshold=0.01,int pointsPerLine=1000);
 
     /**
      * @brief removeSetOfIndices remove points in a cloud

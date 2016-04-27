@@ -86,8 +86,31 @@ std::vector<int> ModelDetection::getBestLine(pcl::PointCloud<pcl::PointXYZRGB>::
     return inliers;
 }
 
-void ModelDetection::colorLines(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,double distanceThreshold){
+void ModelDetection::colorLines(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,double distanceThreshold,int pointsPerLine){
 
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp (new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored (new pcl::PointCloud<pcl::PointXYZRGB>);
+    *temp = *cloud;
+    colored->clear();
+
+    int i = 0;
+    while(temp->size()>(uint)pointsPerLine){
+        std::vector<int> inliers = getBestLine(temp, distanceThreshold);
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr tempPlane (new pcl::PointCloud<pcl::PointXYZRGB>);
+        tempPlane = getSubCloudFromIndices(temp, inliers);
+        temp = removeSetOfIndices(temp, inliers);
+
+        if((int) inliers.size() >= pointsPerLine){
+            std::vector<int> color = colorRandomizer();
+            coloringPointCloud(tempPlane, color);
+            *colored += *tempPlane;
+        }
+
+        i++;
+    }
+
+    cloud->clear();
+    *cloud = *colored;
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr ModelDetection::removeSetOfIndices(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> indices){
