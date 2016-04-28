@@ -43,8 +43,11 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud(std::string path, b
     {
         return pcloud_io::load_cloud_txt(path, is_rgb);
     }
+<<<<<<< HEAD
 
     else return nullptr;
+=======
+>>>>>>> master
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud_txt(std::string pathname, bool is_rgb)
@@ -98,7 +101,11 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud_txt(std::string pat
             // Fill in the cloud data
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
+<<<<<<< HEAD
             for (size_t i = 0; i < px.size(); ++i)
+=======
+            for (int i = 0; i < px.size(); ++i)
+>>>>>>> master
             {
                pcl::PointXYZRGB pt;
                pt.x=px[i];
