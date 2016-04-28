@@ -70,14 +70,13 @@ std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clstr::clustering::getClouds
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr clstr::clustering::getCloudFromVector(std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clouds)
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr final_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_XYZRGB (new pcl::PointCloud<pcl::PointXYZRGB>);
     std::vector<pcl::PointCloud<clstr::PointBool>::Ptr>::iterator vector_it;
     pcl::PointCloud<clstr::PointBool>::iterator clouds_it;
     for(vector_it=clouds.begin(); vector_it!=clouds.end(); vector_it++)
     {
-        for(clouds_it=(*vector_it)->begin(); clouds_it!=(*vector_it)->end(); clouds_it++)
-        {
-            final_cloud->push_back(*clouds_it);
-        }
+        cloud_manip::convertBoolToXYZRGB(*vector_it, cloud_XYZRGB);
+        (*final_cloud)+=(*cloud_XYZRGB);
     }
 
     return final_cloud;

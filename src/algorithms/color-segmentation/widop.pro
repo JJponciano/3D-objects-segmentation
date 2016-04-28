@@ -18,12 +18,14 @@ SOURCES += main.cpp\
            clustering.cpp\
            ../objects/pointbool.cpp\
            ../cloud_manipulation/cloud_manip.cpp\
-           ../io/pcloud_io.cpp
+           ../io/pcloud_io.cpp \
+    ../objects/bounding_box.cpp
 
 HEADERS += clustering.h\
            ../objects/pointbool.h\
            ../cloud_manipulation/cloud_manip.h\
-           ../io/pcloud_io.h
+           ../io/pcloud_io.h \
+    ../objects/bounding_box.h
 
 unix {
     target.path = /usr/lib
