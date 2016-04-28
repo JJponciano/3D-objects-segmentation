@@ -6,8 +6,9 @@
 #include <pcl/point_types.h>
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
 #include <pcl/kdtree/impl/io.hpp>
-#include <pointbool.h>
-#include "pcloud_io.h"
+#include <../objects/pointbool.h>
+#include "../io/pcloud_io.h"
+#include "../cloud_manipulation/cloud_manip.h"
 
 #ifndef CLUSTERING_H
 #define CLUSTERING_H
@@ -23,21 +24,8 @@ namespace clstr{
          * @param radius The radius to find each points neighbour (the bigger the radius is the less precise the obtained clouds are)
          * @param min_cloud_size Default 1000 points. Defines how many points the clouds obtained should at least have
          **/
-        static void getCloudsByColor(pcl::PointCloud<clstr::PointBool>::Ptr base_cloud, double radius, size_t min_cloud_size = 1000);
-
-        /**
-         * @brief convertXYZRGBToBool converts a XYZRGB point cloud into a PointBool one (needed to run the <color-segmentation> algorithm)
-         * @param cloud_RGB The cloud that needs to be converted
-         * @param cloud_bool The cloud in which we store the result
-         */
-        static void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool);
-
-        /**
-         * @brief convertBoolToXYZRGB converts a PointBool point cloud into a XYZRGB one
-         * @param cloud_bool The cloud that needs to be converted
-         * @param cloud_RGB The cloud in which we store the result
-         */
-        static void convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
+        static std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> getCloudsByColor(pcl::PointCloud<clstr::PointBool>::Ptr base_cloud, double radius, size_t min_cloud_size = 1000);
+        static pcl::PointCloud<pcl::PointXYZRGB>::Ptr getCloudFromVector(std::vector<pcl::PointCloud<clstr::PointBool>::Ptr>);
     private:
         /**
          * @brief color_map <map> that has RGB values as keys and return the corresponding coloured cloud

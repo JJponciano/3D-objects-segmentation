@@ -11,7 +11,7 @@ std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clstr::clustering::resulting
 
 //------------------------------------PUBLIC METHODS-------------------------------------------------------
 
-void clstr::clustering::getCloudsByColor(pcl::PointCloud<clstr::PointBool>::Ptr base_cloud, double radius, size_t min_cloud_size)
+std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clstr::clustering::getCloudsByColor(pcl::PointCloud<clstr::PointBool>::Ptr base_cloud, double radius, size_t min_cloud_size)
 {
     // Sorting the points by their RGB value
     std::cout << "Sorting points by their colours" << std::endl;
@@ -63,38 +63,25 @@ void clstr::clustering::getCloudsByColor(pcl::PointCloud<clstr::PointBool>::Ptr 
     std::cout << "Found " << resulting_clouds.size() << " clouds" << std::endl;
     std::cout << "Ignored " << color_map.size()-count_used_map << " colors and " << non_used_clouds << " clouds" << std::endl;
     std::cout << "On a base of " << base_cloud->size() << " points, only " << total_size_kept << " were kept" << std::endl;
-    createTxtFiles(resulting_clouds);
+
+    return resulting_clouds;
 }
 
-void clstr::clustering::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr clstr::clustering::getCloudFromVector(std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clouds)
 {
-    // Make sure that both cloud are of same size and avoid segmentation fault
-    cloud_bool->width = cloud_RGB->width;
-    cloud_bool->height = cloud_RGB->height;
-    cloud_bool->resize(cloud_bool->width * cloud_bool->height);
-    // Copies each point into the other cloud
-    for(size_t i=0; i<cloud_RGB->points.size(); i++)
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr final_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+    std::vector<pcl::PointCloud<clstr::PointBool>::Ptr>::iterator vector_it;
+    pcl::PointCloud<clstr::PointBool>::iterator clouds_it;
+    for(vector_it=clouds.begin(); vector_it!=clouds.end(); vector_it++)
     {
-        cloud_bool->points[i].x = cloud_RGB->points[i].x;
-        cloud_bool->points[i].y = cloud_RGB->points[i].y;
-        cloud_bool->points[i].z = cloud_RGB->points[i].z;
-        cloud_bool->points[i].rgb = cloud_RGB->points[i].rgb;
-        cloud_bool->points[i].setVisited(false);
+        for(clouds_it=(*vector_it)->begin(); clouds_it!=(*vector_it)->end(); clouds_it++)
+        {
+            final_cloud->push_back(*clouds_it);
+        }
     }
-}
 
-void clstr::clustering::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
-{
-    cloud_RGB->width = cloud_bool->width;
-    cloud_RGB->height = cloud_bool->height;
-    cloud_RGB->resize(cloud_RGB->width * cloud_RGB->height);
-    for(size_t i=0; i<cloud_bool->points.size(); i++)
-    {
-        cloud_RGB->points[i].x = cloud_bool->points[i].x;
-        cloud_RGB->points[i].y = cloud_bool->points[i].y;
-        cloud_RGB->points[i].z = cloud_bool->points[i].z;
-        cloud_RGB->points[i].rgb = cloud_bool->points[i].rgb;
-    }
+    return final_cloud;
+
 }
 
 //------------------------------------PRIVATE METHODS-------------------------------------------------------
@@ -171,7 +158,7 @@ void clstr::clustering::createTxtFiles(std::vector<pcl::PointCloud<clstr::PointB
     for(vct_it = clouds.begin(); vct_it!=clouds.end(); vct_it++)
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB (new pcl::PointCloud<pcl::PointXYZRGB>);
-        convertBoolToXYZRGB(*vct_it, cloud_RGB);
+        cloud_manip::convertBoolToXYZRGB(*vct_it, cloud_RGB);
         fileName = "cloud";
         fileName += std::to_string(counter);
         fileName += ".txt";
