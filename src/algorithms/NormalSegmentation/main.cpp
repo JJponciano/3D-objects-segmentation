@@ -9,6 +9,6 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    test_eff_norm_est();
+    test_e_normal_estimation();
 }
 

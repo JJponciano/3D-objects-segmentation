@@ -1,24 +1,38 @@
-#include "../io/pcloud_io.h"
+#include "pcloud_io.h"
 
-void pcloud_io::cloud_to_txt(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
+void pcloud_io::write_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
 {
-    std::ofstream cloud_to_txt;
+    std::ofstream cloud_file;
     std::string line;
 
     // cloud iterator
     pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it;
 
     // opening file
-    cloud_to_txt.open(path, std::ios::out);
+    cloud_file.open(path, std::ios::out);
 
-    for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
+    if (!cloud_file.is_open())
     {
-        line = boost::lexical_cast<std::string>((float)(*cloud_it).x) + "\t" + boost::lexical_cast<std::string>((float)(*cloud_it).y)
-               + "\t" + boost::lexical_cast<std::string>((float)(*cloud_it).z) + "\t" + boost::lexical_cast<std::string>((short)(*cloud_it).r)
-                  + "\t" + boost::lexical_cast<std::string>((short)(*cloud_it).g) + "\t" + boost::lexical_cast<std::string>((short)(*cloud_it).b)
-                     + "\n";
+        throw "pcloud_io::write_cloud : Could not write file at \"" + path + "\".";
+    }
 
-        cloud_to_txt << line;
+    else
+    {
+        if (!pt_cl)
+            throw "pcloud_io::write_cloud : Invalid cloud.";
+
+        else
+        {
+            for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
+            {
+                line = boost::lexical_cast<std::string>((float)(*cloud_it).x) + "\t" + boost::lexical_cast<std::string>((float)(*cloud_it).y)
+                       + "\t" + boost::lexical_cast<std::string>((float)(*cloud_it).z) + "\t" + boost::lexical_cast<std::string>((short)(*cloud_it).r)
+                          + "\t" + boost::lexical_cast<std::string>((short)(*cloud_it).g) + "\t" + boost::lexical_cast<std::string>((short)(*cloud_it).b)
+                             + "\n";
+
+                cloud_file << line;
+            }
+        }
     }
 }
 
@@ -28,21 +42,39 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud(std::string path, b
 
     size_t i = path.rfind('.', path.length());
 
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl;
+
     if (i != std::string::npos)
       ext = path.substr(i+1, path.length() - i);
 
     if (ext.compare("pcd") == 0)
 
     {
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc;
-        pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *pc);
-        return pc;
+        try
+        {
+            pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *pt_cl);
+        }
+
+        catch(std::exception& e)
+        {
+            std::cout << "pcloud_io::load_cloud : Invalid .pcd file.";
+        }
     }
 
     else if (ext.compare("txt") == 0)
     {
-        return pcloud_io::load_cloud_txt(path, is_rgb);
+        try
+        {
+            pt_cl = pcloud_io::load_cloud_txt(path, is_rgb);
+        }
+
+        catch(char const* io_err)
+        {
+            throw io_err;
+        }
     }
+
+    return pt_cl;
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud_txt(std::string pathname, bool is_rgb)
@@ -96,7 +128,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud_txt(std::string pat
             // Fill in the cloud data
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-            for (int i = 0; i < px.size(); ++i)
+            for (unsigned int i = 0; i < px.size(); ++i)
             {
                pcl::PointXYZRGB pt;
                pt.x=px[i];
@@ -110,5 +142,5 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud_txt(std::string pat
             return cloud;
     }
 
-    else return nullptr;
+    else throw "pcloud_io::load_cloud : Invalid .txt file.";
 }

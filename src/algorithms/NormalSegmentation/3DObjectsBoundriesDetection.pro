@@ -15,22 +15,20 @@ TEMPLATE = app
 SOURCES += main.cpp \
     geom_op.cpp \
     vector3.cpp \
-    segm.cpp \
     test_lib.cpp \
-    ../io/pcloud_io.cpp \
     normal_estimation.cpp \
     cloud_manip.cpp \
-    eff_norm_est.cpp
+    e_normal_estimation.cpp \
+    ../io/pcloud_io.cpp
 
 HEADERS += \
     geom_op.h \
     vector3.h \
-    segm.h \
     test_lib.h \
-    ../io/pcloud_io.h \
     normal_estimation.h \
     cloud_manip.h \
-    eff_norm_est.h
+    e_normal_estimation.h \
+    ../io/pcloud_io.h
 
 HEADERS +=
 

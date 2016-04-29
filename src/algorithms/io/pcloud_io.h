@@ -16,19 +16,20 @@
 #include <sstream>
 #include <fstream>
 #include <ios>
+#include <exception>
 
 
 namespace pcloud_io
 {
     /**
-     * @brief Write the point cloud in a text file.
+     * @brief write_cloud writes the point cloud in a text file.
      * @param path Path and name of the file which will be created.
      * @param pc The point cloud which will be saved.
      **/ 
-    void cloud_to_txt(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl);
+    void write_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl);
 
     /**
-     * @brief load_cloudtxt generates a cloud from a txt file
+     * @brief load_cloud_txt generates a cloud from a txt file
      * @param path is the access path of the file
      * @param is_rgb is true if the text file is supposed to generate an rgb cloud as opposed to a greyscale cloud
      * @return the generated cloud
