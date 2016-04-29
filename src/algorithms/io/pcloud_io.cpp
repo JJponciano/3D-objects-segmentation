@@ -1,6 +1,6 @@
 #include "pcloud_io.h"
 
-void pcloud_io::write_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
+void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
 {
     std::ofstream cloud_file;
     std::string line;
@@ -36,7 +36,7 @@ void pcloud_io::write_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>:
     }
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud(std::string path, bool is_rgb)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path, bool is_rgb)
 {
     std::string ext;    // files extension
 
@@ -65,7 +65,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud(std::string path, b
     {
         try
         {
-            pt_cl = pcloud_io::load_cloud_txt(path, is_rgb);
+            pt_cl = pcloud_io::import_cloud_txt(path, is_rgb);
         }
 
         catch(char const* io_err)
@@ -77,7 +77,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud(std::string path, b
     return pt_cl;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::load_cloud_txt(std::string pathname, bool is_rgb)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string pathname, bool is_rgb)
 {
         QFile file( QString(pathname.c_str()) );
 
