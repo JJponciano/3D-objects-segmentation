@@ -2,12 +2,9 @@
 #define CLOUD_MANIP_H
 
 #include "../geom_op/geom_op.h"
-
-<<<<<<< HEAD
-=======
 #include "../objects/pointbool.h"
+#include "../objects/point_xy_greyscale.h"
 
->>>>>>> 6d71749c856435460ce85af764e76e9e7199a1db
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
@@ -70,6 +67,14 @@ namespace cloud_manip
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr merge_clouds(
             std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragments);
+
+    /**
+     * @brief color_to_greyscale turns a 3D colored cloud into a 2D greyscale cloud
+     * @param pt_cl is the point cloud to be transformed
+     * @return the 2D greyscale cloud
+     */
+    pcl::PointCloud<point_xy_greyscale>::Ptr color_to_greyscale(
+            pcl::PointCloud<pcl::PointXYZRGB> pt_cl);
 
 	void convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
 

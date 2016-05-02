@@ -20,7 +20,10 @@ SOURCES += main.cpp \
     ../cloud_manip/cloud_manip.cpp \
     ../geom_op/geom_op.cpp \
     ../geom_op/vector3.cpp \
-    ../interface/interface.cpp
+    ../interface/interface.cpp \
+    ../objects/bounding_box.cpp \
+    ../objects/pointbool.cpp \
+    ../objects/point_xy_greyscale.cpp
 
 HEADERS += \
     test_lib.h \
@@ -30,7 +33,10 @@ HEADERS += \
     ../cloud_manip/cloud_manip.h \
     ../geom_op/geom_op.h \
     ../geom_op/vector3.h \
-    ../interface/interface.h
+    ../interface/interface.h \
+    ../objects/bounding_box.h \
+    ../objects/pointbool.h \
+    ../objects/point_xy_greyscale.h
 
 HEADERS +=
 
