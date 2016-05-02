@@ -34,6 +34,11 @@ void test_crop_cloud(std::string import_path,
                      std::vector<float> xyzthresh,
                      float precision);
 
+void test_color_to_greyscale(std::string import_path,
+                             std::string export_path,
+                             int is_rgb,
+                             float z_min, float z_max);
+
 
 
 #endif // TEST_LIB_H

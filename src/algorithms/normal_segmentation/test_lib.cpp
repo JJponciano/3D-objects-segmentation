@@ -99,3 +99,29 @@ void test_crop_cloud(std::string import_path,
         throw err_string;
     }
 }
+
+void test_color_to_greyscale(std::string import_path,
+                             std::string export_path,
+                             int is_rgb,
+                             float z_min, float z_max)
+
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+    greyscale_image gs_img;
+
+    try
+    {
+        cloud = pcloud_io::import_cloud(import_path, is_rgb);
+        gs_img = cloud_manip::color_to_greyscale(cloud, z_min, z_max);
+        pcloud_io::export_greyscale_image(export_path + boost::lexical_cast<std::string>(z_min)
+                                          + "_" + boost::lexical_cast<std::string>(z_max)
+                                          + ".txt", gs_img);
+    }
+
+    catch(std::exception const& err)
+    {
+        std::string err_string = "test_crop_cloud : ";
+        err_string.append(err.what());
+        throw err_string;
+    }
+}

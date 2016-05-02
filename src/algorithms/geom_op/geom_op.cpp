@@ -119,6 +119,9 @@ void geom::vectors::pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr
 
 
 /** AUX **/
+float geom::aux::map(float x, float in_min, float in_max, float out_min, float out_max)
+{ return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min; }
+
 float geom::aux::float_avg(std::vector<float> floats)
 {
     float sum = 0;

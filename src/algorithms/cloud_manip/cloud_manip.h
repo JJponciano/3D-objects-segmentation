@@ -3,7 +3,7 @@
 
 #include "../geom_op/geom_op.h"
 #include "../objects/pointbool.h"
-#include "../objects/point_xy_greyscale.h"
+#include "../objects/greyscale_image.h"
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -69,14 +69,14 @@ namespace cloud_manip
             std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragments);
 
     /**
-     * @brief color_to_greyscale turns a 3D colored cloud into a 2D greyscale cloud
+     * @brief color_to_greyscale turns a 3D colored cloud into a 2D greyscale image
      * @param pt_cl is the point cloud to be transformed
      * @param min_z is used for the mapping function
      * @param max_z is used for the mapping function
-     * @return the 2D greyscale cloud
+     * @return the 2D greyscale image
      */
-    pcl::PointCloud<point_xy_greyscale>::Ptr color_to_greyscale(
-            pcl::PointCloud<pcl::PointXYZRGB> pt_cl,
+     greyscale_image color_to_greyscale(
+            pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
             float min_z, float max_z);
 
 	void convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);

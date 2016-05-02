@@ -110,12 +110,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
     return pt_cl;
 }
 
-pcl::PointCloud<point_xy_greyscale> cloud_manip::color_to_greyscale(
-        pcl::PointCloud<pcl::PointXYZRGB> pt_cl,
+greyscale_image cloud_manip::color_to_greyscale(
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
         float min_z, float max_z)
 {
-    pcl::PointCloud<point_xy_greyscale>::Ptr greyscale_cloud;
+    greyscale_image gs_img;
 
+    // #pragma omp parallel for schedule(static)
     for (unsigned int cloud_it = 0; cloud_it < pt_cl->points.size(); cloud_it++)
     {
         point_xy_greyscale pt_xy_gs;
@@ -125,11 +126,11 @@ pcl::PointCloud<point_xy_greyscale> cloud_manip::color_to_greyscale(
 
         pt_xy_gs.x = pt_cl->points[cloud_it].x;
         pt_xy_gs.y = pt_cl->points[cloud_it].y;
-        pt_xy_gs.greyscale((short)greyscale);
-        greyscale_cloud->points.push_back();
+        pt_xy_gs.greyscale((unsigned short)greyscale);
+        gs_img.push_back(pt_xy_gs);
     }
 
-    return greyscale_cloud;
+    return gs_img;
 }
 
 void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)

@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     ../interface/interface.cpp \
     ../objects/bounding_box.cpp \
     ../objects/pointbool.cpp \
-    ../objects/point_xy_greyscale.cpp
+    ../objects/point_xy_greyscale.cpp \
+    ../objects/greyscale_image.cpp
 
 HEADERS += \
     test_lib.h \
@@ -36,7 +37,8 @@ HEADERS += \
     ../interface/interface.h \
     ../objects/bounding_box.h \
     ../objects/pointbool.h \
-    ../objects/point_xy_greyscale.h
+    ../objects/point_xy_greyscale.h \
+    ../objects/greyscale_image.h
 
 HEADERS +=
 
