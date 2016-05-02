@@ -1,6 +1,5 @@
 #include "pcloud_io.h"
 
-
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path, bool is_rgb)
 {
     std::string ext;    // files extension
