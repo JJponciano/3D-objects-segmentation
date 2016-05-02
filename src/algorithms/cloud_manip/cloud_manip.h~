@@ -65,12 +65,6 @@ namespace cloud_manip
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr merge_clouds(
             std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragments);
-
-	void convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
-
-    void giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
-
-    void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool);
 }
 
 #endif // CLOUD_MANIP_H
