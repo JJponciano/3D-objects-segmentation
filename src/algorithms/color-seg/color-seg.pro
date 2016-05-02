@@ -10,22 +10,26 @@ QT += opengl
 CONFIG += C++11
 
 TARGET = PCI
-TEMPLATE = lib
+TEMPLATE = app
 
 DEFINES += PCI_LIBRARY
 
 SOURCES += main.cpp\
-           clustering.cpp\
-           ../objects/pointbool.cpp\
-           ../cloud_manipulation/cloud_manip.cpp\
-           ../io/pcloud_io.cpp \
-    ../objects/bounding_box.cpp
+clustering.cpp\
+./cloud_manip/cloud_manip.cpp\
+./io/pcloud_io.cpp\
+./objects/pointbool.cpp\
+./objects/bounding_box.cpp\
+./geom_op/geom_op.cpp\
+./geom_op/vector3.cpp
 
 HEADERS += clustering.h\
-           ../objects/pointbool.h\
-           ../cloud_manipulation/cloud_manip.h\
-           ../io/pcloud_io.h \
-    ../objects/bounding_box.h
+./cloud_manip/cloud_manip.h\
+./io/pcloud_io.h\
+./objects/pointbool.h\
+./objects/bounding_box.h\
+./geom_op/geom_op.h\
+./geom_op/vector3.h
 
 unix {
     target.path = /usr/lib

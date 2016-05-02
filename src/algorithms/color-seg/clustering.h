@@ -6,9 +6,9 @@
 #include <pcl/point_types.h>
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
 #include <pcl/kdtree/impl/io.hpp>
-#include <../objects/pointbool.h>
-#include "../io/pcloud_io.h"
-#include "../cloud_manipulation/cloud_manip.h"
+#include <./objects/pointbool.h>
+#include "./io/pcloud_io.h"
+#include "./cloud_manip/cloud_manip.h"
 
 #ifndef CLUSTERING_H
 #define CLUSTERING_H
@@ -24,13 +24,13 @@ namespace clstr{
          * @param radius The radius to find each points neighbour (the bigger the radius is the less precise the obtained clouds are)
          * @param min_cloud_size Default 1000 points. Defines how many points the clouds obtained should at least have
          **/
-        static std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> getCloudsByColor(pcl::PointCloud<clstr::PointBool>::Ptr base_cloud, double radius, size_t min_cloud_size = 1000);
+        static std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> getCloudsByColor(pcl::PointCloud<clstr::PointBool>::Ptr base_cloud, double radius, size_t min_cluster_size = 1000);
         static pcl::PointCloud<pcl::PointXYZRGB>::Ptr getCloudFromVector(std::vector<pcl::PointCloud<clstr::PointBool>::Ptr>);
     private:
         /**
          * @brief color_map <map> that has RGB values as keys and return the corresponding coloured cloud
          */
-        static std::map<uint32_t, pcl::PointCloud<clstr::PointBool>::Ptr> color_map;
+        static std::map<std::string, pcl::PointCloud<clstr::PointBool>::Ptr> color_map;
         /**
          * @brief resulting_clouds Stores the clouds resulting from the segmentation
          */
@@ -50,17 +50,19 @@ namespace clstr{
         static void setNeighbourhood(pcl::PointCloud<clstr::PointBool>::Ptr colored_cloud, double search_radius);
 
         /**
-         * @brief createNewCloud Despites its name, adds a whole neighbourhood into a new cloud
+         * @brief createNewCluster Despites its name, adds a whole neighbourhood into a new cloud
          * @param crt_point Pointer to the point we want to find the neighbours and add them
-         * @param new_cloud Cloud in which the neighbourhood will be stored
+         * @param new_cluster Cloud in which the neighbourhood will be stored
          */
-        static void createNewCloud(clstr::PointBool* crt_point, pcl::PointCloud<clstr::PointBool>::Ptr new_cloud);
+        static void createNewCluster(clstr::PointBool* crt_point, pcl::PointCloud<clstr::PointBool>::Ptr new_cluster);
 
         /**
          * @brief createTxtFiles Create one text file per cloud found
          * @param clouds A vector containing each of the clouds obtained as a result of the segmentation
          */
         static void createTxtFiles(std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clouds);
+
+        static int roundToNearestTenth(int i);
     };
 }
 #endif // CLUSTERING_H

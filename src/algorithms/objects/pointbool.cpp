@@ -5,7 +5,9 @@ clstr::PointBool::PointBool()
 
 }
 
-void clstr::PointBool::addNeighbour(clstr::PointBool* neighbour)
+clstr::PointBool::PointBool(float x, float y, float z)
 {
-    this->neighbours.push_back(neighbour);
+    this->x = x;
+    this->y = y;
+    this->z = z;
 }
