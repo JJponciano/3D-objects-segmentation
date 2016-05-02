@@ -1,5 +1,16 @@
 #include "interface.h"
 
+float get_precision_input()
+{
+    float precision;
+
+    std::cout << "> precision ";
+    std::cin >> precision;
+    clear_screen();
+
+    return precision;
+}
+
 float get_radius_input()
 {
     float radius;
@@ -22,18 +33,18 @@ int get_max_neighbs_input()
     return max_neighbs;
 }
 
-std::vector<float> get_xyzscale_input()
+std::vector<float> get_xyz_input()
 {
     float x_scale;
     float y_scale;
     float z_scale;
     std::vector<float> xyzscale_input;
 
-    std::cout << "> x_scale: ";
+    std::cout << "> x: ";
     std::cin >> x_scale;
-    std::cout << std::endl << "> y_scale: ";
+    std::cout << std::endl << "> y: ";
     std::cin >> y_scale;
-    std::cout << std::endl << "> z_scale: ";
+    std::cout << std::endl << "> z: ";
     std::cin >> z_scale;
     clear_screen();
 
@@ -74,7 +85,7 @@ void success() { std::cout << "> Test succeeded. Hit ENTER to continue..."; std:
 
 void failure(char const* err)
 {
-    std::cout << "> Test failed. Error: " << err << "Hit ENTER to continue...";
+    std::cout << "> Test failed. Error: " << err << " Hit ENTER to continue...";
     std::cin.ignore(); std::cin.get();
     clear_screen();
 }
@@ -91,6 +102,7 @@ void test_menu()
     {
         std::cout << "1 - normal_estimation();" << std::endl;
         std::cout << "2 - e_normal_estimation();" << std::endl;
+        std::cout << "3 - crop_cloud();" << std::endl;
         std::cout << "0 - quit." << std::endl;
         std::cout << std::endl << "Your selection: ";
         std::cin >> selection;
@@ -126,7 +138,25 @@ void test_menu()
                                              get_export_path_input(),
                                              get_radius_input(),
                                              get_max_neighbs_input(),
-                                             get_xyzscale_input());
+                                             get_xyz_input(),
+                                             get_precision_input());
+                    success();
+                }
+
+                catch (char const* err)
+                {
+                    failure(err);
+                }
+
+                break;
+
+            case 3:
+                try
+                {
+                    test_crop_cloud(get_import_path_input(),
+                                    get_export_path_input(),
+                                    get_xyz_input(),
+                                    get_precision_input());
                     success();
                 }
 

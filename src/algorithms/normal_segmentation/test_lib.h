@@ -6,7 +6,7 @@
 #define TEST_LIB_H
 
 #include "e_normal_estimation.h"
-#include "cloud_manip.h"
+#include "../cloud_manip/cloud_manip.h"
 #include "../io/pcloud_io.h"
 
 #include <time.h>
@@ -23,7 +23,13 @@ void test_e_normal_estimation(std::string import_path,
                               std::string export_path,
                               float radius,
                               int max_neighbs,
-                              std::vector<float> xyzscale);
+                              std::vector<float> xyzscale,
+                              float precision);
+
+void test_crop_cloud(std::string import_path,
+                     std::string export_path,
+                     std::vector<float> xyzthresh,
+                     float precision);
 
 
 

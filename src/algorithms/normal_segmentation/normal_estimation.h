@@ -6,7 +6,7 @@
 #ifndef NORMAL_ESTIMATION_H
 #define NORMAL_ESTIMATION_H
 
-#include "geom_op.h"
+#include "../geom_op/geom_op.h"
 
 /**
  * @brief normal_estimation is a function that estimates the normal vectors of a point cloud

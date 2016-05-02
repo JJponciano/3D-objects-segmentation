@@ -42,15 +42,18 @@ void test_e_normal_estimation(std::string import_path,
                               std::string export_path,
                               float radius,
                               int max_neighbs,
-                              std::vector<float> xyzscale)
+                              std::vector<float> xyzscale,
+                              float precision)
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;   // cloud to be examined
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud;   // output cloud
 
     try
     {
         cloud = pcloud_io::import_cloud(import_path, false);
-        colored_cloud = e_normal_estimation(cloud, radius, max_neighbs, xyzscale[0], xyzscale[1], xyzscale[2]);
+        colored_cloud = e_normal_estimation(cloud, radius, max_neighbs,
+                                            xyzscale[0], xyzscale[1], xyzscale[2],
+                                            precision);
         pcloud_io::export_cloud(export_path + boost::lexical_cast<std::string>(radius) + "_"
                                 + boost::lexical_cast<std::string>(max_neighbs) + "_"
                                 + boost::lexical_cast<std::string>(xyzscale[0]) + "_"
@@ -67,3 +70,29 @@ void test_e_normal_estimation(std::string import_path,
     }
 }
 
+void test_crop_cloud(std::string import_path,
+                     std::string export_path,
+                     std::vector<float> xyzthresh,
+                     float precision)
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cropped_cloud;
+
+    try
+    {
+        cloud = pcloud_io::import_cloud(import_path, true);
+        cropped_cloud =
+                cloud_manip::crop_cloud(cloud, xyzthresh[0], xyzthresh[1], xyzthresh[2], precision);
+        pcloud_io::export_cloud(export_path + boost::lexical_cast<std::string>(xyzthresh[0]) + "_"
+                                + boost::lexical_cast<std::string>(xyzthresh[1]) + "_"
+                                + boost::lexical_cast<std::string>(xyzthresh[2]) + "_"
+                                + ".txt", cropped_cloud);
+    }
+
+    catch(std::exception const& err)
+    {
+        std::string err_string = "test_crop_cloud : ";
+        err_string.append(err.what());
+        throw err_string;
+    }
+}

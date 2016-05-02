@@ -2,11 +2,12 @@
 
 #include <QCoreApplication>
 
-#include "interface.h"
+#include "../interface/interface.h"
 
 /* function implementation */
 int main()
 {
+    clear_screen();
     test_menu();
 
     return 0;

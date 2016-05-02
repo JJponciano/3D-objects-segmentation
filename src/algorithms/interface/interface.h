@@ -1,11 +1,12 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include "test_lib.h"
+#include "../normal_segmentation/test_lib.h"
 
+float get_precision_input();
 float get_radius_input();
 int get_max_neighbs_input();
-std::vector<float> get_xyzscale_input();
+std::vector<float> get_xyz_input();
 std::string get_import_path_input();
 std::string get_export_path_input();
 void clear_screen();

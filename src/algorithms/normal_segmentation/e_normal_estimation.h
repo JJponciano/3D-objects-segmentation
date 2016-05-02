@@ -2,7 +2,7 @@
 #define EFF_NORM_EST_H
 
 #include "normal_estimation.h"
-#include "cloud_manip.h"
+#include "../cloud_manip/cloud_manip.h"
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -16,6 +16,7 @@
  * @param x_scale is a scaling parameter for the x axis of a cloud
  * @param y_scale is a scaling parameter for the y axis of a cloud
  * @param z_scale is a scaling parameter for the z axis of a cloud
+ * @param precision is the precision for float comparison
  * @return the colored cloud
  */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
@@ -23,6 +24,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::
                                                     int max_neighbs,
                                                     float x_scale,
                                                     float y_scale,
-                                                    float z_scale);
+                                                    float z_scale,
+                                                    float precision);
 
 #endif // EFF_NORM_EST_H

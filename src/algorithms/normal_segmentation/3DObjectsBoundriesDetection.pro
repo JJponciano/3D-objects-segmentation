@@ -13,24 +13,24 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    geom_op.cpp \
-    vector3.cpp \
     test_lib.cpp \
     normal_estimation.cpp \
-    cloud_manip.cpp \
     e_normal_estimation.cpp \
     ../io/pcloud_io.cpp \
-    interface.cpp
+    ../cloud_manip/cloud_manip.cpp \
+    ../geom_op/geom_op.cpp \
+    ../geom_op/vector3.cpp \
+    ../interface/interface.cpp
 
 HEADERS += \
-    geom_op.h \
-    vector3.h \
     test_lib.h \
     normal_estimation.h \
-    cloud_manip.h \
     e_normal_estimation.h \
     ../io/pcloud_io.h \
-    interface.h
+    ../cloud_manip/cloud_manip.h \
+    ../geom_op/geom_op.h \
+    ../geom_op/vector3.h \
+    ../interface/interface.h
 
 HEADERS +=
 
