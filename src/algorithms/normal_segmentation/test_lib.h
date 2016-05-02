@@ -16,11 +16,13 @@ void test_load_cloud(std::string bad_path);
 
 void test_normal_estimation(std::string import_path,
                             std::string export_path,
+                            int is_rgb,
                             float radius,
                             int max_neighbs);
 
 void test_e_normal_estimation(std::string import_path,
                               std::string export_path,
+                              int is_rgb,
                               float radius,
                               int max_neighbs,
                               std::vector<float> xyzscale,
@@ -28,6 +30,7 @@ void test_e_normal_estimation(std::string import_path,
 
 void test_crop_cloud(std::string import_path,
                      std::string export_path,
+                     int is_rgb,
                      std::vector<float> xyzthresh,
                      float precision);
 

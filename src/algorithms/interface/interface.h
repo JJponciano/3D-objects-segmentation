@@ -9,6 +9,7 @@ int get_max_neighbs_input();
 std::vector<float> get_xyz_input();
 std::string get_import_path_input();
 std::string get_export_path_input();
+int get_file_type_input();
 void clear_screen();
 void invalid_input();
 void success();

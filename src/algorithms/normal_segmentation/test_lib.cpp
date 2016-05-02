@@ -15,6 +15,7 @@ void test_import_cloud(std::string bad_path)
 
 void test_normal_estimation(std::string import_path,
                               std::string export_path,
+                              int is_rgb,
                               float radius,
                               int max_neighbs)
 {
@@ -22,7 +23,7 @@ void test_normal_estimation(std::string import_path,
 
     try
     {
-        cloud = pcloud_io::import_cloud(import_path, false);
+        cloud = pcloud_io::import_cloud(import_path, is_rgb);
         normal_estimation(cloud, radius, max_neighbs);
         pcloud_io::export_cloud(export_path
                                + boost::lexical_cast<std::string>(radius) + "_"
@@ -40,6 +41,7 @@ void test_normal_estimation(std::string import_path,
 
 void test_e_normal_estimation(std::string import_path,
                               std::string export_path,
+                              int is_rgb,
                               float radius,
                               int max_neighbs,
                               std::vector<float> xyzscale,
@@ -50,7 +52,7 @@ void test_e_normal_estimation(std::string import_path,
 
     try
     {
-        cloud = pcloud_io::import_cloud(import_path, false);
+        cloud = pcloud_io::import_cloud(import_path, is_rgb);
         colored_cloud = e_normal_estimation(cloud, radius, max_neighbs,
                                             xyzscale[0], xyzscale[1], xyzscale[2],
                                             precision);
@@ -72,6 +74,7 @@ void test_e_normal_estimation(std::string import_path,
 
 void test_crop_cloud(std::string import_path,
                      std::string export_path,
+                     int is_rgb,
                      std::vector<float> xyzthresh,
                      float precision)
 {
@@ -80,7 +83,7 @@ void test_crop_cloud(std::string import_path,
 
     try
     {
-        cloud = pcloud_io::import_cloud(import_path, true);
+        cloud = pcloud_io::import_cloud(import_path, is_rgb);
         cropped_cloud =
                 cloud_manip::crop_cloud(cloud, xyzthresh[0], xyzthresh[1], xyzthresh[2], precision);
         pcloud_io::export_cloud(export_path + boost::lexical_cast<std::string>(xyzthresh[0]) + "_"

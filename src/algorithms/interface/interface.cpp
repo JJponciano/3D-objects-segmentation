@@ -4,7 +4,7 @@ float get_precision_input()
 {
     float precision;
 
-    std::cout << "> precision ";
+    std::cout << "> precision: ";
     std::cin >> precision;
     clear_screen();
 
@@ -77,6 +77,17 @@ std::string get_export_path_input()
     return export_path_input;
 }
 
+int get_file_type_input()
+{
+    int is_rgb;
+
+    std::cout << "> is rgb (0 if false): ";
+    std::cin >> is_rgb;
+    clear_screen();
+
+    return is_rgb;
+}
+
 void clear_screen() { std::cout << std::string(50, '\n'); }
 
 void invalid_input() { std::cout << "> Invalid input. Hit ENTER to continue..."; std::cin.ignore(); std::cin.get(); clear_screen(); }
@@ -119,6 +130,7 @@ void test_menu()
                 {
                     test_normal_estimation(get_import_path_input(),
                                            get_export_path_input(),
+                                           get_file_type_input(),
                                            get_radius_input(),
                                            get_max_neighbs_input());
                     success();
@@ -136,6 +148,7 @@ void test_menu()
                 {
                     test_e_normal_estimation(get_import_path_input(),
                                              get_export_path_input(),
+                                             get_file_type_input(),
                                              get_radius_input(),
                                              get_max_neighbs_input(),
                                              get_xyz_input(),
@@ -155,6 +168,7 @@ void test_menu()
                 {
                     test_crop_cloud(get_import_path_input(),
                                     get_export_path_input(),
+                                    get_file_type_input(),
                                     get_xyz_input(),
                                     get_precision_input());
                     success();

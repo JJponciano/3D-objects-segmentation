@@ -3,6 +3,11 @@
 
 #include "../geom_op/geom_op.h"
 
+<<<<<<< HEAD
+=======
+#include "../objects/pointbool.h"
+
+>>>>>>> 6d71749c856435460ce85af764e76e9e7199a1db
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
@@ -65,6 +70,15 @@ namespace cloud_manip
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr merge_clouds(
             std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragments);
+<<<<<<< HEAD
+=======
+
+	void convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
+
+    void giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
+
+    void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool);
+>>>>>>> 6d71749c856435460ce85af764e76e9e7199a1db
 }
 
 #endif // CLOUD_MANIP_H
