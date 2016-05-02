@@ -4,17 +4,26 @@
 
 bounding_box::bounding_box(pcl::PointCloud<clstr::PointBool>::Ptr cloud)
 {
-    float xmin=9999,xmax=-9999,ymin=9999,ymax=-9999,zmin=9999,zmax=-9999;
-    pcl::PointCloud<clstr::PointBool>::iterator cloud_it;
-    for(cloud_it=cloud->begin(); cloud_it!=cloud->end(); cloud_it++)
+    pcl::PointCloud<clstr::PointBool>::iterator cloud_it=cloud->begin();
+    float xmin=(*cloud_it).x,xmax=(*cloud_it).x,ymin=(*cloud_it).y,ymax=(*cloud_it).y,zmin=(*cloud_it).z,zmax=(*cloud_it).z;
+    cloud_it++;
+    for(cloud_it; cloud_it!=cloud->end(); cloud_it++)
     {
         if((*cloud_it).x < xmin) xmin = (*cloud_it).x;
-        if((*cloud_it).x < xmax) xmax = (*cloud_it).x;
+        if((*cloud_it).x > xmax) xmax = (*cloud_it).x;
         if((*cloud_it).y < ymin) ymin = (*cloud_it).y;
-        if((*cloud_it).y < ymax) ymax = (*cloud_it).y;
+        if((*cloud_it).y > ymax) ymax = (*cloud_it).y;
         if((*cloud_it).z < zmin) zmin = (*cloud_it).z;
-        if((*cloud_it).z < zmax) zmax = (*cloud_it).z;
+        if((*cloud_it).z > zmax) zmax = (*cloud_it).z;
     }
+    this->A = new clstr::PointBool(xmin,ymax,zmin);
+    this->B = new clstr::PointBool(xmin,ymax,zmax);
+    this->C = new clstr::PointBool(xmax,ymax,zmax);
+    this->D = new clstr::PointBool(xmax,ymax,zmin);
+    this->E = new clstr::PointBool(xmin,ymin,zmax);
+    this->F = new clstr::PointBool(xmax,ymin,zmax);
+    this->G = new clstr::PointBool(xmax,ymin,zmin);
+    this->H = new clstr::PointBool(xmin,ymin,zmin);
 }
 
 bounding_box::bounding_box(clstr::PointBool* A, clstr::PointBool* B, clstr::PointBool* C, clstr::PointBool* D, clstr::PointBool* E, clstr::PointBool* F, clstr::PointBool* G, clstr::PointBool* H)
@@ -79,6 +88,32 @@ std::vector<bounding_box*> bounding_box::divideBox()
     clstr::PointBool* Y = new clstr::PointBool(this->D->x, (this->D->y)/2, this->C->z);
 
     clstr::PointBool* Z = new clstr::PointBool(this->D->x, this->H->y, (this->C->z)/2);
+
+    clstr::PointBool* cube_center = new clstr::PointBool((this->D->x)/2, (this->D->y)/2, (this->C->z)/2);
+
+    bounding_box* cube_1 = new bounding_box(R, this->B, O, I, W, J, cube_center, K);
+    child_boxes.push_back(cube_1);
+
+    bounding_box* cube_2 = new bounding_box(I, O, this->C, P, J, Y, M, cube_center);
+    child_boxes.push_back(cube_2);
+
+    bounding_box* cube_3 = new bounding_box(this->A, R, I, Q, K, cube_center, this->E, U);
+    child_boxes.push_back(cube_3);
+
+    bounding_box* cube_4 = new bounding_box(Q, I, P, this->D, cube_center, M, S, this->E);
+    child_boxes.push_back(cube_4);
+
+    bounding_box* cube_5 = new bounding_box(K, W, J, cube_center, N, X, L, V);
+    child_boxes.push_back(cube_5);
+
+    bounding_box* cube_6 = new bounding_box(cube_center, J, Y, M, X, this->F, Z, L);
+    child_boxes.push_back(cube_6);
+
+    bounding_box* cube_7 = new bounding_box(U, K, cube_center, this->E, V, L, T, this->H);
+    child_boxes.push_back(cube_7);
+
+    bounding_box* cube_8 = new bounding_box(this->E, cube_center, M, S, L, Z, this->G, T);
+    child_boxes.push_back(cube_8);
 
     return child_boxes;
 }

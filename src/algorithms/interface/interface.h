@@ -1,7 +1,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include "../normal_segmentation/test_lib.h"
+#include "../test_lib/test_lib.h"
 
 float get_precision_input();
 float get_radius_input();

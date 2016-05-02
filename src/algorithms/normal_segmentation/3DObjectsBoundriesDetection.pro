@@ -13,7 +13,6 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    test_lib.cpp \
     normal_estimation.cpp \
     e_normal_estimation.cpp \
     ../io/pcloud_io.cpp \
@@ -24,10 +23,10 @@ SOURCES += main.cpp \
     ../objects/bounding_box.cpp \
     ../objects/pointbool.cpp \
     ../objects/point_xy_greyscale.cpp \
-    ../objects/greyscale_image.cpp
+    ../objects/greyscale_image.cpp \
+    ../test_lib/test_lib.cpp
 
 HEADERS += \
-    test_lib.h \
     normal_estimation.h \
     e_normal_estimation.h \
     ../io/pcloud_io.h \
@@ -38,7 +37,8 @@ HEADERS += \
     ../objects/bounding_box.h \
     ../objects/pointbool.h \
     ../objects/point_xy_greyscale.h \
-    ../objects/greyscale_image.h
+    ../objects/greyscale_image.h \
+    ../test_lib/test_lib.h
 
 HEADERS +=
 

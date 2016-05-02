@@ -1,5 +1,47 @@
 #include "pcloud_io.h"
 
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path, bool is_rgb)
+{
+    std::string ext;    // files extension
+
+    size_t i = path.rfind('.', path.length());
+
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl;
+
+    if (i != std::string::npos)
+      ext = path.substr(i+1, path.length() - i);
+
+    if (ext.compare("pcd") == 0)
+
+    {
+        try
+        {
+            pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *pt_cl);
+        }
+
+        catch(std::exception& e)
+        {
+            std::cout << "pcloud_io::load_cloud : Invalid .pcd file.";
+        }
+    }
+
+    else if (ext.compare("txt") == 0)
+    {
+        try
+        {
+            pt_cl = pcloud_io::import_cloud_txt(path, is_rgb);
+        }
+
+        catch(char const* io_err)
+        {
+            throw io_err;
+        }
+    }
+
+    return pt_cl;
+}
+
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string pathname, bool is_rgb)
 {
         QFile file( QString(pathname.c_str()) );
@@ -78,47 +120,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string p
     }
 
     else throw "pcloud_io::import_cloud : Invalid .txt file.";
-}
-
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path, bool is_rgb)
-{
-    std::string ext;    // files extension
-
-    size_t i = path.rfind('.', path.length());
-
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl;
-
-    if (i != std::string::npos)
-      ext = path.substr(i+1, path.length() - i);
-
-    if (ext.compare("pcd") == 0)
-
-    {
-        try
-        {
-            pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *pt_cl);
-        }
-
-        catch(std::exception& e)
-        {
-            std::cout << "pcloud_io::import_cloud : Invalid .pcd file.";
-        }
-    }
-
-    else if (ext.compare("txt") == 0)
-    {
-        try
-        {
-            pt_cl = pcloud_io::import_cloud_txt(path, is_rgb);
-        }
-
-        catch(char const* io_err)
-        {
-            throw io_err;
-        }
-    }
-
-    return pt_cl;
 }
 
 greyscale_image pcloud_io::import_greyscale_image(std::string path)

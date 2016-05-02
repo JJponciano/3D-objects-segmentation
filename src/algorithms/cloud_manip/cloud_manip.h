@@ -2,6 +2,7 @@
 #define CLOUD_MANIP_H
 
 #include "../geom_op/geom_op.h"
+
 #include "../objects/pointbool.h"
 #include "../objects/greyscale_image.h"
 
@@ -78,12 +79,25 @@ namespace cloud_manip
      greyscale_image color_to_greyscale(
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
             float min_z, float max_z);
-
+     /**W
+     * @brief convertBoolToXYZRGB converts a CLSTR PointBool cloud into a PCL RGB cloud, so its point can be written in a file
+     * @param cloud_bool the CLSTR PointBool from where the data are taken
+     * @param cloud_RGB the PCL RGB cloud cloud where the data will be converted
+     */
 	void convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
 
-    void giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
-
+    /**
+     * @brief convertBoolToXYZRGB converts a PCL RGB cloud into a CLSTR PointBool cloud, used for the clustering and bounding algorithm
+     * @param cloud_bool the CLSTR PointBool cloud where the data will be converted
+     * @param cloud_RGB the PCL RGB cloud from where the data are taken
+     */
     void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool);
+
+    /**
+     * @brief giveRandomColorToCloud gets a cluster and changes its colour to a random colour
+     * @param cloud the cluster you want the colour to change
+     */
+    void giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
 }
 
 #endif // CLOUD_MANIP_H

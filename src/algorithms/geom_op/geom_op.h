@@ -85,6 +85,7 @@ namespace geom
     namespace aux
     {
         /**
+<<<<<<< HEAD
          * @brief map maps a number found within a range to another range
          * @param x is the number to be mapped
          * @param in_min is minimum of the in range
@@ -98,6 +99,8 @@ namespace geom
                   float out_min, float out_max);
 
         /**
+=======
+>>>>>>> 0c875538bc7405352fef8118f72c8a2c50fe3cfb
          * @brief float_avg calculates the average of float numbers
          * @param floats is the array of the floats to be averaged
          * @return the averaged of the floats found within the parameter array
