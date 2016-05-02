@@ -79,7 +79,7 @@ namespace cloud_manip
      greyscale_image color_to_greyscale(
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
             float min_z, float max_z);
-     /**W
+     /**
      * @brief convertBoolToXYZRGB converts a CLSTR PointBool cloud into a PCL RGB cloud, so its point can be written in a file
      * @param cloud_bool the CLSTR PointBool from where the data are taken
      * @param cloud_RGB the PCL RGB cloud cloud where the data will be converted
