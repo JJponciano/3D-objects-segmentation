@@ -109,8 +109,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
 
     return pt_cl;
 }
-<<<<<<< HEAD
-=======
 
 void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
 {
@@ -156,4 +154,3 @@ void cloud_manip::giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr 
         (*cloud_it).b = b;
     }
 }
->>>>>>> 6d71749c856435460ce85af764e76e9e7199a1db
