@@ -5,7 +5,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::
                                                     int max_neighbs,
                                                     float x_scale,
                                                     float y_scale,
-                                                    float z_scale)
+                                                    float z_scale,
+                                                    float precision)
 {
     // the cloud colored by its normal vectors; return value
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud;
@@ -13,9 +14,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::
 
     try
     {
-        cloud_manip::scale_cloud(pt_cl, x_scale, y_scale, z_scale); // scaling cloud
+        cloud_manip::scale_cloud(pt_cl, x_scale, y_scale, z_scale, precision); // scaling cloud
         std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments =
-                cloud_manip::fragment_cloud(pt_cl, y_scale); // fragmenting cloud for faster treatment
+                cloud_manip::fragment_cloud(pt_cl, y_scale, precision); // fragmenting cloud for faster treatment
 
         // estimating the normals for each cloud fragment in parallel
         #pragma omp parallel for schedule(static)
@@ -29,7 +30,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::
         cloud_manip::scale_cloud(colored_cloud,
                                      (1.0/x_scale),
                                      (1.0/y_scale),
-                                     (1.0/z_scale));    // restoring widop scale
+                                     (1.0/z_scale),
+                                     precision);    // restoring widop scale
 
         return colored_cloud;
     }
