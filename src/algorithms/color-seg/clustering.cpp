@@ -30,12 +30,15 @@ std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clstr::clustering::getClouds
     int non_used_clouds = 0;
     int total_point_size = 0;
     int total_size_kept = 0;
+    int colour_counter=0;
 
     std::cout << "The algorithm will now proceed to find the different clusters. This operation WILL take a while... " << std::flush;
     for(map_it = color_map.begin(); map_it!=color_map.end(); map_it++)
     {
+        colour_counter++;
         if((map_it->second)->size() >= min_cluster_size)
         {
+            std::cout << "Analyzing colour n°" << colour_counter << std::endl;
             setNeighbourhood(map_it->second, radius);
             pcl::PointCloud<clstr::PointBool>::iterator cloud_it;
             for(cloud_it = (map_it->second)->begin(); cloud_it < (map_it->second)->end(); cloud_it++)
@@ -53,7 +56,7 @@ std::vector<pcl::PointCloud<clstr::PointBool>::Ptr> clstr::clustering::getClouds
                         resulting_clouds.push_back(new_cluster);
                         total_size_kept += new_cluster->size();
                     }
-                    else { non_used_clouds++; }
+                    else { non_used_clouds++; new_cluster->clear(); new_cluster->resize(0);}
                     total_point_size += new_cluster->size();
                 }
             }
@@ -80,7 +83,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr clstr::clustering::getCloudFromVector(std
     for(vector_it=clouds.begin(); vector_it!=clouds.end(); vector_it++)
     {
         cloud_manip::convertBoolToXYZRGB(*vector_it, cloud_XYZRGB);
-        cloud_manip::giveRandomColorToCloud(cloud_XYZRGB);
+        //cloud_manip::giveRandomColorToCloud(cloud_XYZRGB);
         (*final_cloud)+=(*cloud_XYZRGB);
     }
     std::cout << "Finished attributing colours." << std::endl;
