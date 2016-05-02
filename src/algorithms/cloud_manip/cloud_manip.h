@@ -4,6 +4,7 @@
 #include "../geom_op/geom_op.h"
 
 #include "../objects/pointbool.h"
+#include "../objects/greyscale_image.h"
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -69,6 +70,17 @@ namespace cloud_manip
             std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragments);
 
     /**
+     * @brief color_to_greyscale turns a 3D colored cloud into a 2D greyscale image
+     * @param pt_cl is the point cloud to be transformed
+     * @param min_z is used for the mapping function
+     * @param max_z is used for the mapping function
+     * @return the 2D greyscale image
+     */
+     greyscale_image color_to_greyscale(
+            pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
+            float min_z, float max_z);
+
+     /**
      * @brief convertBoolToXYZRGB converts a CLSTR PointBool cloud into a PCL RGB cloud, so its point can be written in a file
      * @param cloud_bool the CLSTR PointBool from where the data are taken
      * @param cloud_RGB the PCL RGB cloud cloud where the data will be converted
@@ -87,8 +99,6 @@ namespace cloud_manip
      * @param cloud the cluster you want the colour to change
      */
     void giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
-
-
 }
 
 #endif // CLOUD_MANIP_H
