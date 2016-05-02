@@ -89,7 +89,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string p
             std::vector<float> px;
             std::vector<float> py;
             std::vector<float> pz;
-            std::vector<uint32_t> pt_rgb;
+            std::vector<float> pt_r;
+            std::vector<float> pt_g;
+            std::vector<float> pt_b;
 
             while(!flux.atEnd())
             {
@@ -114,10 +116,18 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string p
                     pz.push_back(r.toFloat());
 
                     if (is_rgb)
-                        pt_rgb.push_back((uint32_t)result.at(3).toInt() << 16 | (uint32_t)result.at(4).toInt() << 8 | (uint32_t)result.at(5).toInt());
+                    {
+                        pt_r.push_back(result.at(3).toFloat());
+                        pt_g.push_back(result.at(4).toFloat());
+                        pt_b.push_back(result.at(5).toFloat());
+                    }
 
                     else
-                        pt_rgb.push_back(255);
+                    {
+                        pt_r.push_back((float)255);
+                        pt_g.push_back((float)255);
+                        pt_b.push_back((float)255);
+                    }
                 }
             }
 
@@ -134,7 +144,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string p
                pt.x=px[i];
                pt.y=py[i];
                pt.z=pz[i];
-               pt.rgb = pt_rgb[i];
+               pt.r = pt_r[i];
+               pt.g = pt_g[i];
+               pt.b = pt_b[i];
 
                cloud->push_back(pt);
             }
