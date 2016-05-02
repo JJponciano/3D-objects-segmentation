@@ -71,10 +71,13 @@ namespace cloud_manip
     /**
      * @brief color_to_greyscale turns a 3D colored cloud into a 2D greyscale cloud
      * @param pt_cl is the point cloud to be transformed
+     * @param min_z is used for the mapping function
+     * @param max_z is used for the mapping function
      * @return the 2D greyscale cloud
      */
     pcl::PointCloud<point_xy_greyscale>::Ptr color_to_greyscale(
-            pcl::PointCloud<pcl::PointXYZRGB> pt_cl);
+            pcl::PointCloud<pcl::PointXYZRGB> pt_cl,
+            float min_z, float max_z);
 
 	void convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
 

@@ -85,6 +85,19 @@ namespace geom
     namespace aux
     {
         /**
+         * @brief map maps a number found within a range to another range
+         * @param x is the number to be mapped
+         * @param in_min is minimum of the in range
+         * @param in_max is the maximum of the in range
+         * @param out_min is the minimum of the out range
+         * @param out_max is the maximum of the out range
+         * @return the mapped float
+         */
+        float map(float x,
+                  float in_min, float in_max,
+                  float out_min, float out_max) { return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min; }
+
+        /**
          * @brief float_avg calculates the average of float numbers
          * @param floats is the array of the floats to be averaged
          * @return the averaged of the floats found within the parameter array
