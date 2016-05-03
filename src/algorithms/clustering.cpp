@@ -27,9 +27,6 @@ std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::getClou
     // We then check if the point has already been visited. If it's not the case, that means it must belong to another segmented cloud
     std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr>::iterator map_it;
     //These ints are only used for the informational text written on the console
-    int non_used_clouds = 0;
-    int total_point_size = 0;
-    int total_size_kept = 0;
     int colour_counter=0;
 
     std::cout << "The algorithm will now proceed to find the different clusters. This operation WILL take a while... " << std::flush;
@@ -41,7 +38,7 @@ std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::getClou
             std::cout << "Analyzing colour n°" << colour_counter << std::endl;
             setNeighbourhood(map_it->second, radius);
             pcl::PointCloud<clstr::point_clstr>::iterator cloud_it;
-            for(cloud_it = (map_it->second)->begin(); cloud_it < (map_it->second)->end(); cloud_it++)
+            for(cloud_it = (map_it->second)->begin(); cloud_it != (map_it->second)->end(); cloud_it++)
             {
                 if(!(*cloud_it).getVisited()) // If the point hasn't been visited yet
                 {
@@ -49,15 +46,12 @@ std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::getClou
                     pcl::PointCloud<clstr::point_clstr>::Ptr new_cluster (new pcl::PointCloud<clstr::point_clstr>);
                     (*cloud_it).setVisited(true);
                     new_cluster->push_back(*cloud_it);
-                    clstr::point_clstr* pt_ptr = &(*cloud_it);
-                    createNewCluster(pt_ptr, new_cluster);
+                    createNewCluster(&(*cloud_it), new_cluster);
                     if(new_cluster->size()>=min_cluster_size)
                     {
                         resulting_clouds.push_back(new_cluster);
-                        total_size_kept += new_cluster->size();
                     }
-                    else { non_used_clouds++; new_cluster->clear(); new_cluster->resize(0);}
-                    total_point_size += new_cluster->size();
+                    else { new_cluster->clear(); new_cluster->resize(0);}
                 }
             }
         }
@@ -65,10 +59,6 @@ std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::getClou
         color_map.erase(map_it);
     }
     std::cout << " Finished finding clusters." << std::endl;
-    std::cout << "Found " << resulting_clouds.size() << " clusters." << std::endl;
-    std::cout << "The clusters have an average of " << (double)(total_point_size/resulting_clouds.size()) << " points." << std::endl;
-    std::cout << "A total of " << non_used_clouds << " clusters were beneath the minimum size required. (" << min_cluster_size << ")" << std::endl;
-    std::cout << "Starting with " << base_cloud->size() << " points, only " << total_size_kept << " were kept" << std::endl;
 
     return resulting_clouds;
 }
@@ -97,7 +87,7 @@ void clstr::clustering::sortPointsByColor(pcl::PointCloud<clstr::point_clstr>::i
     // Gets the point color and check if it already exists as a key in our <map>
     // If the key value has been found, we push the point into the cloud that corresponds to the key
     // Else we create a new cloud for a new key value and push the point in this new cloud instead
-    std::string point_color = std::to_string(roundToNearestTenth((int)(*cloud_iterator).r)) + std::to_string(roundToNearestTenth((int)(*cloud_iterator).g)) + std::to_string(roundToNearestTenth((int)(*cloud_iterator).b));
+    std::string point_color = std::to_string((*cloud_iterator).r) + std::to_string((*cloud_iterator).g) + std::to_string((*cloud_iterator).b);
     std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr>::iterator map_it = color_map.find(point_color);
     if(map_it != color_map.end()) // Means the key already exists
     {
@@ -124,14 +114,16 @@ void clstr::clustering::setNeighbourhood(pcl::PointCloud<clstr::point_clstr>::Pt
         std::vector<float> distances; // Contains the squared distances of the nieghbours (useless but mandatory)
         if(kdtree.radiusSearch(*cloud_it, search_radius, PointsID, distances) > 1) // Note that 0 refers to the point itself
         {
-            for(size_t i = 1; i<PointsID.size(); i++)
+            for(size_t i = 0; i<PointsID.size(); i++)
             {
-                clstr::point_clstr* nghbr_ptr = nullptr;
-                nghbr_ptr = &(colored_cloud->points[PointsID[i]]);
-                (*cloud_it).addNeighbour(nghbr_ptr); // We add a pointer of the neighbour because storing pointer costs way less rapid access memory than a copy of the neighbour itself
+                if(!colored_cloud->points[PointsID[i]].getAdded())
+                {
+                    colored_cloud->points[PointsID[i]].setAdded(true);
+                    (*cloud_it).addNeighbour(&(colored_cloud->points[PointsID[i]])); // We add a pointer of the neighbour because storing pointer costs way less rapid access memory than a copy of the neighbour itself
+                }
             }
         }
-        // Deleting a vecotr does not free memory so we clear it and shrink its size to what space it really needs. In this case, the space is of 0.
+        // Deleting a vector does not free memory so we clear it and shrink its size to what space it really needs. In this case, the space is of 0.
         PointsID.clear();
         PointsID.shrink_to_fit();
         distances.clear();
@@ -141,17 +133,13 @@ void clstr::clustering::setNeighbourhood(pcl::PointCloud<clstr::point_clstr>::Pt
 
 void clstr::clustering::createNewCluster(clstr::point_clstr* crt_point, pcl::PointCloud<clstr::point_clstr>::Ptr new_cluster)
 {
-    std::vector<clstr::point_clstr*>::iterator nghbr_it;
-    // We iterate through the neighbourhood of the point
-    for(nghbr_it = crt_point->getFirstNghbr(); nghbr_it!=crt_point->getEndNghbr(); nghbr_it++)
+    for(clstr::point_clstr* point : crt_point->getNghbr())
     {
-        // If the neighbours hasn't been visited yet
-        if(!(**nghbr_it).getVisited())
+        if(!(point->getVisited()))
         {
-            // We set it as visited, push it in the cloud and then iterate through its neighbours
-            (**nghbr_it).setVisited(true);
-            new_cluster->push_back(**nghbr_it);
-            createNewCluster(*nghbr_it, new_cluster);
+            point->setVisited(true);
+            new_cluster->push_back(*point);
+            createNewCluster(point, new_cluster);
         }
     }
 }
