@@ -3,11 +3,19 @@
 
 #include "../test_lib/test_lib.h"
 
+#define NORMAL_ESTIMATION_RES_OUTPUT_PATH "/home/vlad-adrian/share/sem_detection/semanticDir/test/normal_estimation_test_results/result_clouds/"
+#define E_NORMAL_ESTIMATION_RES_OUTPUT_PATH "/home/vlad-adrian/share/sem_detection/semanticDir/test/e_normal_estimation_test_results/result_clouds/"
+#define CONVERT_TO_GREYSCALE_RES_OUTPUT_PATH "/home/vlad-adrian/share/sem_detection/semanticDir/test/xyzrgb_to_xygreyscale_test_results/result_clouds/"
+#define CLOUD_CROP_RES_OUTPUT_PATH "/home/vlad-adrian/share/sem_detection/semanticDir/test/cloud_crop_test_results/result_clouds/"
+#define CLOUD_HOMOG_RES_OUTPUT_PATH "/home/vlad-adrian/share/sem_detection/semanticDir/test/cloud_homog_test_results/result_clouds/"
+
 float get_precision_input();
 float get_radius_input();
 float get_z_min_input();
 float get_z_max_input();
 float get_float_input();
+float get_dec_precision_input();
+int get_epsilon_input();
 int get_max_neighbs_input();
 int get_file_type_input();
 std::vector<float> get_xyz_input();

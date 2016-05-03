@@ -71,7 +71,7 @@ namespace cloud_manip
 
     /**
      * @brief color_to_greyscale turns a 3D colored cloud into a 2D greyscale image
-     * @param pt_cl is the point cloud to be transformed
+     * @param pt_cl is the point cloud to be transformed to greyscale
      * @param min_z is used for the mapping function
      * @param max_z is used for the mapping function
      * @return the 2D greyscale image
@@ -79,6 +79,14 @@ namespace cloud_manip
      greyscale_image color_to_greyscale(
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
             float min_z, float max_z);
+
+     /**
+      * @brief cloud_homogenization homogenizes the similar colors within a cloud
+      * @details if two points have similar but not identical colors they will be attributed the same color
+      * @param pt_cl the point cloud to be homogenized
+      * @param epsilon defines the 3 dimensions of the cube used to regroup colors
+      */
+     void cloud_homogenization(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl, short epsilon);
 
      /**
      * @brief convertBoolToXYZRGB converts a CLSTR PointBool cloud into a PCL RGB cloud, so its point can be written in a file

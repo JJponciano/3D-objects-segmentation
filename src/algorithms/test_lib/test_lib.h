@@ -28,6 +28,11 @@ void test_e_normal_estimation(std::string import_path,
                               std::vector<float> xyzscale,
                               float precision);
 
+void test_cloud_homogenization(std::string import_path,
+                               std::string export_path,
+                               int is_rgb,
+                               short epsilon);
+
 void test_crop_cloud(std::string import_path,
                      std::string export_path,
                      int is_rgb,
