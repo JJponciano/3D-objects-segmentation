@@ -112,6 +112,13 @@ namespace geom
         std::vector<float> spherical_coords(vectors::vector3 vect);
 
         /**
+         * @brief set_precision sets the number of digits after the decimal
+         * @param float_num is the number to be truncated
+         * @param precision is the number of digits after the decimal
+         */
+        float set_precision(float float_num, float precision);
+
+        /**
          * @brief cmp_angles compares the inclination and azimuth angles (spherical coordinate system) of two points
          * @param coords_1 is an array containing the radius, inclination and azimuth of the first point
          * @param coords_2 is an array containing the radius, inclination and azimuth of the second point

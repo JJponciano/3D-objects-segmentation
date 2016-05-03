@@ -44,6 +44,17 @@ float get_z_max_input()
     return z_max;
 }
 
+float get_float_input()
+{
+    float float_num;
+
+    std::cout << "> float: ";
+    std::cin >> float_num;
+    clear_screen();
+
+    return float_num;
+}
+
 int get_max_neighbs_input()
 {
     float max_neighbs;
@@ -137,6 +148,7 @@ void test_menu()
         std::cout << "2 - e_normal_estimation();" << std::endl;
         std::cout << "3 - crop_cloud();" << std::endl;
         std::cout << "4 - color_to_grayscale();" << std::endl;
+        std::cout << "5 - set_precision();" << std::endl;
         std::cout << "0 - quit." << std::endl;
         std::cout << std::endl << "Your selection: ";
         std::cin >> selection;
@@ -218,6 +230,20 @@ void test_menu()
                     catch (char const* err)
                     {
                         failure(err);
+                    }
+                    break;
+
+                case 5:
+                    try
+                    {
+                        std::cout << test_precision(get_float_input(), get_precision_input())
+                                  << std::endl;
+                        success();
+                    }
+
+                    catch (std::logic_error err)
+                    {
+                        failure(err.what());
                     }
                     break;
 

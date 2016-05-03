@@ -7,6 +7,7 @@ float get_precision_input();
 float get_radius_input();
 float get_z_min_input();
 float get_z_max_input();
+float get_float_input();
 int get_max_neighbs_input();
 int get_file_type_input();
 std::vector<float> get_xyz_input();
