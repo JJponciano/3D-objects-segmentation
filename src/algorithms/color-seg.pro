@@ -18,7 +18,7 @@ SOURCES += main.cpp\
 clustering.cpp\
 ./cloud_manip/cloud_manip.cpp\
 ./io/pcloud_io.cpp\
-./objects/pointbool.cpp\
+./objects/point_clstr.cpp\
 ./objects/bounding_box.cpp\
 ./geom_op/geom_op.cpp\
 ./geom_op/vector3.cpp \
@@ -27,7 +27,7 @@ clustering.cpp\
 HEADERS += clustering.h\
 ./cloud_manip/cloud_manip.h\
 ./io/pcloud_io.h\
-./objects/pointbool.h\
+./objects/point_clstr.h\
 ./objects/bounding_box.h\
 ./geom_op/geom_op.h\
 ./geom_op/vector3.h \

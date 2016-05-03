@@ -110,7 +110,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
     return pt_cl;
 }
 
-void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
+void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
 {
     cloud_RGB->width = cloud_bool->width;
     cloud_RGB->height = cloud_bool->height;
@@ -126,7 +126,7 @@ void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr clo
     }
 }
 
-void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool)
+void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool)
 {
     cloud_bool->width = cloud_RGB->width;
     cloud_bool->height = cloud_RGB->height;
