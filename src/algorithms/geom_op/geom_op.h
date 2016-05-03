@@ -85,7 +85,6 @@ namespace geom
     namespace aux
     {
         /**
-<<<<<<< HEAD
          * @brief map maps a number found within a range to another range
          * @param x is the number to be mapped
          * @param in_min is minimum of the in range
@@ -99,8 +98,6 @@ namespace geom
                   float out_min, float out_max);
 
         /**
-=======
->>>>>>> 0c875538bc7405352fef8118f72c8a2c50fe3cfb
          * @brief float_avg calculates the average of float numbers
          * @param floats is the array of the floats to be averaged
          * @return the averaged of the floats found within the parameter array
@@ -113,6 +110,13 @@ namespace geom
          * @return an array of 3 floats corresponding to the 3 spherical coordinates of a point (radius, inclination and azimuth)
          */
         std::vector<float> spherical_coords(vectors::vector3 vect);
+
+        /**
+         * @brief set_precision sets the number of digits after the decimal
+         * @param float_num is the number to be truncated
+         * @param precision is the number of digits after the decimal
+         */
+        float set_precision(float float_num, float precision);
 
         /**
          * @brief cmp_angles compares the inclination and azimuth angles (spherical coordinate system) of two points

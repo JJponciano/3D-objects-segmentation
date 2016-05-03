@@ -171,6 +171,17 @@ std::vector<float> geom::aux::spherical_coords(vectors::vector3 vect)
     return spherical_coords;
 }
 
+float geom::aux::set_precision(float float_num, float precision)
+{
+    if (geom::aux::cmp_floats(precision, 0.0, 0.005)
+            || precision < 0
+            || ((int)precision % 10 != 0))
+        throw std::logic_error("geom::aux::set_precision : precision cannot be 0, negative and has to be a multiple of 10.");
+
+    else
+        return ((float)(int)(float_num * precision)) / precision;
+}
+
 bool geom::aux::cmp_angles(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
 {
     if ((std::abs(coords_1[1] - coords_2[1]) < precision))

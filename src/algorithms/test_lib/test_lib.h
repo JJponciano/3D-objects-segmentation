@@ -39,6 +39,8 @@ void test_color_to_greyscale(std::string import_path,
                              int is_rgb,
                              float z_min, float z_max);
 
+float test_precision(float float_num, float precision);
+
 
 
 #endif // TEST_LIB_H
