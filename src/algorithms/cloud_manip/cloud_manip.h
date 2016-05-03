@@ -81,18 +81,18 @@ namespace cloud_manip
             float min_z, float max_z);
 
      /**
-     * @brief convertBoolToXYZRGB converts a CLSTR PointBool cloud into a PCL RGB cloud, so its point can be written in a file
-     * @param cloud_bool the CLSTR PointBool from where the data are taken
+     * @brief convertBoolToXYZRGB converts a CLSTR point_clstr cloud into a PCL RGB cloud, so its point can be written in a file
+     * @param cloud_bool the CLSTR point_clstr from where the data are taken
      * @param cloud_RGB the PCL RGB cloud cloud where the data will be converted
      */
-	void convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
+	void convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
 
     /**
-     * @brief convertBoolToXYZRGB converts a PCL RGB cloud into a CLSTR PointBool cloud, used for the clustering and bounding algorithm
-     * @param cloud_bool the CLSTR PointBool cloud where the data will be converted
+     * @brief convertBoolToXYZRGB converts a PCL RGB cloud into a CLSTR point_clstr cloud, used for the clustering and bounding algorithm
+     * @param cloud_bool the CLSTR point_clstr cloud where the data will be converted
      * @param cloud_RGB the PCL RGB cloud from where the data are taken
      */
-    void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool);
+    void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool);
 
     /**
      * @brief giveRandomColorToCloud gets a cluster and changes its colour to a random colour

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "pcl/point_cloud.h"
-#include "./objects/pointbool.h"
+#include "./objects/point_clstr.h"
 #include "./cloud_manip/cloud_manip.h"
 #include "./io/pcloud_io.h"
 #include "clustering.h"
@@ -11,7 +11,7 @@ using namespace std;
 void test_cloud()
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb (new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool (new pcl::PointCloud<clstr::PointBool>);
+    pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool (new pcl::PointCloud<clstr::point_clstr>);
     std::cout << "Loading Widop file and converting it to cloud format... " << std::flush;
     cloud_xyzrgb = pcloud_io::import_cloud("/home/kevin/Desktop/good_result.txt", true);
     cloud_manip::scale_cloud(cloud_xyzrgb, 1, 100, 1, 0.0000005);

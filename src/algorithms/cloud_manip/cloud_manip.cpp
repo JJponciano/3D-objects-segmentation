@@ -132,35 +132,35 @@ greyscale_image cloud_manip::color_to_greyscale(
     return gs_img;
 }
 
-void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
+void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_clstr, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
 {
-    cloud_RGB->width = cloud_bool->width;
-    cloud_RGB->height = cloud_bool->height;
+    cloud_RGB->width = cloud_clstr->width;
+    cloud_RGB->height = cloud_clstr->height;
     cloud_RGB->resize(cloud_RGB->width * cloud_RGB->height);
-    for(size_t i=0; i<cloud_bool->points.size(); i++)
+    for(size_t i=0; i<cloud_clstr->points.size(); i++)
     {
-        cloud_RGB->points[i].x = cloud_bool->points[i].x;
-        cloud_RGB->points[i].y = cloud_bool->points[i].y;
-        cloud_RGB->points[i].z = cloud_bool->points[i].z;
-        cloud_RGB->points[i].r = cloud_bool->points[i].r;
-	cloud_RGB->points[i].g = cloud_bool->points[i].g;
-	cloud_RGB->points[i].b = cloud_bool->points[i].b;
+        cloud_RGB->points[i].x = cloud_clstr->points[i].x;
+        cloud_RGB->points[i].y = cloud_clstr->points[i].y;
+        cloud_RGB->points[i].z = cloud_clstr->points[i].z;
+        cloud_RGB->points[i].r = cloud_clstr->points[i].r;
+	cloud_RGB->points[i].g = cloud_clstr->points[i].g;
+	cloud_RGB->points[i].b = cloud_clstr->points[i].b;
     }
 }
 
-void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool)
+void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::point_clstr>::Ptr cloud_clstr)
 {
-    cloud_bool->width = cloud_RGB->width;
-    cloud_bool->height = cloud_RGB->height;
-    cloud_bool->resize(cloud_bool->width * cloud_bool->height);
+    cloud_clstr->width = cloud_RGB->width;
+    cloud_clstr->height = cloud_RGB->height;
+    cloud_clstr->resize(cloud_clstr->width * cloud_clstr->height);
     for(size_t i=0; i<cloud_RGB->points.size(); i++)
     {
-        cloud_bool->points[i].x = cloud_RGB->points[i].x;
-        cloud_bool->points[i].y = cloud_RGB->points[i].y;
-        cloud_bool->points[i].z = cloud_RGB->points[i].z;
-        cloud_bool->points[i].r = cloud_RGB->points[i].r;
-	cloud_bool->points[i].g = cloud_RGB->points[i].g;
-	cloud_bool->points[i].b = cloud_RGB->points[i].b;
+        cloud_clstr->points[i].x = cloud_RGB->points[i].x;
+        cloud_clstr->points[i].y = cloud_RGB->points[i].y;
+        cloud_clstr->points[i].z = cloud_RGB->points[i].z;
+        cloud_clstr->points[i].r = cloud_RGB->points[i].r;
+	cloud_clstr->points[i].g = cloud_RGB->points[i].g;
+	cloud_clstr->points[i].b = cloud_RGB->points[i].b;
     }
 }
 
