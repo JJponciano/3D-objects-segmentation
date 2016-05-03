@@ -116,7 +116,6 @@ greyscale_image cloud_manip::color_to_greyscale(
 {
     greyscale_image gs_img;
 
-    // #pragma omp parallel for schedule(static)
     for (unsigned int cloud_it = 0; cloud_it < pt_cl->points.size(); cloud_it++)
     {
         point_xy_greyscale pt_xy_gs;
