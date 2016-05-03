@@ -55,6 +55,17 @@ float get_float_input()
     return float_num;
 }
 
+float get_dec_precision_input()
+{
+    float precision;
+
+    std::cout << "> dec_precision: ";
+    std::cin >> precision;
+    clear_screen();
+
+    return precision;
+}
+
 int get_max_neighbs_input()
 {
     float max_neighbs;
@@ -64,6 +75,17 @@ int get_max_neighbs_input()
     clear_screen();
 
     return max_neighbs;
+}
+
+int get_epsilon_input()
+{
+    int epsilon;
+
+    std::cout << "> epsilon: ";
+    std::cin >> epsilon;
+    clear_screen();
+
+    return epsilon;
 }
 
 int get_file_type_input()
@@ -123,7 +145,7 @@ std::string get_export_path_input()
 
 void clear_screen() { std::cout << std::string(50, '\n'); }
 
-void invalid_input() { std::cout << "> Invalid input. Hit ENTER to continue..."; std::cin.ignore(); std::cin.get(); clear_screen(); }
+void invalid_input() { std::cout << "> Invalid input. Hit ENTER to continue..."; std::cin.get(); clear_screen(); }
 
 void success() { std::cout << "> Test succeeded. Hit ENTER to continue..."; std::cin.ignore(); std::cin.get(); clear_screen(); }
 
@@ -136,19 +158,37 @@ void failure(char const* err)
 
 void test_menu()
 {
+    // user choice management
     int selection;
     bool exit;
     bool error;
+
+    // input
+    std::string import_path;
+    std::string export_path;
+    int is_rgb;
+    int max_neighbs;
+    int epsilon;
+    float precision;
+    float radius;
+    float z_min;
+    float z_max;
+    float float_num;
+    std::vector<float> xyz;
+
 
     std::cout << "--- Normal Segmentation test library ---" << std::endl;
 
     do
     {
+        error = false;
+
         std::cout << "1 - normal_estimation();" << std::endl;
         std::cout << "2 - e_normal_estimation();" << std::endl;
         std::cout << "3 - crop_cloud();" << std::endl;
         std::cout << "4 - color_to_grayscale();" << std::endl;
         std::cout << "5 - set_precision();" << std::endl;
+        std::cout << "6 - cloud_homogenization();" << std::endl;
         std::cout << "0 - quit." << std::endl;
         std::cout << std::endl << "Your selection: ";
         std::cin >> selection;
@@ -163,11 +203,14 @@ void test_menu()
             case 1:
                 try
                 {
-                    test_normal_estimation(get_import_path_input(),
-                                           get_export_path_input(),
-                                           get_file_type_input(),
-                                           get_radius_input(),
-                                           get_max_neighbs_input());
+                    import_path = get_import_path_input();
+                    export_path = NORMAL_ESTIMATION_RES_OUTPUT_PATH;
+                    is_rgb = get_file_type_input();
+                    radius = get_radius_input();
+                    max_neighbs = get_max_neighbs_input();
+
+                    test_normal_estimation(import_path, export_path, is_rgb,
+                                           radius, max_neighbs);
                     success();
                 }
 
@@ -175,19 +218,21 @@ void test_menu()
                 {
                     failure(err);
                 }
-
                 break;
 
             case 2:
                 try
                 {
-                    test_e_normal_estimation(get_import_path_input(),
-                                             get_export_path_input(),
-                                             get_file_type_input(),
-                                             get_radius_input(),
-                                             get_max_neighbs_input(),
-                                             get_xyz_input(),
-                                             get_precision_input());
+                    import_path = get_import_path_input();
+                    export_path = E_NORMAL_ESTIMATION_RES_OUTPUT_PATH;
+                    is_rgb = get_file_type_input();
+                    radius = get_radius_input();
+                    max_neighbs = get_max_neighbs_input();
+                    xyz = get_xyz_input();
+                    precision = get_precision_input();
+
+                    test_e_normal_estimation(import_path, export_path, is_rgb,
+                                             radius, max_neighbs, xyz, precision);
                     success();
                 }
 
@@ -195,17 +240,19 @@ void test_menu()
                 {
                     failure(err);
                 }
-
                 break;
 
                 case 3:
                     try
                     {
-                        test_crop_cloud(get_import_path_input(),
-                                        get_export_path_input(),
-                                        get_file_type_input(),
-                                        get_xyz_input(),
-                                        get_precision_input());
+                        import_path = get_import_path_input();
+                        export_path = CLOUD_CROP_RES_OUTPUT_PATH;
+                        is_rgb = get_file_type_input();
+                        xyz = get_xyz_input();
+                        precision = get_precision_input();
+
+                        test_crop_cloud(import_path, export_path, is_rgb,
+                                        xyz, precision);
                         success();
                     }
 
@@ -213,16 +260,19 @@ void test_menu()
                     {
                         failure(err);
                     }
-
                     break;
 
                 case 4:
                     try
                     {
-                        test_color_to_greyscale(get_import_path_input(),
-                                                get_export_path_input(),
-                                                get_file_type_input(),
-                                                get_z_min_input(), get_z_max_input());
+                        import_path = get_import_path_input();
+                        export_path = CONVERT_TO_GREYSCALE_RES_OUTPUT_PATH;
+                        is_rgb = get_file_type_input();
+                        z_min = get_z_min_input();
+                        z_max = get_z_max_input();
+
+                        test_color_to_greyscale(import_path, export_path, is_rgb,
+                                                z_min, z_max);
 
                         success();
                     }
@@ -236,7 +286,10 @@ void test_menu()
                 case 5:
                     try
                     {
-                        std::cout << test_precision(get_float_input(), get_precision_input())
+                        float_num = get_float_input();
+                        precision = get_precision_input();
+
+                        std::cout << test_precision(float_num, precision)
                                   << std::endl;
                         success();
                     }
@@ -247,6 +300,24 @@ void test_menu()
                     }
                     break;
 
+                case 6:
+                    try
+                    {
+                        import_path = get_import_path_input();
+                        export_path = CLOUD_HOMOG_RES_OUTPUT_PATH;
+                        is_rgb = get_file_type_input();
+                        epsilon = get_epsilon_input();
+
+                        test_cloud_homogenization(import_path, export_path,
+                                                  is_rgb, epsilon);
+                        success();
+                    }
+
+                    catch(std::exception err)
+                    {
+                        failure(err.what());
+                    }
+                    break;
                 default:
                     error = true;
                     invalid_input();

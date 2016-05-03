@@ -25,9 +25,9 @@ void test_normal_estimation(std::string import_path,
     {
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         normal_estimation(cloud, radius, max_neighbs);
-        pcloud_io::export_cloud(export_path
-                               + boost::lexical_cast<std::string>(radius) + "_"
-                               + boost::lexical_cast<std::string>(max_neighbs)
+        pcloud_io::export_cloud(export_path + "normal_estimation_test_"
+                               + boost::lexical_cast<std::string>(radius)
+                               + "_" + boost::lexical_cast<std::string>(max_neighbs)
                                + "_" + ".txt", cloud);
     }
 
@@ -56,7 +56,8 @@ void test_e_normal_estimation(std::string import_path,
         colored_cloud = e_normal_estimation(cloud, radius, max_neighbs,
                                             xyzscale[0], xyzscale[1], xyzscale[2],
                                             precision);
-        pcloud_io::export_cloud(export_path + boost::lexical_cast<std::string>(radius) + "_"
+        pcloud_io::export_cloud(export_path + "e_normal_estimation_test_"
+                                + boost::lexical_cast<std::string>(radius) + "_"
                                 + boost::lexical_cast<std::string>(max_neighbs) + "_"
                                 + boost::lexical_cast<std::string>(xyzscale[0]) + "_"
                                 + boost::lexical_cast<std::string>(xyzscale[1]) + "_"
@@ -70,6 +71,20 @@ void test_e_normal_estimation(std::string import_path,
         err_string.append(err.what());
         throw err_string;
     }
+}
+
+void test_cloud_homogenization(std::string import_path,
+                               std::string export_path,
+                               int is_rgb,
+                               short epsilon)
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud = pcloud_io::import_cloud(import_path, is_rgb);
+
+    cloud_manip::cloud_homogenization(cloud, epsilon);
+
+    pcloud_io::export_cloud(export_path + "cloud_homogenization_test_"
+                            + boost::lexical_cast<std::string>(epsilon)
+                            + ".txt", cloud);
 }
 
 void test_crop_cloud(std::string import_path,
@@ -86,7 +101,8 @@ void test_crop_cloud(std::string import_path,
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         cropped_cloud =
                 cloud_manip::crop_cloud(cloud, xyzthresh[0], xyzthresh[1], xyzthresh[2], precision);
-        pcloud_io::export_cloud(export_path + boost::lexical_cast<std::string>(xyzthresh[0]) + "_"
+        pcloud_io::export_cloud(export_path + "cloud_crop_test_"
+                                + boost::lexical_cast<std::string>(xyzthresh[0]) + "_"
                                 + boost::lexical_cast<std::string>(xyzthresh[1]) + "_"
                                 + boost::lexical_cast<std::string>(xyzthresh[2]) + "_"
                                 + ".txt", cropped_cloud);
@@ -113,7 +129,8 @@ void test_color_to_greyscale(std::string import_path,
     {
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         gs_img = cloud_manip::color_to_greyscale(cloud, z_min, z_max);
-        pcloud_io::export_greyscale_image(export_path + boost::lexical_cast<std::string>(z_min)
+        pcloud_io::export_greyscale_image(export_path + "color_to_greyscale_test_"
+                                          + boost::lexical_cast<std::string>(z_min)
                                           + "_" + boost::lexical_cast<std::string>(z_max)
                                           + ".txt", gs_img);
     }

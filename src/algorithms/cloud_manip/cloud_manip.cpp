@@ -132,6 +132,37 @@ greyscale_image cloud_manip::color_to_greyscale(
     return gs_img;
 }
 
+
+void cloud_manip::cloud_homogenization(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
+                                       short epsilon)
+{
+    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = pt_cl->begin();
+     cloud_it < pt_cl->end(); cloud_it++)
+    {
+        short r_times_epsilon = (short)(*cloud_it).r / epsilon;
+        short g_times_epsilon = (short)(*cloud_it).g / epsilon;
+        short b_times_epsilon = (short)(*cloud_it).b / epsilon;
+
+        if ((r_times_epsilon * epsilon) > 255)
+            (*cloud_it).r = 255;
+
+        else
+            (*cloud_it).r = r_times_epsilon * epsilon;
+
+        if ((g_times_epsilon * epsilon) > 255)
+            (*cloud_it).g = 255;
+
+        else
+            (*cloud_it).g = g_times_epsilon * epsilon;
+
+        if ((b_times_epsilon * epsilon) > 255)
+            (*cloud_it).b = 255;
+
+        else
+            (*cloud_it).b = b_times_epsilon * epsilon;
+    }
+}
+
 void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
 {
     cloud_RGB->width = cloud_bool->width;
