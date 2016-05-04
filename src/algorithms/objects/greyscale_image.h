@@ -10,10 +10,11 @@ private:
     int _height;
     std::vector<std::vector<short>> _pixels;
 public:
+    greyscale_image();
+    greyscale_image(int width, int height);
     int width() { return _width; }
     int height() { return _height; }
     int resolution() { return _width * _height; }
-    greyscale_image();
 };
 
 #endif // GREYSCALE_IMAGE_H

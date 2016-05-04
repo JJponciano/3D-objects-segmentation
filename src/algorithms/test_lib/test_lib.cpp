@@ -122,7 +122,7 @@ void test_color_to_greyscale(std::string import_path,
                              float z_min, float z_max)
 
 {
-    throw "Not yet implemented.";
+    throw "test_color_to_greyscale : not yet implemented.";
 }
 
 float test_precision(float float_num, float precision) { return geom::aux::set_precision(float_num, precision); }
