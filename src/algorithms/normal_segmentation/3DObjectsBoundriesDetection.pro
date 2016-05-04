@@ -21,10 +21,9 @@ SOURCES += main.cpp \
     ../geom_op/vector3.cpp \
     ../interface/interface.cpp \
     ../objects/bounding_box.cpp \
-    ../objects/pointbool.cpp \
     ../objects/point_xy_greyscale.cpp \
-    ../objects/greyscale_image.cpp \
-    ../test_lib/test_lib.cpp
+    ../test_lib/test_lib.cpp \
+    ../objects/PointCloudXYGreyscale.cpp
 
 HEADERS += \
     normal_estimation.h \
@@ -35,10 +34,9 @@ HEADERS += \
     ../geom_op/vector3.h \
     ../interface/interface.h \
     ../objects/bounding_box.h \
-    ../objects/pointbool.h \
     ../objects/point_xy_greyscale.h \
-    ../objects/greyscale_image.h \
-    ../test_lib/test_lib.h
+    ../test_lib/test_lib.h \
+    ../objects/PointCloudXYGreyscale.h
 
 HEADERS +=
 

@@ -110,11 +110,11 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
     return pt_cl;
 }
 
-greyscale_image cloud_manip::color_to_greyscale(
+PointCloudXYGreyscale cloud_manip::color_to_greyscale(
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
         float min_z, float max_z)
 {
-    greyscale_image gs_img;
+    PointCloudXYGreyscale gs_img;
 
     for (unsigned int cloud_it = 0; cloud_it < pt_cl->points.size(); cloud_it++)
     {
@@ -163,7 +163,8 @@ void cloud_manip::cloud_homogenization(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt
     }
 }
 
-void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
+/*
+void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
 {
     cloud_RGB->width = cloud_bool->width;
     cloud_RGB->height = cloud_bool->height;
@@ -179,7 +180,7 @@ void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::PointBool>::Ptr clo
     }
 }
 
-void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::PointBool>::Ptr cloud_bool)
+void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool)
 {
     cloud_bool->width = cloud_RGB->width;
     cloud_bool->height = cloud_RGB->height;
@@ -207,3 +208,4 @@ void cloud_manip::giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr 
         (*cloud_it).b = b;
     }
 }
+*/

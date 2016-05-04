@@ -1,7 +1,7 @@
 #include "bounding_box.h"
 
 // CONSTRUCTORS
-
+/*
 bounding_box::bounding_box(pcl::PointCloud<clstr::point_clstr>::Ptr cloud)
 {
     pcl::PointCloud<clstr::point_clstr>::iterator cloud_it=cloud->begin();
@@ -202,3 +202,4 @@ bounding_box::~bounding_box()
 {
 
 }
+*/

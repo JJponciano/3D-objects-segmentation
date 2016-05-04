@@ -121,43 +121,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string p
     else throw "pcloud_io::import_cloud : Invalid .txt file.";
 }
 
-greyscale_image pcloud_io::import_greyscale_image(std::string path)
-{
-    std::ifstream image_file;
-    std::string line;
-
-    image_file.open(path, std::ios::in);
-
-    if (!image_file.is_open())
-    {
-        throw "pcloud_io::import_greyscale_image : Could not load file at \""
-                + path + "\".";
-    }
-
-    else
-    {
-        greyscale_image gs_img;
-
-        while (std::getline(image_file, line))
-        {
-            point_xy_greyscale pt_gs;
-            float x, y;
-            unsigned short greyscale;
-            std::stringstream iss(line);
-
-            if (iss >> x >> y >> greyscale)
-            {
-                pt_gs.x = x;
-                pt_gs.y = y;
-                pt_gs.greyscale(greyscale);
-
-                gs_img.points().push_back(pt_gs);
-            }
-        }
-
-        return gs_img;
-    }
-}
 
 void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
 {
@@ -194,34 +157,6 @@ void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>
 
                 cloud_file << line;
             }
-        }
-    }
-}
-
-void pcloud_io::export_greyscale_image(std::string path, greyscale_image gs_img)
-{
-    std::ofstream image_file;
-    std::string line;
-
-    image_file.open(path, std::ios::out);
-
-    if (!image_file.is_open())
-    {
-        throw "pcloud_io::export_greyscale_image : Could not write file at \"" + path + "\".";
-    }
-
-    else
-    {
-        for (std::vector<point_xy_greyscale>::iterator pt_it = gs_img.begin();
-             pt_it != gs_img.end();
-             pt_it++)
-        {
-            line = boost::lexical_cast<std::string>(pt_it->x)
-                    + "\t" + boost::lexical_cast<std::string>(pt_it->y)
-                    + "\t" + boost::lexical_cast<std::string>(pt_it->greyscale())
-                    + "\n";
-
-            image_file << line;
         }
     }
 }

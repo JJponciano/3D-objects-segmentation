@@ -1,0 +1,5 @@
+#include "PointCloudXYGreyscale.h"
+
+PointCloudXYGreyscale::PointCloudXYGreyscale()
+{PointCloudXYGreyscale
+}
