@@ -2,8 +2,8 @@
 #define CLOUD_MANIP_H
 
 #include "../geom_op/geom_op.h"
-// #include "../objects/pointbool.h"
-#include "../objects/PointCloudXYGreyscale.h"
+#include "../objects/point_xy_greyscale.h"
+#include "../objects/point_clstr.h"
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -73,9 +73,9 @@ namespace cloud_manip
      * @param pt_cl is the point cloud to be transformed to greyscale
      * @param min_z is used for the mapping function
      * @param max_z is used for the mapping function
-     * @return the 2D greyscale image
+     * @return an array of 2D greyscale points
      */
-     PointCloudXYGreyscale color_to_greyscale(
+     std::vector<point_xy_greyscale> color_to_greyscale(
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
             float min_z, float max_z);
 
@@ -87,26 +87,25 @@ namespace cloud_manip
       */
      void cloud_homogenization(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl, short epsilon);
 
-    /*
      /**
      * @brief convertBoolToXYZRGB converts a CLSTR point_clstr cloud into a PCL RGB cloud, so its point can be written in a file
      * @param cloud_bool the CLSTR point_clstr from where the data are taken
      * @param cloud_RGB the PCL RGB cloud cloud where the data will be converted
-     *
+     */
     void convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
 
     /**
      * @brief convertBoolToXYZRGB converts a PCL RGB cloud into a CLSTR point_clstr cloud, used for the clustering and bounding algorithm
      * @param cloud_bool the CLSTR point_clstr cloud where the data will be converted
      * @param cloud_RGB the PCL RGB cloud from where the data are taken
-     *
+     */
     void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool);
 
     /**
      * @brief giveRandomColorToCloud gets a cluster and changes its colour to a random colour
      * @param cloud the cluster you want the colour to change
-     *
-    void giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);*/
+     */
+    void giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
 }
 
 #endif // CLOUD_MANIP_H

@@ -56,7 +56,8 @@ SOURCES       = main.cpp \
 		../objects/bounding_box.cpp \
 		../objects/point_xy_greyscale.cpp \
 		../test_lib/test_lib.cpp \
-		../objects/PointCloudXYGreyscale.cpp 
+		../objects/greyscale_image.cpp \
+		../objects/point_clstr.cpp 
 OBJECTS       = main.o \
 		normal_estimation.o \
 		e_normal_estimation.o \
@@ -68,7 +69,8 @@ OBJECTS       = main.o \
 		bounding_box.o \
 		point_xy_greyscale.o \
 		test_lib.o \
-		PointCloudXYGreyscale.o
+		greyscale_image.o \
+		point_clstr.o
 DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -293,7 +295,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/3DObjectsBoundriesDetection1.0.0 || mkdir -p .tmp/3DObjectsBoundriesDetection1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents normal_estimation.h e_normal_estimation.h ../io/pcloud_io.h ../cloud_manip/cloud_manip.h ../geom_op/geom_op.h ../geom_op/vector3.h ../interface/interface.h ../objects/bounding_box.h ../objects/point_xy_greyscale.h ../test_lib/test_lib.h ../objects/PointCloudXYGreyscale.h .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents main.cpp normal_estimation.cpp e_normal_estimation.cpp ../io/pcloud_io.cpp ../cloud_manip/cloud_manip.cpp ../geom_op/geom_op.cpp ../geom_op/vector3.cpp ../interface/interface.cpp ../objects/bounding_box.cpp ../objects/point_xy_greyscale.cpp ../test_lib/test_lib.cpp ../objects/PointCloudXYGreyscale.cpp .tmp/3DObjectsBoundriesDetection1.0.0/ && (cd `dirname .tmp/3DObjectsBoundriesDetection1.0.0` && $(TAR) 3DObjectsBoundriesDetection1.0.0.tar 3DObjectsBoundriesDetection1.0.0 && $(COMPRESS) 3DObjectsBoundriesDetection1.0.0.tar) && $(MOVE) `dirname .tmp/3DObjectsBoundriesDetection1.0.0`/3DObjectsBoundriesDetection1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/3DObjectsBoundriesDetection1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents normal_estimation.h e_normal_estimation.h ../io/pcloud_io.h ../cloud_manip/cloud_manip.h ../geom_op/geom_op.h ../geom_op/vector3.h ../interface/interface.h ../objects/bounding_box.h ../objects/point_xy_greyscale.h ../test_lib/test_lib.h ../objects/greyscale_image.h ../objects/point_clstr.h .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents main.cpp normal_estimation.cpp e_normal_estimation.cpp ../io/pcloud_io.cpp ../cloud_manip/cloud_manip.cpp ../geom_op/geom_op.cpp ../geom_op/vector3.cpp ../interface/interface.cpp ../objects/bounding_box.cpp ../objects/point_xy_greyscale.cpp ../test_lib/test_lib.cpp ../objects/greyscale_image.cpp ../objects/point_clstr.cpp .tmp/3DObjectsBoundriesDetection1.0.0/ && (cd `dirname .tmp/3DObjectsBoundriesDetection1.0.0` && $(TAR) 3DObjectsBoundriesDetection1.0.0.tar 3DObjectsBoundriesDetection1.0.0 && $(COMPRESS) 3DObjectsBoundriesDetection1.0.0.tar) && $(MOVE) `dirname .tmp/3DObjectsBoundriesDetection1.0.0`/3DObjectsBoundriesDetection1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/3DObjectsBoundriesDetection1.0.0
 
 
 clean:compiler_clean 
@@ -1890,8 +1892,8 @@ main.o: main.cpp /usr/include/qt5/QtCore/QCoreApplication \
 		/usr/include/pcl-1.7/pcl/common/impl/centroid.hpp \
 		/usr/include/pcl-1.7/pcl/features/impl/normal_3d.hpp \
 		../cloud_manip/cloud_manip.h \
-		../objects/PointCloudXYGreyscale.h \
 		../objects/point_xy_greyscale.h \
+		../objects/point_clstr.h \
 		../io/pcloud_io.h \
 		/usr/include/qt5/QtCore/QTextStream \
 		/usr/include/qt5/QtCore/qtextstream.h \
@@ -5399,8 +5401,8 @@ e_normal_estimation.o: e_normal_estimation.cpp e_normal_estimation.h \
 		/usr/include/pcl-1.7/pcl/common/impl/centroid.hpp \
 		/usr/include/pcl-1.7/pcl/features/impl/normal_3d.hpp \
 		../cloud_manip/cloud_manip.h \
-		../objects/PointCloudXYGreyscale.h \
-		../objects/point_xy_greyscale.h
+		../objects/point_xy_greyscale.h \
+		../objects/point_clstr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o e_normal_estimation.o e_normal_estimation.cpp
 
 pcloud_io.o: ../io/pcloud_io.cpp ../io/pcloud_io.h \
@@ -8605,8 +8607,8 @@ cloud_manip.o: ../cloud_manip/cloud_manip.cpp ../cloud_manip/cloud_manip.h \
 		/usr/include/boost/fusion/container/vector/detail/convert_impl.hpp \
 		/usr/include/pcl-1.7/pcl/common/impl/centroid.hpp \
 		/usr/include/pcl-1.7/pcl/features/impl/normal_3d.hpp \
-		../objects/PointCloudXYGreyscale.h \
-		../objects/point_xy_greyscale.h
+		../objects/point_xy_greyscale.h \
+		../objects/point_clstr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cloud_manip.o ../cloud_manip/cloud_manip.cpp
 
 geom_op.o: ../geom_op/geom_op.cpp ../geom_op/geom_op.h \
@@ -11611,8 +11613,8 @@ interface.o: ../interface/interface.cpp ../interface/interface.h \
 		/usr/include/pcl-1.7/pcl/common/impl/centroid.hpp \
 		/usr/include/pcl-1.7/pcl/features/impl/normal_3d.hpp \
 		../cloud_manip/cloud_manip.h \
-		../objects/PointCloudXYGreyscale.h \
 		../objects/point_xy_greyscale.h \
+		../objects/point_clstr.h \
 		../io/pcloud_io.h \
 		/usr/include/qt5/QtCore/QTextStream \
 		/usr/include/qt5/QtCore/qtextstream.h \
@@ -15237,8 +15239,8 @@ test_lib.o: ../test_lib/test_lib.cpp ../test_lib/test_lib.h \
 		/usr/include/pcl-1.7/pcl/common/impl/centroid.hpp \
 		/usr/include/pcl-1.7/pcl/features/impl/normal_3d.hpp \
 		../cloud_manip/cloud_manip.h \
-		../objects/PointCloudXYGreyscale.h \
 		../objects/point_xy_greyscale.h \
+		../objects/point_clstr.h \
 		../io/pcloud_io.h \
 		/usr/include/qt5/QtCore/QTextStream \
 		/usr/include/qt5/QtCore/qtextstream.h \
@@ -15804,8 +15806,10 @@ test_lib.o: ../test_lib/test_lib.cpp ../test_lib/test_lib.h \
 		/usr/include/pcl-1.7/pcl/io/lzf.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o test_lib.o ../test_lib/test_lib.cpp
 
-PointCloudXYGreyscale.o: ../objects/PointCloudXYGreyscale.cpp ../objects/PointCloudXYGreyscale.h \
-		../objects/point_xy_greyscale.h \
+greyscale_image.o: ../objects/greyscale_image.cpp ../objects/greyscale_image.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o greyscale_image.o ../objects/greyscale_image.cpp
+
+point_clstr.o: ../objects/point_clstr.cpp ../objects/point_clstr.h \
 		/usr/include/pcl-1.7/pcl/point_types.h \
 		/usr/include/pcl-1.7/pcl/pcl_macros.h \
 		/usr/include/pcl-1.7/pcl/pcl_config.h \
@@ -16542,7 +16546,7 @@ PointCloudXYGreyscale.o: ../objects/PointCloudXYGreyscale.cpp ../objects/PointCl
 		/usr/include/boost/type_traits/promote.hpp \
 		/usr/include/pcl-1.7/pcl/impl/point_types.hpp \
 		/usr/include/pcl-1.7/pcl/common/point_tests.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PointCloudXYGreyscale.o ../objects/PointCloudXYGreyscale.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o point_clstr.o ../objects/point_clstr.cpp
 
 ####### Install
 

@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     ../objects/bounding_box.cpp \
     ../objects/point_xy_greyscale.cpp \
     ../test_lib/test_lib.cpp \
-    ../objects/PointCloudXYGreyscale.cpp
+    ../objects/greyscale_image.cpp \
+    ../objects/point_clstr.cpp
 
 HEADERS += \
     normal_estimation.h \
@@ -36,7 +37,8 @@ HEADERS += \
     ../objects/bounding_box.h \
     ../objects/point_xy_greyscale.h \
     ../test_lib/test_lib.h \
-    ../objects/PointCloudXYGreyscale.h
+    ../objects/greyscale_image.h \
+    ../objects/point_clstr.h
 
 HEADERS +=
 

@@ -1,8 +1,6 @@
 #ifndef PCLOUD_IO_H
 #define PCLOUD_IO_H
 
-#include "../objects/PointCloudXYGreyscale.h"
-
 #include <QTextStream>
 #include <QString>
 #include <QStringList>
