@@ -129,7 +129,7 @@ void test_color_to_greyscale(std::string import_path,
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         greyscale_result = cloud_manip::cloud_to_greyscale(cloud);
         pcloud_io::export_greyscale(export_path + "color_to_greyscale_test"
-                                    + "_" + import_path + ".txt", greyscale_result);
+                                    + "_.txt", greyscale_result);
     }
 
     catch(std::exception const& err)
@@ -139,7 +139,12 @@ void test_color_to_greyscale(std::string import_path,
         throw err_string;
     }
 
-    catch(const char* str_err)
+    catch(char const* char_ptr_err)
+    {
+        throw char_ptr_err;
+    }
+
+    catch(std::string str_err)
     {
         throw str_err;
     }

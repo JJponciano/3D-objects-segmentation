@@ -4,7 +4,8 @@ std::vector<float> cloud_manip::cloud_x_coords(pcl::PointCloud<pcl::PointXYZRGB>
 {
     std::vector<float> x_coords;
 
-    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it; cloud_it < cloud->end(); cloud_it++)
+    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud->begin();
+         cloud_it < cloud->end(); cloud_it++)
         x_coords.push_back((float)(cloud_it->x));
 
     return x_coords;
@@ -14,7 +15,8 @@ std::vector<float> cloud_manip::cloud_y_coords(pcl::PointCloud<pcl::PointXYZRGB>
 {
     std::vector<float> y_coords;
 
-    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it; cloud_it < cloud->end(); cloud_it++)
+    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud->begin();
+         cloud_it < cloud->end(); cloud_it++)
         y_coords.push_back((float)(cloud_it->y));
 
     return y_coords;
@@ -24,7 +26,8 @@ std::vector<float> cloud_manip::cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>
 {
     std::vector<float> z_coords;
 
-    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it; cloud_it < cloud->end(); cloud_it++)
+    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud->begin();
+         cloud_it < cloud->end(); cloud_it++)
         z_coords.push_back((float)(cloud_it->z));
 
     return z_coords;
