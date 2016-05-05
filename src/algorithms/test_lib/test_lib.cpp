@@ -138,6 +138,11 @@ void test_color_to_greyscale(std::string import_path,
         err_string.append(err.what());
         throw err_string;
     }
+
+    catch(const char* str_err)
+    {
+        throw str_err;
+    }
 }
 
 float test_precision(float float_num, float precision) { return geom::aux::set_precision(float_num, precision); }
