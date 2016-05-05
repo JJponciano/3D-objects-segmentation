@@ -6,7 +6,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path,
 
     size_t i = path.rfind('.', path.length());
 
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 
     if (i != std::string::npos)
       ext = path.substr(i+1, path.length() - i);
@@ -16,7 +16,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path,
     {
         try
         {
-            pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *pt_cl);
+            pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *cloud);
         }
 
         catch(std::exception& e)
@@ -29,7 +29,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path,
     {
         try
         {
-            pt_cl = pcloud_io::import_cloud_txt(path, is_rgb);
+            cloud = pcloud_io::import_cloud_txt(path, is_rgb);
         }
 
         catch(char const* io_err)
@@ -38,7 +38,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path,
         }
     }
 
-    return pt_cl;
+    return cloud;
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string pathname, bool is_rgb)
@@ -122,7 +122,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string p
 }
 
 
-void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
+void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
 {
     std::ofstream cloud_file;
     std::string line;
@@ -140,12 +140,12 @@ void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>
 
     else
     {
-        if (!pt_cl)
+        if (!cloud)
             throw "pcloud_io::export_cloud : Invalid cloud.";
 
         else
         {
-            for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
+            for (cloud_it = cloud->points.begin(); cloud_it < cloud->points.end(); cloud_it++)
             {
                 line = boost::lexical_cast<std::string>((float)(*cloud_it).x) + "\t"
                         + boost::lexical_cast<std::string>((float)(*cloud_it).y) + "\t"
@@ -156,6 +156,40 @@ void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>
                         + "\n";
 
                 cloud_file << line;
+            }
+        }
+    }
+}
+
+void pcloud_io::export_greyscale(std::string path, std::vector<point_xy_greyscale> greyscale_vector)
+{
+    std::ofstream greyscale_file;
+    std::string line;;
+
+    // opening file
+    greyscale_file.open(path, std::ios::out);
+
+    if (!greyscale_file.is_open())
+    {
+        throw "pcloud_io::export_greyscale : Could not write file at \"" + path + "\".";
+    }
+
+    else
+    {
+        if (greyscale_vector.empty())
+            throw "pcloud_io::export_greyscale : Invalid greyscale vector.";
+
+        else
+        {
+            for (std::vector<point_xy_greyscale>::iterator vector_it = greyscale_vector.begin();
+                 vector_it < greyscale_vector.end(); vector_it++)
+            {
+                line = boost::lexical_cast<std::string>((float)(vector_it->x)) + "\t"
+                        + boost::lexical_cast<std::string>((float)(vector_it->y)) + "\t"
+                        + boost::lexical_cast<std::string>((unsigned short)(vector_it->greyscale())) + "\t"
+                        + "\n";
+
+                greyscale_file << line;
             }
         }
     }

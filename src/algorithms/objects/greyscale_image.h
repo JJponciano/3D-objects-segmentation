@@ -1,20 +1,19 @@
 #ifndef GREYSCALE_IMAGE_H
 #define GREYSCALE_IMAGE_H
 
-#include <vector>
+#include "image.h"
 
-class greyscale_image
+#include <vector>
+#include <stdexcept>
+
+class greyscale_image : public image
 {
 private:
-    int _width;
-    int _height;
-    std::vector<std::vector<short>> _pixels;
+    std::vector<std::vector<unsigned short>> _pixels;
 public:
-    greyscale_image();
     greyscale_image(int width, int height);
-    int width() { return _width; }
-    int height() { return _height; }
-    int resolution() { return _width * _height; }
+    unsigned short get_grey_at(int y, int x);
+    void set_grey_at(int y, int x, unsigned short grey);
 };
 
 #endif // GREYSCALE_IMAGE_H

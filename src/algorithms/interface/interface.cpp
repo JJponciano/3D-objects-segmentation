@@ -268,11 +268,8 @@ void test_menu()
                         import_path = get_import_path_input();
                         export_path = CONVERT_TO_GREYSCALE_RES_OUTPUT_PATH;
                         is_rgb = get_file_type_input();
-                        z_min = get_z_min_input();
-                        z_max = get_z_max_input();
 
-                        test_color_to_greyscale(import_path, export_path, is_rgb,
-                                                z_min, z_max);
+                        test_color_to_greyscale(import_path, export_path, is_rgb);
 
                         success();
                     }

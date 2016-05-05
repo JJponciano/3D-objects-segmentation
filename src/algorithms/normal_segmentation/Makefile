@@ -57,7 +57,8 @@ SOURCES       = main.cpp \
 		../objects/point_xy_greyscale.cpp \
 		../test_lib/test_lib.cpp \
 		../objects/greyscale_image.cpp \
-		../objects/point_clstr.cpp 
+		../objects/point_clstr.cpp \
+		../objects/image.cpp 
 OBJECTS       = main.o \
 		normal_estimation.o \
 		e_normal_estimation.o \
@@ -70,7 +71,8 @@ OBJECTS       = main.o \
 		point_xy_greyscale.o \
 		test_lib.o \
 		greyscale_image.o \
-		point_clstr.o
+		point_clstr.o \
+		image.o
 DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -295,7 +297,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/3DObjectsBoundriesDetection1.0.0 || mkdir -p .tmp/3DObjectsBoundriesDetection1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents normal_estimation.h e_normal_estimation.h ../io/pcloud_io.h ../cloud_manip/cloud_manip.h ../geom_op/geom_op.h ../geom_op/vector3.h ../interface/interface.h ../objects/bounding_box.h ../objects/point_xy_greyscale.h ../test_lib/test_lib.h ../objects/greyscale_image.h ../objects/point_clstr.h .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents main.cpp normal_estimation.cpp e_normal_estimation.cpp ../io/pcloud_io.cpp ../cloud_manip/cloud_manip.cpp ../geom_op/geom_op.cpp ../geom_op/vector3.cpp ../interface/interface.cpp ../objects/bounding_box.cpp ../objects/point_xy_greyscale.cpp ../test_lib/test_lib.cpp ../objects/greyscale_image.cpp ../objects/point_clstr.cpp .tmp/3DObjectsBoundriesDetection1.0.0/ && (cd `dirname .tmp/3DObjectsBoundriesDetection1.0.0` && $(TAR) 3DObjectsBoundriesDetection1.0.0.tar 3DObjectsBoundriesDetection1.0.0 && $(COMPRESS) 3DObjectsBoundriesDetection1.0.0.tar) && $(MOVE) `dirname .tmp/3DObjectsBoundriesDetection1.0.0`/3DObjectsBoundriesDetection1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/3DObjectsBoundriesDetection1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents normal_estimation.h e_normal_estimation.h ../io/pcloud_io.h ../cloud_manip/cloud_manip.h ../geom_op/geom_op.h ../geom_op/vector3.h ../interface/interface.h ../objects/bounding_box.h ../objects/point_xy_greyscale.h ../test_lib/test_lib.h ../objects/greyscale_image.h ../objects/point_clstr.h ../objects/image.h .tmp/3DObjectsBoundriesDetection1.0.0/ && $(COPY_FILE) --parents main.cpp normal_estimation.cpp e_normal_estimation.cpp ../io/pcloud_io.cpp ../cloud_manip/cloud_manip.cpp ../geom_op/geom_op.cpp ../geom_op/vector3.cpp ../interface/interface.cpp ../objects/bounding_box.cpp ../objects/point_xy_greyscale.cpp ../test_lib/test_lib.cpp ../objects/greyscale_image.cpp ../objects/point_clstr.cpp ../objects/image.cpp .tmp/3DObjectsBoundriesDetection1.0.0/ && (cd `dirname .tmp/3DObjectsBoundriesDetection1.0.0` && $(TAR) 3DObjectsBoundriesDetection1.0.0.tar 3DObjectsBoundriesDetection1.0.0 && $(COMPRESS) 3DObjectsBoundriesDetection1.0.0.tar) && $(MOVE) `dirname .tmp/3DObjectsBoundriesDetection1.0.0`/3DObjectsBoundriesDetection1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/3DObjectsBoundriesDetection1.0.0
 
 
 clean:compiler_clean 
@@ -16547,6 +16549,9 @@ point_clstr.o: ../objects/point_clstr.cpp ../objects/point_clstr.h \
 		/usr/include/pcl-1.7/pcl/impl/point_types.hpp \
 		/usr/include/pcl-1.7/pcl/common/point_tests.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o point_clstr.o ../objects/point_clstr.cpp
+
+image.o: ../objects/image.cpp ../objects/image.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o image.o ../objects/image.cpp
 
 ####### Install
 

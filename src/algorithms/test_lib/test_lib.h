@@ -41,8 +41,7 @@ void test_crop_cloud(std::string import_path,
 
 void test_color_to_greyscale(std::string import_path,
                              std::string export_path,
-                             int is_rgb,
-                             float z_min, float z_max);
+                             int is_rgb);
 
 float test_precision(float float_num, float precision);
 

@@ -118,11 +118,26 @@ void test_crop_cloud(std::string import_path,
 
 void test_color_to_greyscale(std::string import_path,
                              std::string export_path,
-                             int is_rgb,
-                             float z_min, float z_max)
+                             int is_rgb)
 
 {
-    throw "test_color_to_greyscale : not yet implemented.";
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+    std::vector<point_xy_greyscale> greyscale_result;
+
+    try
+    {
+        cloud = pcloud_io::import_cloud(import_path, is_rgb);
+        greyscale_result = cloud_manip::cloud_to_greyscale(cloud);
+        pcloud_io::export_greyscale(export_path + "color_to_greyscale_test"
+                                    + "_" + import_path + ".txt", greyscale_result);
+    }
+
+    catch(std::exception const& err)
+    {
+        std::string err_string = "test_color_to_greyscale: ";
+        err_string.append(err.what());
+        throw err_string;
+    }
 }
 
 float test_precision(float float_num, float precision) { return geom::aux::set_precision(float_num, precision); }

@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     ../objects/point_xy_greyscale.cpp \
     ../test_lib/test_lib.cpp \
     ../objects/greyscale_image.cpp \
-    ../objects/point_clstr.cpp
+    ../objects/point_clstr.cpp \
+    ../objects/image.cpp
 
 HEADERS += \
     normal_estimation.h \
@@ -38,7 +39,8 @@ HEADERS += \
     ../objects/point_xy_greyscale.h \
     ../test_lib/test_lib.h \
     ../objects/greyscale_image.h \
-    ../objects/point_clstr.h
+    ../objects/point_clstr.h \
+    ../objects/image.h
 
 HEADERS +=
 

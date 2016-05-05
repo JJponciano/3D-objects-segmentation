@@ -1,6 +1,9 @@
 #ifndef PCLOUD_IO_H
 #define PCLOUD_IO_H
 
+#include "../objects/greyscale_image.h"
+#include "../objects/point_xy_greyscale.h"
+
 #include <QTextStream>
 #include <QString>
 #include <QStringList>
@@ -17,7 +20,7 @@
 #include <fstream>
 #include <ios>
 #include <exception>
-
+#include <type_traits>
 
 namespace pcloud_io
 {
@@ -42,7 +45,14 @@ namespace pcloud_io
      * @param path represents the path and name of the file which will be created.
      * @param pc The point cloud which will be saved.
      **/ 
-    void export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl);
+    void export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
+
+    /**
+     * @brief export_greyscale exports a greyscale vector to a text file
+     * @param path represents the path of the file which will be created
+     * @param greyscale_vector the greyscale_vector to be exported
+     */
+    void export_greyscale(std::string path, std::vector<point_xy_greyscale> greyscale_vector);
 }
 
 #endif // PCLOUD_IO_H
