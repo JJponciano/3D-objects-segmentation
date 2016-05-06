@@ -2,6 +2,7 @@
 #define PCLOUD_IO_H
 
 #include "../objects/greyscale_image.h"
+#include "../objects/point_xy_greyscale.h"
 
 #include <QTextStream>
 #include <QString>
@@ -19,7 +20,7 @@
 #include <fstream>
 #include <ios>
 #include <exception>
-
+#include <type_traits>
 
 namespace pcloud_io
 {
@@ -40,25 +41,26 @@ namespace pcloud_io
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr import_cloud(std::string path, bool is_rgb);
 
     /**
-     * @brief import_greyscale_image generates a greyscale image from a txt file
-     * @param path is the access path of the file
-     * @return the generated image
-     */
-    greyscale_image import_greyscale_image(std::string path);
-
-    /**
      * @brief export_cloud writes the point cloud to a text file.
      * @param path represents the path and name of the file which will be created.
      * @param pc The point cloud which will be saved.
      **/ 
-    void export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl);
+    void export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
 
     /**
-     * @brief export_greyscale_image writes the greyscale image to a text file
-     * @param path is the export path
-     * @param gs_img is the greyscale image to be written
+     * @brief export_greyscale exports a greyscale vector to a text file
+     * @param path represents the path of the file which will be created
+     * @param greyscale_vector the greyscale_vector to be exported
      */
-    void export_greyscale_image(std::string path, greyscale_image gs_img);
+    void export_greyscale(std::string path, std::vector<point_xy_greyscale> greyscale_vector);
+
+    /**
+     * @brief export_image exports an image to a file in pgm format
+     * @param path the path where the file will be exported
+     * @param magic_number defines the format of the file
+     * @param gs_img the image to be exported
+     */
+    void export_image(std::string path, std::string magic_number, greyscale_image gs_img);
 }
 
 #endif // PCLOUD_IO_H

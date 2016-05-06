@@ -1,24 +1,19 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef GREYSCALE_IMAGE_H
+#define GREYSCALE_IMAGE_H
 
-#include "point_xy_greyscale.h"
+#include "image.h"
 
 #include <vector>
+#include <stdexcept>
 
-class greyscale_image
+class greyscale_image : public image
 {
 private:
-    std::vector<point_xy_greyscale> _points;
-
+    std::vector<std::vector<unsigned short>> _pixels;
 public:
-    greyscale_image();
-
-    std::vector<point_xy_greyscale> points() { return _points; }
-    std::vector<point_xy_greyscale>::iterator begin() { return _points.begin(); }
-    std::vector<point_xy_greyscale>::iterator end() { return _points.end(); }
-
-    void push_back(point_xy_greyscale pt_gs) { _points.push_back(pt_gs); }
-    int size() { return _points.size(); }
+    greyscale_image(unsigned long width, unsigned long height);
+    unsigned short get_grey_at(unsigned long y, unsigned long x);
+    void set_grey_at(unsigned long y, unsigned long x, unsigned short grey);
 };
 
-#endif // IMAGE_H
+#endif // GREYSCALE_IMAGE_H
