@@ -10,7 +10,7 @@
 /**
  * @brief e_normal_estimation an efficient way of coloring a cloud by its estimated normal vectors
  * @details it uses multi-threading and cloud segmentation
- * @param pt_cl is the point cloud to find the normals of
+ * @param cloud is the point cloud to find the normals of
  * @param radius is the range in which a k-d tree will find the neighbours of a point
  * @param max_neighbs is the maximum number of neighbours returned by the k-d tree radius search
  * @param x_scale is a scaling parameter for the x axis of a cloud
@@ -19,7 +19,7 @@
  * @param precision is the precision for float comparison
  * @return the colored cloud
  */
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
                                                     float radius,
                                                     int max_neighbs,
                                                     float x_scale,

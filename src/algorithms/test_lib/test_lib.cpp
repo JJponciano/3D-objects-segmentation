@@ -116,31 +116,74 @@ void test_crop_cloud(std::string import_path,
     }
 }
 
+float test_precision(float float_num, float precision) { return geom::aux::set_precision(float_num, precision); }
+
 void test_color_to_greyscale(std::string import_path,
                              std::string export_path,
-                             int is_rgb,
-                             float z_min, float z_max)
+                             int is_rgb)
 
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
-    greyscale_image gs_img;
+    std::vector<point_xy_greyscale> greyscale_result;
 
     try
     {
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
-        gs_img = cloud_manip::color_to_greyscale(cloud, z_min, z_max);
-        pcloud_io::export_greyscale_image(export_path + "color_to_greyscale_test_"
-                                          + boost::lexical_cast<std::string>(z_min)
-                                          + "_" + boost::lexical_cast<std::string>(z_max)
-                                          + ".txt", gs_img);
+        greyscale_result = cloud_manip::cloud_to_greyscale(cloud);
+        pcloud_io::export_greyscale(export_path + "color_to_greyscale_test"
+                                    + "_.txt", greyscale_result);
     }
 
     catch(std::exception const& err)
     {
-        std::string err_string = "test_crop_cloud : ";
+        std::string err_string = "test_color_to_greyscale: ";
         err_string.append(err.what());
         throw err_string;
     }
+
+    catch(char const* char_ptr_err)
+    {
+        throw char_ptr_err;
+    }
+
+    catch(std::string str_err)
+    {
+        throw str_err;
+    }
 }
 
-float test_precision(float float_num, float precision) { return geom::aux::set_precision(float_num, precision); }
+void test_greyscale_to_image(std::string import_path, std::string export_path,
+                             std::string magic_number,
+                             int is_rgb,
+                             float epsilon)
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+    std::vector<point_xy_greyscale> greyscale_result;
+
+    try
+    {
+        cloud = pcloud_io::import_cloud(import_path, is_rgb);
+        greyscale_result = cloud_manip::cloud_to_greyscale(cloud);
+        greyscale_image gs_img= cloud_manip::greyscale_to_image(greyscale_result, epsilon);
+        pcloud_io::export_image(export_path + "greyscale_to_image_test_"
+                                + boost::lexical_cast<std::string>(epsilon)
+                                + "_.pgm", magic_number, gs_img);
+    }
+
+    catch(std::exception const& err)
+    {
+        std::string err_string = "test_greyscale_to_image: ";
+        err_string.append(err.what());
+        throw err_string;
+    }
+
+    catch(char const* char_ptr_err)
+    {
+        throw char_ptr_err;
+    }
+
+    catch(std::string str_err)
+    {
+        throw str_err;
+    }
+}

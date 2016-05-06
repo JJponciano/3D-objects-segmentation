@@ -1,6 +1,6 @@
 #include "e_normal_estimation.h"
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl,
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
                                                     float radius,
                                                     int max_neighbs,
                                                     float x_scale,
@@ -14,9 +14,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::
 
     try
     {
-        cloud_manip::scale_cloud(pt_cl, x_scale, y_scale, z_scale, precision); // scaling cloud
+        cloud_manip::scale_cloud(cloud, x_scale, y_scale, z_scale, precision); // scaling cloud
         std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments =
-                cloud_manip::fragment_cloud(pt_cl, y_scale, precision); // fragmenting cloud for faster treatment
+                cloud_manip::fragment_cloud(cloud, y_scale, precision); // fragmenting cloud for faster treatment
 
         // estimating the normals for each cloud fragment in parallel
         #pragma omp parallel for schedule(static)

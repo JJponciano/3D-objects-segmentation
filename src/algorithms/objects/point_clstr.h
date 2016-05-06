@@ -14,10 +14,8 @@ namespace clstr
     public:
         point_clstr();
         point_clstr(float x, float y, float z);
-
         void makeVertex(){ this->nbTimeVertex++; }
         void removeVertex(){ this->nbTimeVertex--; }
-
         void addNeighbour(clstr::point_clstr* point_ptr) { this->neighbours.push_front(point_ptr); }
         std::list<clstr::point_clstr*>::iterator getIteratorOnFirstNeighbour() { return this->neighbours.begin(); }
         std::list<clstr::point_clstr*>::iterator getIteratorOnLastNeighbour() { return this->neighbours.end(); }
@@ -38,7 +36,6 @@ namespace clstr
         pcl::PointCloud<clstr::point_clstr>::Ptr added_in_cloud = nullptr;
         bool visited = false;
         bool added = false;
-
         int nbTimeVertex = 0;
     };
 }

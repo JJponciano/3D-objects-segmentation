@@ -77,9 +77,9 @@ int get_max_neighbs_input()
     return max_neighbs;
 }
 
-int get_epsilon_input()
+float get_epsilon_input()
 {
-    int epsilon;
+    float epsilon;
 
     std::cout << "> epsilon: ";
     std::cin >> epsilon;
@@ -143,6 +143,17 @@ std::string get_export_path_input()
     return export_path_input;
 }
 
+std::string get_magic_number_input()
+{
+    std::string magic_number;
+
+    std::cout << "> magic_number (\"P2\" or \"P5\"): ";
+    std::cin >> magic_number;
+    clear_screen();
+
+    return magic_number;
+}
+
 void clear_screen() { std::cout << std::string(50, '\n'); }
 
 void invalid_input() { std::cout << "> Invalid input. Hit ENTER to continue..."; std::cin.get(); clear_screen(); }
@@ -166,13 +177,12 @@ void test_menu()
     // input
     std::string import_path;
     std::string export_path;
+    std::string magic_number;
     int is_rgb;
     int max_neighbs;
-    int epsilon;
+    float epsilon;
     float precision;
     float radius;
-    float z_min;
-    float z_max;
     float float_num;
     std::vector<float> xyz;
 
@@ -189,6 +199,7 @@ void test_menu()
         std::cout << "4 - color_to_grayscale();" << std::endl;
         std::cout << "5 - set_precision();" << std::endl;
         std::cout << "6 - cloud_homogenization();" << std::endl;
+        std::cout << "7 - grayscale_to_image();" << std::endl;
         std::cout << "0 - quit." << std::endl;
         std::cout << std::endl << "Your selection: ";
         std::cin >> selection;
@@ -268,11 +279,8 @@ void test_menu()
                         import_path = get_import_path_input();
                         export_path = CONVERT_TO_GREYSCALE_RES_OUTPUT_PATH;
                         is_rgb = get_file_type_input();
-                        z_min = get_z_min_input();
-                        z_max = get_z_max_input();
 
-                        test_color_to_greyscale(import_path, export_path, is_rgb,
-                                                z_min, z_max);
+                        test_color_to_greyscale(import_path, export_path, is_rgb);
 
                         success();
                     }
@@ -316,6 +324,26 @@ void test_menu()
                     catch(std::exception err)
                     {
                         failure(err.what());
+                    }
+                    break;
+
+                case 7:
+                    try
+                    {
+                        import_path = get_import_path_input();
+                        export_path = IMAGE_TO_FILE_RES_OUTPUT_PATH;
+                        magic_number = get_magic_number_input();
+                        epsilon = get_epsilon_input();
+                        is_rgb = get_file_type_input();
+
+                        test_greyscale_to_image(import_path, export_path, magic_number, is_rgb, epsilon);
+
+                        success();
+                    }
+
+                    catch(char const* err)
+                    {
+                        failure(err);
                     }
                     break;
                 default:
