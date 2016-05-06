@@ -4,6 +4,7 @@
 #include <vector>
 #include <Eigen/StdVector>
 #include <QString>
+#include <vector>
 
 class Line
 {
@@ -16,6 +17,7 @@ public:
     std::vector<int> getInliers();
     Eigen::VectorXf getCoefficients();
     void toConsole();
+    std::vector<float> getAnglesToOrigin();
 };
 
 #endif // LINE_H
