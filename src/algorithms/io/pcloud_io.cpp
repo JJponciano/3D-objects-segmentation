@@ -194,3 +194,58 @@ void pcloud_io::export_greyscale(std::string path, std::vector<point_xy_greyscal
         }
     }
 }
+
+void pcloud_io::export_image(std::string path, std::string magic_number, greyscale_image gs_img)
+{
+    std::ofstream image_file;
+    std::string line;
+    const std::string P_5 = "P5";
+    const std::string P_2 = "P2";
+
+    // opening file
+    image_file.open(path, std::ios::out);
+
+    if (magic_number.compare(P_5)
+            && magic_number.compare(P_2))
+        throw "pcloud_io::export_image : magic_number must be \"P5\" or \"P2\"";
+
+    else
+    {
+        if (!image_file.is_open())
+        {
+            throw "pcloud_io::export_image : Could not write file at \"" + path + "\".";
+        }
+
+        else
+        {
+            if (gs_img.width() == 0 || gs_img.height() == 0)
+                throw "pcloud_io::export_image : Invalid image.";
+
+            else
+            {
+                line = magic_number.append("\n");
+                image_file << line;
+                line.clear();
+                line = boost::lexical_cast<std::string>(gs_img.width()) + "\t"
+                       + boost::lexical_cast<std::string>(gs_img.height()) + "\n";
+                image_file << line;
+                line.clear();
+                line = boost::lexical_cast<std::string>(255);
+                image_file << line;
+
+                for (unsigned long i = 0; i < gs_img.height(); i++)
+                {
+                    line.clear();
+
+                    for (unsigned long j = 0; j < gs_img.width(); j++)
+                    {
+                        line += boost::lexical_cast<std::string>(gs_img.get_grey_at(i, j)) + "\t";
+                    }
+
+                    line += "\n";
+                    image_file << line;
+                }
+            }
+        }
+    }
+}

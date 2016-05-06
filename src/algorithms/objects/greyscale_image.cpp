@@ -1,10 +1,16 @@
 #include "greyscale_image.h"
 
-greyscale_image::greyscale_image(int width, int height) : image(width, height)
+greyscale_image::greyscale_image(unsigned long width, unsigned long height) : image(width, height)
 {
+    _pixels.resize(height);
+
+    for (unsigned int i = 0; i < _pixels.size(); i++)
+    {
+        _pixels[i].resize(width);
+    }
 }
 
-unsigned short greyscale_image::get_grey_at(int y, int x)
+unsigned short greyscale_image::get_grey_at(unsigned long y, unsigned long x)
 {
     try
     {
@@ -19,7 +25,7 @@ unsigned short greyscale_image::get_grey_at(int y, int x)
     }
 }
 
-void greyscale_image::set_grey_at(int y, int x, unsigned short grey)
+void greyscale_image::set_grey_at(unsigned long y, unsigned long x, unsigned short grey)
 {
     try
     {

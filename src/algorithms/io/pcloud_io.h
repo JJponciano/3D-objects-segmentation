@@ -53,6 +53,14 @@ namespace pcloud_io
      * @param greyscale_vector the greyscale_vector to be exported
      */
     void export_greyscale(std::string path, std::vector<point_xy_greyscale> greyscale_vector);
+
+    /**
+     * @brief export_image exports an image to a file in pgm format
+     * @param path the path where the file will be exported
+     * @param magic_number defines the format of the file
+     * @param gs_img the image to be exported
+     */
+    void export_image(std::string path, std::string magic_number, greyscale_image gs_img);
 }
 
 #endif // PCLOUD_IO_H

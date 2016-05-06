@@ -39,12 +39,16 @@ void test_crop_cloud(std::string import_path,
                      std::vector<float> xyzthresh,
                      float precision);
 
+
+float test_precision(float float_num, float precision);
+
 void test_color_to_greyscale(std::string import_path,
                              std::string export_path,
                              int is_rgb);
 
-float test_precision(float float_num, float precision);
-
-
+void test_greyscale_to_image(std::string import_path, std::string export_path,
+                             std::string magic_number,
+                             int is_rgb,
+                             float epsilon);
 
 #endif // TEST_LIB_H

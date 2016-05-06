@@ -11,9 +11,9 @@ class greyscale_image : public image
 private:
     std::vector<std::vector<unsigned short>> _pixels;
 public:
-    greyscale_image(int width, int height);
-    unsigned short get_grey_at(int y, int x);
-    void set_grey_at(int y, int x, unsigned short grey);
+    greyscale_image(unsigned long width, unsigned long height);
+    unsigned short get_grey_at(unsigned long y, unsigned long x);
+    void set_grey_at(unsigned long y, unsigned long x, unsigned short grey);
 };
 
 #endif // GREYSCALE_IMAGE_H

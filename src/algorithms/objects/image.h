@@ -4,13 +4,13 @@
 class image
 {
 private:
-    int _width;
-    int _height;
+    unsigned long _width;
+    unsigned long _height;
 public:
-    image(int width, int height);
-    int width() { return _width; }
-    int height() { return _height; }
-    int resolution() { return _width * _height; }
+    image(unsigned long width, unsigned long height);
+    unsigned long width() { return _width; }
+    unsigned long height() { return _height; }
+    unsigned long resolution() { return _width * _height; }
 };
 
 #endif // IMAGE_H
