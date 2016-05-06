@@ -1,5 +1,6 @@
 #include <pcl/point_types.h>
-#include <vector>
+#include <pcl/point_cloud.h>
+#include <list>
 
 #ifndef POINT_CLSTR_H
 #define POINT_CLSTR_H
@@ -13,30 +14,31 @@ namespace clstr
     public:
         point_clstr();
         point_clstr(float x, float y, float z);
-        bool getVisited() const{return this->visited;}
-        void setVisited(bool visited) {this->visited = visited;}
-
-        /**
-         * @brief Adds a pointer to a neighbour into the neighbours vector
-         * @param neighbour The pointer to the neighbour
-         **/
-        void addNeighbour(clstr::point_clstr* neighbour) { this->neighbours.push_back(neighbour); }
 
         void makeVertex(){ this->nbTimeVertex++; }
         void removeVertex(){ this->nbTimeVertex--; }
 
-        /**
-         * @brief getFirstNghbr returns an iterator to the beggining of the neighbours vector
-         * @return an iterator to the beggining of the neighbours vector
-         */
-        std::vector<clstr::point_clstr*>::iterator getFirstNghbr() { return this->neighbours.begin(); }
-        std::vector<clstr::point_clstr*>::iterator getEndNghbr() { return this->neighbours.end(); }
+        void addNeighbour(clstr::point_clstr* point_ptr) { this->neighbours.push_front(point_ptr); }
+        std::list<clstr::point_clstr*>::iterator getIteratorOnFirstNeighbour() { return this->neighbours.begin(); }
+        std::list<clstr::point_clstr*>::iterator getIteratorOnLastNeighbour() { return this->neighbours.end(); }
+
+        void setCloud(pcl::PointCloud<clstr::point_clstr>::Ptr cloud) { this->added_in_cloud = cloud; }
+        pcl::PointCloud<clstr::point_clstr>::Ptr getCloud() { return this->added_in_cloud; }
+
+        bool getVisited() { return this->visited; }
+        void setVisited(bool visited) { this->visited = visited; }
+
+        bool getAdded() { return this->added; }
+        void setAdded(bool added) { this->added = added; }
+
+        void clearNeighbours() { this->neighbours.clear(); }
+
     private:
+        std::list<clstr::point_clstr*> neighbours;
+        pcl::PointCloud<clstr::point_clstr>::Ptr added_in_cloud = nullptr;
         bool visited = false;
-        /**
-         * @brief neighbours contains the pointers to each neighbours of the point
-         */
-        std::vector<clstr::point_clstr*> neighbours;
+        bool added = false;
+
         int nbTimeVertex = 0;
     };
 }

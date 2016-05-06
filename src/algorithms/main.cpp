@@ -10,21 +10,8 @@ using namespace std;
 
 void test_cloud()
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb (new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool (new pcl::PointCloud<clstr::point_clstr>);
-    std::cout << "Loading Widop file and converting it to cloud format... " << std::flush;
-    cloud_xyzrgb = pcloud_io::import_cloud("/home/kevin/Desktop/results.txt", true);
-    cloud_manip::scale_cloud(cloud_xyzrgb, 1, 100, 1, 0.0000005);
-    cloud_manip::convertXYZRGBToBool(cloud_xyzrgb, cloud_bool);
-    std::cout << "Initializing algorithm." << std::endl;
-    cloud_xyzrgb->clear();
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr final_cloud = clstr::clustering::getCloudFromVector(clstr::clustering::getCloudsByColor(cloud_bool, 0.05, 1000));
-    cloud_bool->clear();
-    std::cout << "Reconverting to Widop size... " << std::flush;
-    cloud_manip::scale_cloud(final_cloud, 1, ((float)1/(float)100), 1, 0.0000005);
-    std::cout << "Writing results into txt file... " << std::flush;
-    pcloud_io::export_cloud("clusters_assemble.txt", final_cloud);
-    std::cout << "Done." << std::endl;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud = pcloud_io::import_cloud("/home/kevin/Desktop/results_2.txt", true);
+    clstr::clustering::getClustersFromColouredCloud(cloud, 0.05, true, 20000);
 }
 
 int roundToNearestTen(int i)
@@ -46,10 +33,19 @@ void test_couleur_point()
     std::cout << r << " " << g << " " << b << std::endl;
 }
 
+void read_clusters()
+{
+    std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragments;
+    for(int i=1; i<25; i++)
+    {
+        fragments.push_back(pcloud_io::import_cloud("/home/kevin/Desktop/build-color-seg-Desktop-Debug/cluster"+std::to_string(i)+".txt", true));
+    }
+    pcloud_io::export_cloud("final_cloud_multicoloured.txt" ,cloud_manip::merge_clouds(fragments));
+}
+
 int main(int argc, char *argv[])
 {
     //test_couleur_point();
-    test_cloud();
-
-    return 0;
+    //test_cloud();
+    read_clusters();
 }

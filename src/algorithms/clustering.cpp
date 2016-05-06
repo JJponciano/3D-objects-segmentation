@@ -5,146 +5,183 @@
 
 #include "clustering.h"
 
-//-----------------------------INITIALIZING STATIC ATTRIBUTES----------------------------------------------
-std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::color_map;
-std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::resulting_clouds;
+// Initializes static variables
+std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::coloured_clouds_map;
+std::vector<clstr::point_clstr*> clstr::clustering::neighboursNotYetPushed;
 
-//------------------------------------PUBLIC METHODS-------------------------------------------------------
-
-std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::getCloudsByColor(pcl::PointCloud<clstr::point_clstr>::Ptr base_cloud, double radius, size_t min_cluster_size)
+std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::getClustersFromColouredCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, double neighbours_radius, bool isWidop, int min_cluster_size)
 {
-    // Sorting the points by their RGB value
+    // Creates the vector where the clusters will be stored
+    std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> resulting_clusters;
+
+    // If widop file, rescale to usable coordinates
+    if(isWidop) cloud_manip::scale_cloud(cloud, 1, 100, 1, 0.0005);
+
+    // This algorithm works only with Cluster Points
+    pcl::PointCloud<clstr::point_clstr>::Ptr base_cloud (new pcl::PointCloud<clstr::point_clstr>);
+    cloud_manip::convertXYZRGBToClstr(cloud, base_cloud);
+
+    // Frees memory by deleting the unused cloud
+    cloud->points.clear();
+    cloud->points.shrink_to_fit();
+    cloud = nullptr;
+
+    // Creates as many fragmented cloud as there are colours
+    clstr::clustering::sortPointsByColor(base_cloud);
+    base_cloud->points.clear();
+    base_cloud->points.shrink_to_fit();
+    base_cloud = nullptr;
+
+    std::cout << coloured_clouds_map.size() << " colours found." << std::endl;
+
+    // We will go through the entire map to get each unicoloured cloud as there are and as many points as they contain
+    std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr>::iterator map_iterator;
     pcl::PointCloud<clstr::point_clstr>::iterator cloud_iterator;
-    std::cout << "Please wait while the algorithm sorts the cloud colours. " << std::flush;
-    for(cloud_iterator = base_cloud->begin(); cloud_iterator!=base_cloud->end(); cloud_iterator++)
-    {
-        sortPointsByColor(cloud_iterator);
-    }
-    std::cout << "Approximated values and found " << color_map.size() << " different colours." << std::endl;
+    int colour_counter = 0;
 
-    // By iterating through the entire <map> we set a neighbourhood for each point of the currently looked at coloured cloud
-    // By grouping every neighbourhood we will be able to segment the colour cloud into multiple segmented clouds of the same colour
-    // We then check if the point has already been visited. If it's not the case, that means it must belong to another segmented cloud
-    std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr>::iterator map_it;
-    //These ints are only used for the informational text written on the console
-    int colour_counter=0;
+    std::vector<clstr::point_clstr*> neighboursToSee;
+    std::vector<clstr::point_clstr*> useless_vector;
+    std::vector<clstr::point_clstr*> resultingNeighbours;
+    int i;
+    int count_cluster;
+    int totalPointsKept = 0;
 
-    std::cout << "The algorithm will now proceed to find the different clusters. This operation WILL take a while... " << std::flush;
-    for(map_it = color_map.begin(); map_it!=color_map.end(); map_it++)
+    for(map_iterator=coloured_clouds_map.begin(); map_iterator!=coloured_clouds_map.end(); map_iterator++)
     {
         colour_counter++;
-        if((map_it->second)->size() >= min_cluster_size)
+        std::cout << "Analizing coloured cloud number " << colour_counter << std::endl;
+        std::cout << "Hint : This coloured cloud contains " << (map_iterator->second)->size() << " points" << std::endl;
+        // As we need a kdtree to know our points neighbours but the vector it creates take a lot of memory, we will in advance tell our points who are their neighbours
+        clstr::clustering::setNeighbourhoodForPoints(map_iterator->second, neighbours_radius);
+
+        // Now we need to create the clusters for this unicoloured cloud
+        for(cloud_iterator=(map_iterator->second)->begin(); cloud_iterator!=(map_iterator->second)->end(); cloud_iterator++)
         {
-            std::cout << "Analyzing colour n°" << colour_counter << std::endl;
-            setNeighbourhood(map_it->second, radius);
-            pcl::PointCloud<clstr::point_clstr>::iterator cloud_it;
-            for(cloud_it = (map_it->second)->begin(); cloud_it != (map_it->second)->end(); cloud_it++)
+            if(!(*cloud_iterator).getVisited())
             {
-                if(!(*cloud_it).getVisited()) // If the point hasn't been visited yet
+                // Deallocates memory used by the vector
+                neighboursToSee.clear();
+                neighboursToSee.shrink_to_fit();
+
+                pcl::PointCloud<clstr::point_clstr>::Ptr new_cluster (new pcl::PointCloud<clstr::point_clstr>);
+                new_cluster->push_back(*cloud_iterator);
+                (*cloud_iterator).setCloud(new_cluster);
+
+                neighboursToSee.push_back(&(*cloud_iterator));
+                i = 0;
+                while(i < neighboursToSee.size())
                 {
-                    // We create a new cloud, set the point to visited then add him and its neighbours into the newly created cloud
-                    pcl::PointCloud<clstr::point_clstr>::Ptr new_cluster (new pcl::PointCloud<clstr::point_clstr>);
-                    (*cloud_it).setVisited(true);
-                    new_cluster->push_back(*cloud_it);
-                    createNewCluster(&(*cloud_it), new_cluster);
-                    if(new_cluster->size()>=min_cluster_size)
-                    {
-                        resulting_clouds.push_back(new_cluster);
-                    }
-                    else { new_cluster->clear(); new_cluster->resize(0);}
+                    resultingNeighbours.clear();
+                    resultingNeighbours.shrink_to_fit();
+                    resultingNeighbours = clstr::clustering::addNeighboursIntoCluster(neighboursToSee[i]);
+                    std::merge(useless_vector.begin(), useless_vector.end(), resultingNeighbours.begin(), resultingNeighbours.end(), std::back_inserter(neighboursToSee));
+                    i++;
+                }
+                if(new_cluster->size() >= min_cluster_size)
+                {
+                    count_cluster++;
+                    totalPointsKept += new_cluster->size();
+                    std::cout << "Cluster added because it contains " << new_cluster->size() << " points" << std::endl;
+                    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb (new pcl::PointCloud<pcl::PointXYZRGB>);
+                    cloud_manip::convertClstrToXYZRGB(new_cluster, cloud_xyzrgb);
+                    new_cluster->points.clear();
+                    new_cluster->points.shrink_to_fit();
+                    new_cluster = nullptr;
+                    cloud_manip::giveRandomColorToCloud(cloud_xyzrgb);
+                    cloud_manip::scale_cloud(cloud_xyzrgb, 1, ((float)1/(float)100), 1, 0.005);
+                    pcloud_io::export_cloud("cluster"+std::to_string(count_cluster)+".txt", cloud_xyzrgb);
+                    cloud_xyzrgb->points.clear();
+                    cloud_xyzrgb->points.shrink_to_fit();
+                    cloud_xyzrgb = nullptr;
+                }
+                else
+                {
+                    new_cluster->points.clear();
+                    new_cluster->points.shrink_to_fit();
+                    new_cluster = nullptr;
                 }
             }
         }
-        // Frees memory by erasing the entry
-        color_map.erase(map_it);
+        (map_iterator->second)->points.clear();
+        (map_iterator->second)->points.shrink_to_fit();
+        coloured_clouds_map.erase(map_iterator);
     }
-    std::cout << " Finished finding clusters." << std::endl;
-
-    return resulting_clouds;
+    std::cout << totalPointsKept << " points were kept during the making of this film." << std::endl;
+    return resulting_clusters;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr clstr::clustering::getCloudFromVector(std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clouds)
+void clstr::clustering::sortPointsByColor(pcl::PointCloud<clstr::point_clstr>::Ptr base_cloud)
 {
-    std::cout << "The program will now colour each cluster with an unique color. " << std::flush;
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr final_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_XYZRGB (new pcl::PointCloud<pcl::PointXYZRGB>);
-    std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr>::iterator vector_it;
-    pcl::PointCloud<clstr::point_clstr>::iterator clouds_it;
-    for(vector_it=clouds.begin(); vector_it!=clouds.end(); vector_it++)
-    {
-        cloud_manip::convertBoolToXYZRGB(*vector_it, cloud_XYZRGB);
-        //cloud_manip::giveRandomColorToCloud(cloud_XYZRGB);
-        (*final_cloud)+=(*cloud_XYZRGB);
-    }
-    std::cout << "Finished attributing colours." << std::endl;
-    return final_cloud;
+    pcl::PointCloud<clstr::point_clstr>::iterator cloud_iterator;
+    std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr>::iterator map_iterator;
+    // Strings are less memory eating than floats
+    std::string point_color;
 
-}
-
-//------------------------------------PRIVATE METHODS-------------------------------------------------------
-void clstr::clustering::sortPointsByColor(pcl::PointCloud<clstr::point_clstr>::iterator cloud_iterator)
-{
-    // Gets the point color and check if it already exists as a key in our <map>
-    // If the key value has been found, we push the point into the cloud that corresponds to the key
-    // Else we create a new cloud for a new key value and push the point in this new cloud instead
-    std::string point_color = std::to_string((*cloud_iterator).r) + std::to_string((*cloud_iterator).g) + std::to_string((*cloud_iterator).b);
-    std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr>::iterator map_it = color_map.find(point_color);
-    if(map_it != color_map.end()) // Means the key already exists
+    for(cloud_iterator=base_cloud->begin(); cloud_iterator!=base_cloud->end(); cloud_iterator++)
     {
-        map_it->second->push_back(*cloud_iterator);
-    }
-    else
-    {
-        pcl::PointCloud<clstr::point_clstr>::Ptr new_colored_cloud (new pcl::PointCloud<clstr::point_clstr>);
-        color_map[point_color] = new_colored_cloud;
-        new_colored_cloud->push_back(*cloud_iterator);
+        point_color = std::to_string((int)(*cloud_iterator).r) + std::to_string((int)(*cloud_iterator).g) + std::to_string((int)(*cloud_iterator).b);
+        map_iterator=coloured_clouds_map.find(point_color);
+        // If the colour has already been seen in the map we basically had the point to the pre-existing coloured cloud
+        if(map_iterator != coloured_clouds_map.end())
+        {
+            (map_iterator->second)->push_back(*cloud_iterator);
+        }
+        // If the colour has never been seen we create a new cloud for this colour
+        else
+        {
+            pcl::PointCloud<clstr::point_clstr>::Ptr unicoloured_cloud (new pcl::PointCloud<clstr::point_clstr>);
+            unicoloured_cloud->push_back(*cloud_iterator);
+            coloured_clouds_map[point_color] = unicoloured_cloud;
+        }
     }
 }
 
-void clstr::clustering::setNeighbourhood(pcl::PointCloud<clstr::point_clstr>::Ptr colored_cloud, double search_radius)
+void clstr::clustering::setNeighbourhoodForPoints(pcl::PointCloud<clstr::point_clstr>::Ptr unicoloured_cloud, double neighbours_radius)
 {
-    // Using a kdtree we are able to sort the points by coordinates
-    // Since the clouds used are already sorted by colour, we are sure that each point find in a search radius is a true neighbour to another
+    pcl::PointCloud<clstr::point_clstr>::iterator cloud_iterator;
+
     pcl::KdTreeFLANN<clstr::point_clstr> kdtree;
-    kdtree.setInputCloud(colored_cloud);
-    pcl::PointCloud<clstr::point_clstr>::iterator cloud_it;
-    for(cloud_it = colored_cloud->begin(); cloud_it!=colored_cloud->end(); cloud_it++)
+    kdtree.setInputCloud(unicoloured_cloud);
+
+    std::vector<int> PointsID; // Contains the neighbours indices
+    std::vector<float> PointsDist; // Only needed by the KDTree for the radius search
+
+    for(cloud_iterator=unicoloured_cloud->begin(); cloud_iterator!=unicoloured_cloud->end(); cloud_iterator++)
     {
-        std::vector<int> PointsID; // Contains the ID of the neighbours
-        std::vector<float> distances; // Contains the squared distances of the nieghbours (useless but mandatory)
-        if(kdtree.radiusSearch(*cloud_it, search_radius, PointsID, distances) > 1) // Note that 0 refers to the point itself
+        // Checks if the point has at least one neighbour except itself
+        if(kdtree.radiusSearch(*cloud_iterator, neighbours_radius, PointsID, PointsDist) >= 1)
         {
-            for(size_t i = 0; i<PointsID.size(); i++)
+            for(size_t i = 1; i<PointsID.size(); i++)
             {
-                if(!colored_cloud->points[PointsID[i]].getAdded())
-                {
-                    colored_cloud->points[PointsID[i]].setAdded(true);
-                    (*cloud_it).addNeighbour(&(colored_cloud->points[PointsID[i]])); // We add a pointer of the neighbour because storing pointer costs way less rapid access memory than a copy of the neighbour itself
-                }
+                (*cloud_iterator).addNeighbour(&(unicoloured_cloud->points[PointsID[i]]));
             }
         }
-        // Deleting a vector does not free memory so we clear it and shrink its size to what space it really needs. In this case, the space is of 0.
         PointsID.clear();
         PointsID.shrink_to_fit();
-        distances.clear();
-        distances.shrink_to_fit();
+        PointsDist.clear();
+        PointsDist.shrink_to_fit();
     }
+    kdtree = nullptr;
 }
 
-void clstr::clustering::createNewCluster(clstr::point_clstr* crt_point, pcl::PointCloud<clstr::point_clstr>::Ptr new_cluster)
+std::vector<clstr::point_clstr*> clstr::clustering::addNeighboursIntoCluster(clstr::point_clstr* point_ptr)
 {
-    for(clstr::point_clstr* point : crt_point->getNghbr())
+    neighboursNotYetPushed.clear();
+    neighboursNotYetPushed.shrink_to_fit();
+    std::list<clstr::point_clstr*>::iterator nghbr_it;
+
+    point_ptr->setVisited(true);
+    for(nghbr_it=point_ptr->getIteratorOnFirstNeighbour(); nghbr_it!=point_ptr->getIteratorOnLastNeighbour(); nghbr_it++)
     {
-        if(!(point->getVisited()))
+        if(!(*nghbr_it)->getAdded())
         {
-            point->setVisited(true);
-            new_cluster->push_back(*point);
-            createNewCluster(point, new_cluster);
+            (*nghbr_it)->setAdded(true);
+            point_ptr->getCloud()->push_back(**nghbr_it);
+            (*nghbr_it)->setCloud(point_ptr->getCloud());
+            neighboursNotYetPushed.push_back(*nghbr_it);
         }
     }
-}
+    point_ptr->clearNeighbours();
 
-int clstr::clustering::roundToNearestTenth(int i)
-{
-    if(i%10<5)i=(i/10)*10;else{i=(i/10)*10+10;}return i;
+    return neighboursNotYetPushed;
 }
