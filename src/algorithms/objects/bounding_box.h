@@ -14,8 +14,8 @@ public:
     std::vector<bounding_box*> divideBox();
     void addPointIntoBox(clstr::point_clstr* point);
     int getNbOfPoints() { return this->points.size(); }
+    std::vector<clstr::point_clstr*> getVertices();
     void deleteBox();
-    ~bounding_box();
 private:
     clstr::point_clstr* A;
     clstr::point_clstr* B;

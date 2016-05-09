@@ -9,13 +9,16 @@
 std::map<std::string, pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::coloured_clouds_map;
 std::vector<clstr::point_clstr*> clstr::clustering::neighboursNotYetPushed;
 
-std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::getClustersFromColouredCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, double neighbours_radius, bool isWidop, int min_cluster_size)
+int clstr::clustering::getClustersFromColouredCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, double neighbours_radius, bool isWidop, int min_cluster_size)
 {
     // Creates the vector where the clusters will be stored
     std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> resulting_clusters;
 
     // If widop file, rescale to usable coordinates
     if(isWidop) cloud_manip::scale_cloud(cloud, 1, 100, 1, 0.0005);
+
+    std::clock_t clock;
+    clock = std::clock();
 
     // This algorithm works only with Cluster Points
     pcl::PointCloud<clstr::point_clstr>::Ptr base_cloud (new pcl::PointCloud<clstr::point_clstr>);
@@ -43,71 +46,73 @@ std::vector<pcl::PointCloud<clstr::point_clstr>::Ptr> clstr::clustering::getClus
     std::vector<clstr::point_clstr*> useless_vector;
     std::vector<clstr::point_clstr*> resultingNeighbours;
     int i;
-    int count_cluster;
+    int count_cluster = 0;
     int totalPointsKept = 0;
 
-    for(map_iterator=coloured_clouds_map.begin(); map_iterator!=coloured_clouds_map.end(); map_iterator++)
+    map_iterator=coloured_clouds_map.begin();
+    for(map_iterator; map_iterator!=coloured_clouds_map.end(); map_iterator++)
     {
         colour_counter++;
-        std::cout << "Analizing coloured cloud number " << colour_counter << std::endl;
-        std::cout << "Hint : This coloured cloud contains " << (map_iterator->second)->size() << " points" << std::endl;
-        // As we need a kdtree to know our points neighbours but the vector it creates take a lot of memory, we will in advance tell our points who are their neighbours
-        clstr::clustering::setNeighbourhoodForPoints(map_iterator->second, neighbours_radius);
-
-        // Now we need to create the clusters for this unicoloured cloud
-        for(cloud_iterator=(map_iterator->second)->begin(); cloud_iterator!=(map_iterator->second)->end(); cloud_iterator++)
+        if(map_iterator->first != "000" &&  map_iterator->first !="00200")
         {
-            if(!(*cloud_iterator).getVisited())
+            std::cout << "Analizing coloured cloud number " << colour_counter << std::endl;
+            std::cout << "Hint : This coloured cloud contains " << (map_iterator->second)->size() << " points" << std::endl;
+            // As we need a kdtree to know our points neighbours but the vector it creates take a lot of memory, we will in advance tell our points who are their neighbours
+            clstr::clustering::setNeighbourhoodForPoints(map_iterator->second, neighbours_radius);
+
+            // Now we need to create the clusters for this unicoloured cloud
+            for(cloud_iterator=(map_iterator->second)->begin(); cloud_iterator!=(map_iterator->second)->end(); cloud_iterator++)
             {
-                // Deallocates memory used by the vector
-                neighboursToSee.clear();
-                neighboursToSee.shrink_to_fit();
+                if(!(*cloud_iterator).getVisited())
+                {
+                    // Deallocates memory used by the vector
+                    neighboursToSee.clear();
+                    neighboursToSee.shrink_to_fit();
 
-                pcl::PointCloud<clstr::point_clstr>::Ptr new_cluster (new pcl::PointCloud<clstr::point_clstr>);
-                new_cluster->push_back(*cloud_iterator);
-                (*cloud_iterator).setCloud(new_cluster);
+                    pcl::PointCloud<clstr::point_clstr>::Ptr new_cluster (new pcl::PointCloud<clstr::point_clstr>);
+                    new_cluster->push_back(*cloud_iterator);
 
-                neighboursToSee.push_back(&(*cloud_iterator));
-                i = 0;
-                while(i < neighboursToSee.size())
-                {
-                    resultingNeighbours.clear();
-                    resultingNeighbours.shrink_to_fit();
-                    resultingNeighbours = clstr::clustering::addNeighboursIntoCluster(neighboursToSee[i]);
-                    std::merge(useless_vector.begin(), useless_vector.end(), resultingNeighbours.begin(), resultingNeighbours.end(), std::back_inserter(neighboursToSee));
-                    i++;
-                }
-                if(new_cluster->size() >= min_cluster_size)
-                {
-                    count_cluster++;
-                    totalPointsKept += new_cluster->size();
-                    std::cout << "Cluster added because it contains " << new_cluster->size() << " points" << std::endl;
-                    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb (new pcl::PointCloud<pcl::PointXYZRGB>);
-                    cloud_manip::convertClstrToXYZRGB(new_cluster, cloud_xyzrgb);
-                    new_cluster->points.clear();
-                    new_cluster->points.shrink_to_fit();
-                    new_cluster = nullptr;
-                    cloud_manip::giveRandomColorToCloud(cloud_xyzrgb);
-                    cloud_manip::scale_cloud(cloud_xyzrgb, 1, ((float)1/(float)100), 1, 0.005);
-                    pcloud_io::export_cloud("cluster"+std::to_string(count_cluster)+".txt", cloud_xyzrgb);
-                    cloud_xyzrgb->points.clear();
-                    cloud_xyzrgb->points.shrink_to_fit();
-                    cloud_xyzrgb = nullptr;
-                }
-                else
-                {
-                    new_cluster->points.clear();
-                    new_cluster->points.shrink_to_fit();
-                    new_cluster = nullptr;
+                    neighboursToSee.push_back(&(*cloud_iterator));
+                    i = 0;
+                    while(i < neighboursToSee.size())
+                    {
+                        resultingNeighbours.clear();
+                        resultingNeighbours.shrink_to_fit();
+                        resultingNeighbours = clstr::clustering::addNeighboursIntoCluster(neighboursToSee[i], new_cluster);
+                        std::merge(useless_vector.begin(), useless_vector.end(), resultingNeighbours.begin(), resultingNeighbours.end(), std::back_inserter(neighboursToSee));
+                        i++;
+                    }
+                    if(new_cluster->size() >= min_cluster_size)
+                    {
+                        count_cluster++;
+                        totalPointsKept += new_cluster->size();
+                        std::cout << "Cluster added because it contains " << new_cluster->size() << " points" << std::endl;
+                        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb (new pcl::PointCloud<pcl::PointXYZRGB>);
+                        cloud_manip::convertClstrToXYZRGB(new_cluster, cloud_xyzrgb);
+                        new_cluster->points.clear();
+                        new_cluster->points.shrink_to_fit();
+                        new_cluster = nullptr;
+                        pcloud_io::export_cloud("cluster"+std::to_string(count_cluster)+".txt", cloud_xyzrgb);
+                        cloud_xyzrgb->points.clear();
+                        cloud_xyzrgb->points.shrink_to_fit();
+                        cloud_xyzrgb = nullptr;
+                    }
+                    else
+                    {
+                        new_cluster->points.clear();
+                        new_cluster->points.shrink_to_fit();
+                        new_cluster = nullptr;
+                    }
                 }
             }
         }
         (map_iterator->second)->points.clear();
         (map_iterator->second)->points.shrink_to_fit();
-        coloured_clouds_map.erase(map_iterator);
+        //coloured_clouds_map.erase(map_iterator);
     }
+    std::cout << "Algorithm ran in " << (std::clock()-clock)/CLOCKS_PER_SEC << " seconds" << std::endl;
     std::cout << totalPointsKept << " points were kept during the making of this film." << std::endl;
-    return resulting_clusters;
+    return count_cluster;
 }
 
 void clstr::clustering::sortPointsByColor(pcl::PointCloud<clstr::point_clstr>::Ptr base_cloud)
@@ -164,7 +169,7 @@ void clstr::clustering::setNeighbourhoodForPoints(pcl::PointCloud<clstr::point_c
     kdtree = nullptr;
 }
 
-std::vector<clstr::point_clstr*> clstr::clustering::addNeighboursIntoCluster(clstr::point_clstr* point_ptr)
+std::vector<clstr::point_clstr*> clstr::clustering::addNeighboursIntoCluster(clstr::point_clstr* point_ptr, pcl::PointCloud<clstr::point_clstr>::Ptr cluster)
 {
     neighboursNotYetPushed.clear();
     neighboursNotYetPushed.shrink_to_fit();
@@ -176,8 +181,7 @@ std::vector<clstr::point_clstr*> clstr::clustering::addNeighboursIntoCluster(cls
         if(!(*nghbr_it)->getAdded())
         {
             (*nghbr_it)->setAdded(true);
-            point_ptr->getCloud()->push_back(**nghbr_it);
-            (*nghbr_it)->setCloud(point_ptr->getCloud());
+            cluster->push_back(**nghbr_it);
             neighboursNotYetPushed.push_back(*nghbr_it);
         }
     }

@@ -5,13 +5,15 @@
 #include "./cloud_manip/cloud_manip.h"
 #include "./io/pcloud_io.h"
 #include "clustering.h"
+#include "bounding/bounding.h"
 
 using namespace std;
 
-void test_cloud()
+int test_cloud()
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud = pcloud_io::import_cloud("/home/kevin/Desktop/results_2.txt", true);
-    clstr::clustering::getClustersFromColouredCloud(cloud, 0.05, true, 20000);
+    int i = clstr::clustering::getClustersFromColouredCloud(cloud, 0.1, true, 700);
+    return i;
 }
 
 int roundToNearestTen(int i)
@@ -33,19 +35,39 @@ void test_couleur_point()
     std::cout << r << " " << g << " " << b << std::endl;
 }
 
-void read_clusters()
+void read_clusters(int j)
 {
     std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragments;
-    for(int i=1; i<25; i++)
+    for(int i=1; i<j; i++)
     {
-        fragments.push_back(pcloud_io::import_cloud("/home/kevin/Desktop/build-color-seg-Desktop-Debug/cluster"+std::to_string(i)+".txt", true));
+        fragments.push_back(bounding::getCloudBoundings(pcloud_io::import_cloud("/home/kevin/Desktop/build-color-seg-Desktop-Debug/cluster"+std::to_string(i)+".txt", true), 5));
     }
-    pcloud_io::export_cloud("final_cloud_multicoloured.txt" ,cloud_manip::merge_clouds(fragments));
+    pcloud_io::export_cloud("final_cloud_bounds.txt" ,cloud_manip::merge_clouds(fragments));
+}
+
+void test_bounding()
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb = pcloud_io::import_cloud("/home/kevin/Desktop/cluster17.txt", true);
+    std::cout << "Finished reading cluster"  << std::endl;
+    pcloud_io::export_cloud("cluster17_bounds", bounding::getCloudBoundings(cloud_xyzrgb, 6));
+}
+
+void assemble_test()
+{
+    std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragments;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr wall = pcloud_io::import_cloud("/home/kevin/Desktop/boundTest_wall.txt", true);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr boundings_wall = pcloud_io::import_cloud("/home/kevin/Desktop/bounding_test.txt", true);
+    fragments.push_back(wall);
+    fragments.push_back(boundings_wall);
+    pcloud_io::export_cloud("WALL and BOUNDS.txt" ,cloud_manip::merge_clouds(fragments));
 }
 
 int main(int argc, char *argv[])
 {
     //test_couleur_point();
-    //test_cloud();
-    read_clusters();
+    //int i = test_cloud();
+    //read_clusters(i);
+    //test_bounding();
+    assemble_test();
+    return 0;
 }
