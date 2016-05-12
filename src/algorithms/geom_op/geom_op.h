@@ -74,9 +74,9 @@ namespace geom
 
         /**
          * @brief pcl_normal_estimation is a function that estimates the normals of the parameter cloud using the standard pcl library
-         * @param cloud is the point cloud to find the normals of
+         * @param cloud_ptr is a pointer to the point cloud to find the normals of
          */
-        void pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
+        void pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
     }
 
     /**
