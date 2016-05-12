@@ -6,7 +6,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path,
 
     size_t i = path.rfind('.', path.length());
 
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 
     if (i != std::string::npos)
       ext = path.substr(i+1, path.length() - i);
@@ -16,7 +16,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path,
     {
         try
         {
-            pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *pt_cl);
+            pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *cloud);
         }
 
         catch(std::exception& e)
@@ -29,7 +29,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path,
     {
         try
         {
-            pt_cl = pcloud_io::import_cloud_txt(path, is_rgb);
+            cloud = pcloud_io::import_cloud_txt(path, is_rgb);
         }
 
         catch(char const* io_err)
@@ -38,7 +38,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud(std::string path,
         }
     }
 
-    return pt_cl;
+    return cloud;
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string pathname, bool is_rgb)
@@ -121,45 +121,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcloud_io::import_cloud_txt(std::string p
     else throw "pcloud_io::import_cloud : Invalid .txt file.";
 }
 
-greyscale_image pcloud_io::import_greyscale_image(std::string path)
-{
-    std::ifstream image_file;
-    std::string line;
 
-    image_file.open(path, std::ios::in);
-
-    if (!image_file.is_open())
-    {
-        throw "pcloud_io::import_greyscale_image : Could not load file at \""
-                + path + "\".";
-    }
-
-    else
-    {
-        greyscale_image gs_img;
-
-        while (std::getline(image_file, line))
-        {
-            point_xy_greyscale pt_gs;
-            float x, y;
-            unsigned short greyscale;
-            std::stringstream iss(line);
-
-            if (iss >> x >> y >> greyscale)
-            {
-                pt_gs.x = x;
-                pt_gs.y = y;
-                pt_gs.greyscale(greyscale);
-
-                gs_img.points().push_back(pt_gs);
-            }
-        }
-
-        return gs_img;
-    }
-}
-
-void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
+void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
     std::ofstream cloud_file;
     std::string line;
@@ -177,12 +140,12 @@ void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>
 
     else
     {
-        if (!pt_cl)
+        if (!cloud_ptr)
             throw "pcloud_io::export_cloud : Invalid cloud.";
 
         else
         {
-            for (cloud_it = pt_cl->points.begin(); cloud_it < pt_cl->points.end(); cloud_it++)
+            for (cloud_it = cloud_ptr->points.begin(); cloud_it < cloud_ptr->points.end(); cloud_it++)
             {
                 line = boost::lexical_cast<std::string>((float)(*cloud_it).x) + "\t"
                         + boost::lexical_cast<std::string>((float)(*cloud_it).y) + "\t"
@@ -198,30 +161,91 @@ void pcloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>
     }
 }
 
-void pcloud_io::export_greyscale_image(std::string path, greyscale_image gs_img)
+void pcloud_io::export_greyscale_vector(std::string path, std::vector<point_xy_greyscale> greyscale_vector)
 {
-    std::ofstream image_file;
-    std::string line;
+    std::ofstream greyscale_file;
+    std::string line;;
 
-    image_file.open(path, std::ios::out);
+    // opening file
+    greyscale_file.open(path, std::ios::out);
 
-    if (!image_file.is_open())
+    if (!greyscale_file.is_open())
     {
-        throw "pcloud_io::export_greyscale_image : Could not write file at \"" + path + "\".";
+        throw "pcloud_io::export_greyscale : Could not write file at \"" + path + "\".";
     }
 
     else
     {
-        for (std::vector<point_xy_greyscale>::iterator pt_it = gs_img.begin();
-             pt_it != gs_img.end();
-             pt_it++)
-        {
-            line = boost::lexical_cast<std::string>(pt_it->x)
-                    + "\t" + boost::lexical_cast<std::string>(pt_it->y)
-                    + "\t" + boost::lexical_cast<std::string>(pt_it->greyscale())
-                    + "\n";
+        if (greyscale_vector.empty())
+            throw "pcloud_io::export_greyscale : Invalid greyscale vector.";
 
-            image_file << line;
+        else
+        {
+            for (std::vector<point_xy_greyscale>::iterator vector_it = greyscale_vector.begin();
+                 vector_it < greyscale_vector.end(); vector_it++)
+            {
+                line = boost::lexical_cast<std::string>((float)(vector_it->x)) + "\t"
+                        + boost::lexical_cast<std::string>((float)(vector_it->y)) + "\t"
+                        + boost::lexical_cast<std::string>((unsigned short)(vector_it->greyscale())) + "\t"
+                        + "\n";
+
+                greyscale_file << line;
+            }
+        }
+    }
+}
+
+void pcloud_io::export_greyscale_image(std::string path, std::string magic_number, greyscale_image gs_img)
+{
+    std::ofstream image_file;
+    std::string line;
+    const std::string P_5 = "P5";
+    const std::string P_2 = "P2";
+
+    // opening file
+    image_file.open(path, std::ios::out);
+
+    if (magic_number.compare(P_5)
+            && magic_number.compare(P_2))
+        throw "pcloud_io::export_image : magic_number must be \"P5\" or \"P2\"";
+
+    else
+    {
+        if (!image_file.is_open())
+        {
+            throw "pcloud_io::export_image : Could not write file at \"" + path + "\".";
+        }
+
+        else
+        {
+            if (gs_img.width() == 0 || gs_img.height() == 0)
+                throw "pcloud_io::export_image : Invalid image.";
+
+            else
+            {
+                line = magic_number.append("\n");
+                image_file << line;
+                line.clear();
+                line = boost::lexical_cast<std::string>(gs_img.width()) + "\t"
+                       + boost::lexical_cast<std::string>(gs_img.height()) + "\n";
+                image_file << line;
+                line.clear();
+                line = boost::lexical_cast<std::string>(255);
+                image_file << line;
+
+                for (unsigned long i = 0; i < gs_img.height(); i++)
+                {
+                    line.clear();
+
+                    for (unsigned long j = 0; j < gs_img.width(); j++)
+                    {
+                        line += boost::lexical_cast<std::string>(gs_img.get_grey_at(i, j)) + "\t";
+                    }
+
+                    line += "\n";
+                    image_file << line;
+                }
+            }
         }
     }
 }

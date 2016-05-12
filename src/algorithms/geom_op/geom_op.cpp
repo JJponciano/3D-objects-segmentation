@@ -96,25 +96,25 @@ geom::vectors::vector3 geom::vectors::vect_avg(std::vector<geom::vectors::vector
     return vect_avg;
 }
 
-void geom::vectors::pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pt_cl)
+void geom::vectors::pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
       // Create the normal estimation class, and pass the input dataset to it
       pcl::NormalEstimation<pcl::PointXYZRGB, pcl::Normal> ne;
-      ne.setInputCloud(pt_cl);
+      ne.setInputCloud(cloud_ptr);
 
       // Create an empty kdtree representation, and pass it to the normal estimation object.
       // Its content will be filled inside the object, based on the given input dataset (as no other search surface is given).
-      pcl::search::KdTree<pcl::PointXYZRGB>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZRGB> ());
-      ne.setSearchMethod (tree);
+      pcl::search::KdTree<pcl::PointXYZRGB>::Ptr tree_ptr (new pcl::search::KdTree<pcl::PointXYZRGB> ());
+      ne.setSearchMethod (tree_ptr);
 
       // Output datasets
-      pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>);
+      pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ptr (new pcl::PointCloud<pcl::Normal>);
 
       // Use all neighbors in a sphere of radius 3cm
       ne.setRadiusSearch (0.03);
 
       // Compute the features
-      ne.compute (*cloud_normals);
+      ne.compute (*cloud_normals_ptr);
 }
 
 
