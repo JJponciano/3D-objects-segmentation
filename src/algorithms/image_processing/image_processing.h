@@ -1,3 +1,6 @@
+#ifndef IMAGE_PROCESSING_H
+#define IMAGE_PROCESSING_H
+
 #include "../objects/greyscale_image.h"
 #include "../objects/point_xy_greyscale.h"
 
@@ -28,3 +31,5 @@ namespace image_processing
      */
     void normalize(greyscale_image *gs_img_ptr);
 }
+
+#endif // IMAGE_PROCESSING_H
