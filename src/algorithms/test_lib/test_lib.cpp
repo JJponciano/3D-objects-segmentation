@@ -153,7 +153,8 @@ void test_greyscale_to_image(std::string import_path, std::string export_path, s
 
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         greyscale_result = cloud_manip::cloud_to_greyscale(cloud);
-        greyscale_image gs_img= cloud_manip::greyscale_to_image(greyscale_result, epsilon);
+        greyscale_image gs_img= image_processing::greyscale_to_image(greyscale_result, epsilon);
+        image_processing::normalize(&gs_img);
         pcloud_io::export_greyscale_image(export_path + "greyscale_to_image_test_"
                                 + boost::lexical_cast<std::string>(epsilon)
                                 + "_.pgm", magic_number, gs_img);
