@@ -18,6 +18,7 @@ float get_z_max_input();
 float get_float_input();
 float get_dec_precision_input();
 float get_epsilon_input();
+float get_max_fragment_depth_input();
 int get_max_neighbs_input();
 int get_file_type_input();
 std::vector<float> get_xyz_input();

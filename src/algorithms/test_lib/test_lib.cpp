@@ -13,16 +13,13 @@ void test_import_cloud(std::string bad_path)
     }
 }
 
-void test_normal_estimation(std::string import_path,
-                              std::string export_path,
-                              int is_rgb,
-                              float radius,
-                              int max_neighbs)
+void test_normal_estimation(std::string import_path, std::string export_path, int is_rgb,
+                              float radius, int max_neighbs)
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);   // cloud to be examined
-
     try
     {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);   // cloud to be examined
+
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         normal_estimation(cloud, radius, max_neighbs);
         pcloud_io::export_cloud(export_path + "normal_estimation_test_"
@@ -39,23 +36,19 @@ void test_normal_estimation(std::string import_path,
     }
 }
 
-void test_e_normal_estimation(std::string import_path,
-                              std::string export_path,
-                              int is_rgb,
-                              float radius,
-                              int max_neighbs,
-                              std::vector<float> xyzscale,
-                              float precision)
+void test_e_normal_estimation(std::string import_path, std::string export_path, int is_rgb,
+                              float radius, int max_neighbs, std::vector<float> xyzscale,
+                              float max_fragment_depth, float precision)
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud;   // output cloud
-
     try
     {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud;   // output cloud
+
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
-        colored_cloud = e_normal_estimation(cloud, radius, max_neighbs,
+        colored_cloud = e_normal_estimation(cloud, max_neighbs, radius,
                                             xyzscale[0], xyzscale[1], xyzscale[2],
-                                            precision);
+                                            max_fragment_depth, precision);
         pcloud_io::export_cloud(export_path + "e_normal_estimation_test_"
                                 + boost::lexical_cast<std::string>(radius) + "_"
                                 + boost::lexical_cast<std::string>(max_neighbs) + "_"
@@ -73,10 +66,8 @@ void test_e_normal_estimation(std::string import_path,
     }
 }
 
-void test_cloud_homogenization(std::string import_path,
-                               std::string export_path,
-                               int is_rgb,
-                               short epsilon)
+void test_cloud_homogenization(std::string import_path, std::string export_path,
+                               int is_rgb, short epsilon)
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud = pcloud_io::import_cloud(import_path, is_rgb);
 
@@ -93,11 +84,11 @@ void test_crop_cloud(std::string import_path,
                      std::vector<float> xyzthresh,
                      float precision)
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cropped_cloud;
-
     try
     {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cropped_cloud;
+
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         cropped_cloud =
                 cloud_manip::crop_cloud(cloud, xyzthresh[0], xyzthresh[1], xyzthresh[2], precision);
@@ -123,14 +114,14 @@ void test_color_to_greyscale(std::string import_path,
                              int is_rgb)
 
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
-    std::vector<point_xy_greyscale> greyscale_result;
-
     try
     {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+        std::vector<point_xy_greyscale> greyscale_result;
+
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         greyscale_result = cloud_manip::cloud_to_greyscale(cloud);
-        pcloud_io::export_greyscale(export_path + "color_to_greyscale_test"
+        pcloud_io::export_greyscale_vector(export_path + "color_to_greyscale_test"
                                     + "_.txt", greyscale_result);
     }
 
@@ -152,20 +143,19 @@ void test_color_to_greyscale(std::string import_path,
     }
 }
 
-void test_greyscale_to_image(std::string import_path, std::string export_path,
-                             std::string magic_number,
-                             int is_rgb,
-                             float epsilon)
+void test_greyscale_to_image(std::string import_path, std::string export_path, std::string magic_number,
+                             int is_rgb, float epsilon)
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
-    std::vector<point_xy_greyscale> greyscale_result;
-
     try
     {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+        std::vector<point_xy_greyscale> greyscale_result;
+
         cloud = pcloud_io::import_cloud(import_path, is_rgb);
         greyscale_result = cloud_manip::cloud_to_greyscale(cloud);
-        greyscale_image gs_img= cloud_manip::greyscale_to_image(greyscale_result, epsilon);
-        pcloud_io::export_image(export_path + "greyscale_to_image_test_"
+        greyscale_image gs_img= image_processing::greyscale_to_image(greyscale_result, epsilon);
+        image_processing::normalize(&gs_img);
+        pcloud_io::export_greyscale_image(export_path + "greyscale_to_image_test_"
                                 + boost::lexical_cast<std::string>(epsilon)
                                 + "_.pgm", magic_number, gs_img);
     }

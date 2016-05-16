@@ -66,6 +66,17 @@ float get_dec_precision_input()
     return precision;
 }
 
+float get_max_fragment_depth_input()
+{
+    float max_fragment_depth;
+
+    std::cout << "> max_fragment_depth: ";
+    std::cin >> max_fragment_depth;
+    clear_screen();
+
+    return max_fragment_depth;
+}
+
 int get_max_neighbs_input()
 {
     float max_neighbs;
@@ -184,6 +195,7 @@ void test_menu()
     float precision;
     float radius;
     float float_num;
+    float max_fragment_depth;
     std::vector<float> xyz;
 
 
@@ -240,10 +252,12 @@ void test_menu()
                     radius = get_radius_input();
                     max_neighbs = get_max_neighbs_input();
                     xyz = get_xyz_input();
+                    max_fragment_depth = get_max_fragment_depth_input();
                     precision = get_precision_input();
 
-                    test_e_normal_estimation(import_path, export_path, is_rgb,
-                                             radius, max_neighbs, xyz, precision);
+                    test_e_normal_estimation(import_path, export_path, is_rgb, radius,
+                                             max_neighbs, xyz, max_fragment_depth,
+                                             precision);
                     success();
                 }
 
