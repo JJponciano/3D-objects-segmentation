@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     ../test_lib/test_lib.cpp \
     ../objects/greyscale_image.cpp \
     ../objects/point_clstr.cpp \
-    ../objects/image.cpp
+    ../objects/image.cpp \
+    ../image_processing/image_processing.cpp
 
 HEADERS += \
     normal_estimation.h \
@@ -40,7 +41,8 @@ HEADERS += \
     ../test_lib/test_lib.h \
     ../objects/greyscale_image.h \
     ../objects/point_clstr.h \
-    ../objects/image.h
+    ../objects/image.h \
+    ../image_processing/image_processing.h
 
 HEADERS +=
 

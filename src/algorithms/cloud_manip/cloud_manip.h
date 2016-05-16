@@ -23,12 +23,6 @@ namespace cloud_manip
     /** @return all of the z coordinates found in the parameter cloud */
     std::vector<float> cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
 
-    /** @return all the x coordinates in the parameter greyscale vector */
-    std::vector<float> greyscale_x_coords(std::vector<point_xy_greyscale> greyscale_vector);
-
-    /** @return all the y coordinates in the parameter greyscale vector */
-    std::vector<float> greyscale_y_coords(std::vector<point_xy_greyscale> greyscale_vector);
-
     /**
      * @brief copy_cloud copies a cloud into another cloud
      * @param src is a pointer to the source cloud
@@ -88,14 +82,6 @@ namespace cloud_manip
      */
      std::vector<point_xy_greyscale> cloud_to_greyscale(
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
-
-     /**
-      * @brief greyscale_to_image converts an 2D greyscale points array into a depth image
-      * @param greyscale_vector is the the array to be converted
-      * @param x_epsilon helps delimiting the x cases of the image
-      * @return the resulted depth image
-      */
-     greyscale_image greyscale_to_image(std::vector<point_xy_greyscale> greyscale_vector, float x_epsilon);
 
      /**
       * @brief cloud_homogenization homogenizes the similar colors within a cloud

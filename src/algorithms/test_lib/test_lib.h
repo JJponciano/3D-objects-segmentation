@@ -6,6 +6,7 @@
 #define TEST_LIB_H
 
 #include "e_normal_estimation.h"
+#include "../image_processing/image_processing.h"
 #include "../cloud_manip/cloud_manip.h"
 #include "../io/pcloud_io.h"
 
