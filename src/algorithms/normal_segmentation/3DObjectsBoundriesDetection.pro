@@ -15,34 +15,46 @@ TEMPLATE = app
 SOURCES += main.cpp \
     normal_estimation.cpp \
     e_normal_estimation.cpp \
-    ../io/pcloud_io.cpp \
-    ../cloud_manip/cloud_manip.cpp \
-    ../geom_op/geom_op.cpp \
-    ../geom_op/vector3.cpp \
     ../interface/interface.cpp \
     ../objects/bounding_box.cpp \
-    ../objects/point_xy_greyscale.cpp \
     ../test_lib/test_lib.cpp \
-    ../objects/greyscale_image.cpp \
     ../objects/point_clstr.cpp \
-    ../objects/image.cpp \
-    ../image_processing/image_processing.cpp
+    ../tools/aux.cpp \
+    ../io/cloud_io.cpp \
+    ../io/image_io.cpp \
+    ../2d/image.cpp \
+    ../2d/image_greyscale.cpp \
+    ../2d/image_rgb.cpp \
+    ../2d/point_xy_greyscale.cpp \
+    ../2d/point_xy_mixed.cpp \
+    ../2d/point_xy_rgb.cpp \
+    ../tools/cloud_manip.cpp \
+    ../tools/image_processing.cpp \
+    ../2d/image_mixed.cpp \
+    ../tools/vector3.cpp \
+    ../tools/vector3_operations.cpp
 
 HEADERS += \
     normal_estimation.h \
     e_normal_estimation.h \
-    ../io/pcloud_io.h \
-    ../cloud_manip/cloud_manip.h \
-    ../geom_op/geom_op.h \
-    ../geom_op/vector3.h \
     ../interface/interface.h \
     ../objects/bounding_box.h \
-    ../objects/point_xy_greyscale.h \
     ../test_lib/test_lib.h \
-    ../objects/greyscale_image.h \
     ../objects/point_clstr.h \
-    ../objects/image.h \
-    ../image_processing/image_processing.h
+    ../tools/aux.h \
+    ../io/cloud_io.h \
+    ../io/image_io.h \
+    ../2d/image.h \
+    ../2d/image_greyscale.h \
+    ../2d/image_rgb.h \
+    ../2d/point_xy_greyscale.h \
+    ../2d/point_xy_mixed.h \
+    ../2d/point_xy_rgb.h \
+    ../tools/cloud_manip.h \
+    ../tools/image_processing.h \
+    ../2d/image_mixed.h \
+    ../tools/vector3.h \
+    ../tools/vector3_operations.h
 
 HEADERS +=
 

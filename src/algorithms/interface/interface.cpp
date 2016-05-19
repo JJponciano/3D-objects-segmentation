@@ -185,19 +185,8 @@ void test_menu()
     bool exit;
     bool error;
 
-    // input
-    std::string import_path;
+    // export path
     std::string export_path;
-    std::string magic_number;
-    int is_rgb;
-    int max_neighbs;
-    float epsilon;
-    float precision;
-    float radius;
-    float float_num;
-    float max_fragment_depth;
-    std::vector<float> xyz;
-
 
     std::cout << "--- Normal Segmentation test library ---" << std::endl;
 
@@ -212,6 +201,8 @@ void test_menu()
         std::cout << "5 - set_precision();" << std::endl;
         std::cout << "6 - cloud_homogenization();" << std::endl;
         std::cout << "7 - grayscale_to_image();" << std::endl;
+        std::cout << "8 - image_to_cloud();" << std::endl;
+        std::cout << "9 - railway_detection();" << std::endl;
         std::cout << "0 - quit." << std::endl;
         std::cout << std::endl << "Your selection: ";
         std::cin >> selection;
@@ -226,14 +217,10 @@ void test_menu()
             case 1:
                 try
                 {
-                    import_path = get_import_path_input();
                     export_path = NORMAL_ESTIMATION_RES_OUTPUT_PATH;
-                    is_rgb = get_file_type_input();
-                    radius = get_radius_input();
-                    max_neighbs = get_max_neighbs_input();
 
-                    test_normal_estimation(import_path, export_path, is_rgb,
-                                           radius, max_neighbs);
+                    test_normal_estimation(get_import_path_input(), export_path, get_file_type_input(),
+                                           get_radius_input(), get_max_neighbs_input());
                     success();
                 }
 
@@ -246,18 +233,11 @@ void test_menu()
             case 2:
                 try
                 {
-                    import_path = get_import_path_input();
                     export_path = E_NORMAL_ESTIMATION_RES_OUTPUT_PATH;
-                    is_rgb = get_file_type_input();
-                    radius = get_radius_input();
-                    max_neighbs = get_max_neighbs_input();
-                    xyz = get_xyz_input();
-                    max_fragment_depth = get_max_fragment_depth_input();
-                    precision = get_precision_input();
 
-                    test_e_normal_estimation(import_path, export_path, is_rgb, radius,
-                                             max_neighbs, xyz, max_fragment_depth,
-                                             precision);
+                    test_e_normal_estimation(get_import_path_input(), export_path, get_file_type_input(), get_radius_input(),
+                                             get_max_neighbs_input(), get_xyz_input(), get_max_fragment_depth_input(),
+                                             get_precision_input());
                     success();
                 }
 
@@ -267,103 +247,118 @@ void test_menu()
                 }
                 break;
 
-                case 3:
-                    try
-                    {
-                        import_path = get_import_path_input();
-                        export_path = CLOUD_CROP_RES_OUTPUT_PATH;
-                        is_rgb = get_file_type_input();
-                        xyz = get_xyz_input();
-                        precision = get_precision_input();
+            case 3:
+                try
+                {
+                    export_path = CLOUD_CROP_RES_OUTPUT_PATH;
 
-                        test_crop_cloud(import_path, export_path, is_rgb,
-                                        xyz, precision);
-                        success();
-                    }
+                    test_crop_cloud(get_import_path_input(), export_path, get_file_type_input(),
+                                    get_xyz_input(), get_precision_input());
+                    success();
+                }
 
-                    catch (char const* err)
-                    {
-                        failure(err);
-                    }
-                    break;
+                catch (char const* err)
+                {
+                    failure(err);
+                }
+                break;
 
-                case 4:
-                    try
-                    {
-                        import_path = get_import_path_input();
-                        export_path = CONVERT_TO_GREYSCALE_RES_OUTPUT_PATH;
-                        is_rgb = get_file_type_input();
+            case 4:
+                try
+                {
+                    export_path = CONVERT_TO_GREYSCALE_RES_OUTPUT_PATH;
 
-                        test_color_to_greyscale(import_path, export_path, is_rgb);
+                    test_color_to_greyscale(get_import_path_input(), export_path, get_file_type_input());
+                    success();
+                }
 
-                        success();
-                    }
+                catch (char const* err)
+                {
+                    failure(err);
+                }
+                break;
 
-                    catch (char const* err)
-                    {
-                        failure(err);
-                    }
-                    break;
+            case 5:
+                try
+                {
+                    std::cout << test_precision(get_float_input(), get_precision_input())
+                              << std::endl;
+                    success();
+                }
 
-                case 5:
-                    try
-                    {
-                        float_num = get_float_input();
-                        precision = get_precision_input();
+                catch (std::logic_error err)
+                {
+                    failure(err.what());
+                }
+                break;
 
-                        std::cout << test_precision(float_num, precision)
-                                  << std::endl;
-                        success();
-                    }
+            case 6:
+                try
+                {
+                    export_path = CLOUD_HOMOG_RES_OUTPUT_PATH;
 
-                    catch (std::logic_error err)
-                    {
-                        failure(err.what());
-                    }
-                    break;
+                    test_cloud_homogenization(get_import_path_input(), export_path,
+                                              get_file_type_input(), get_epsilon_input());
+                    success();
+                }
 
-                case 6:
-                    try
-                    {
-                        import_path = get_import_path_input();
-                        export_path = CLOUD_HOMOG_RES_OUTPUT_PATH;
-                        is_rgb = get_file_type_input();
-                        epsilon = get_epsilon_input();
+                catch(std::exception err)
+                {
+                    failure(err.what());
+                }
+                break;
 
-                        test_cloud_homogenization(import_path, export_path,
-                                                  is_rgb, epsilon);
-                        success();
-                    }
+            case 7:
+                try
+                {
+                    export_path = IMAGE_TO_FILE_RES_OUTPUT_PATH;
 
-                    catch(std::exception err)
-                    {
-                        failure(err.what());
-                    }
-                    break;
+                    test_greyscale_to_image(get_import_path_input(), export_path,
+                                            get_file_type_input(), get_epsilon_input());
+                    success();
+                }
 
-                case 7:
-                    try
-                    {
-                        import_path = get_import_path_input();
-                        export_path = IMAGE_TO_FILE_RES_OUTPUT_PATH;
-                        magic_number = get_magic_number_input();
-                        epsilon = get_epsilon_input();
-                        is_rgb = get_file_type_input();
+                catch(char const* err)
+                {
+                    failure(err);
+                }
+                break;
 
-                        test_greyscale_to_image(import_path, export_path, magic_number, is_rgb, epsilon);
+            case 8:
+                try
+                {
+                    export_path = IMAGE_TO_CLOUD_RES_OUTPUT_PATH;
 
-                        success();
-                    }
+                    test_image_to_cloud(get_import_path_input(), export_path, get_file_type_input(),
+                                        get_epsilon_input());
+                    success();
+                }
 
-                    catch(char const* err)
-                    {
-                        failure(err);
-                    }
-                    break;
-                default:
-                    error = true;
-                    invalid_input();
-                    break;
+                catch(char const* err)
+                {
+                    failure(err);
+                }
+                break;
+
+            case 9:
+                try
+                {
+                    export_path = "/home/vlad-adrian/share/sem_detection/semanticDir/test/railway_detection_test_results/";
+                    test_rail_detection(get_import_path_input(), export_path, get_file_type_input(),
+                                        get_epsilon_input());
+                    success();
+                }
+
+                catch(char const* err)
+                {
+                    failure(err);
+                }
+                break;
+
+            default:
+                error = true;
+                invalid_input();
+                break;
         }
     } while (!exit && !error);
 }

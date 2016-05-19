@@ -42,12 +42,30 @@ void cloud_manip::copy_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr src_ptr,
     }
 }
 
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud_ptr)
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgb_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
+    uint8_t r, g, b = 255;   // make it white
+
+    for (unsigned int point_index = 0; point_index < white_cloud_ptr->size(); point_index++)
+    {
+        pcl::PointXYZRGB rgb_point(r, g, b);
+        rgb_point.x = white_cloud_ptr->points[point_index].x;
+        rgb_point.y = white_cloud_ptr->points[point_index].y;
+        rgb_point.z = white_cloud_ptr->points[point_index].z;
+
+        rgb_cloud->push_back(rgb_point);
+    }
+
+    return rgb_cloud;
+}
+
 void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float x_scale, float y_scale,
                                  float z_scale, float precision)
 {
-    if (geom::aux::cmp_floats(x_scale, 0.00, precision)
-            || geom::aux::cmp_floats(y_scale, 0.00, precision)
-            || geom::aux::cmp_floats(z_scale, 0.00, precision))
+    if (aux::cmp_floats(x_scale, 0.00, precision)
+            || aux::cmp_floats(y_scale, 0.00, precision)
+            || aux::cmp_floats(z_scale, 0.00, precision))
         throw std::logic_error("cloud_manip::scale_cloud : Multiplying by 0 will destroy the cloud.");
 
     else
@@ -65,7 +83,7 @@ void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, 
 std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_manip::fragment_cloud(
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float max_scaled_fragment_depth, float precision)
 {
-    if (!geom::aux::cmp_floats(max_scaled_fragment_depth, 0.00, precision))
+    if (!aux::cmp_floats(max_scaled_fragment_depth, 0.00, precision))
     {
         float curr_depth = FLT_MAX;
         std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments;
@@ -103,15 +121,15 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(pcl::PointCloud<p
         bool remove_point = false;
 
         if ((std::abs(cloud_ptr->points[cloud_it].x) > std::abs(x_thresh))
-                && (!geom::aux::cmp_floats(x_thresh, 0, precision)))
+                && (!aux::cmp_floats(x_thresh, 0, precision)))
             remove_point = true;
 
         if ((std::abs(cloud_ptr->points[cloud_it].y) > std::abs(y_thresh))
-                && (!geom::aux::cmp_floats(y_thresh, 0, precision)))
+                && (!aux::cmp_floats(y_thresh, 0, precision)))
             remove_point = true;
 
         if (std::abs(cloud_ptr->points[cloud_it].z) > std::abs(z_thresh)
-                && (!geom::aux::cmp_floats(z_thresh, 0, precision)))
+                && (!aux::cmp_floats(z_thresh, 0, precision)))
             remove_point = true;
 
         if (!remove_point)
@@ -137,10 +155,10 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
     return merge_result;
 }
 
-std::vector<point_xy_greyscale> cloud_manip::cloud_to_greyscale(
+std::vector<point_xy_greyscale> cloud_manip::cloud_to_2d_greyscale(
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
-    std::vector<point_xy_greyscale> gs_points;
+    std::vector<point_xy_greyscale> greyscale_points;
     std::vector<float> z_coords = cloud_manip::cloud_z_coords(cloud_ptr);
     float z_min = *(std::min_element(z_coords.begin(), z_coords.end()));
     float z_max = *(std::max_element(z_coords.begin(), z_coords.end()));
@@ -148,16 +166,40 @@ std::vector<point_xy_greyscale> cloud_manip::cloud_to_greyscale(
     for (unsigned int cloud_it = 0; cloud_it < cloud_ptr->points.size(); cloud_it++)
     {
         point_xy_greyscale pt_xy_gs;
-        float greyscale = geom::aux::map(cloud_ptr->points[cloud_it].z, z_min, z_max,
+        float greyscale = aux::map(cloud_ptr->points[cloud_it].z, z_min, z_max,
                                        0.0, 255.0);
 
         pt_xy_gs.x = cloud_ptr->points[cloud_it].x;
         pt_xy_gs.y = cloud_ptr->points[cloud_it].y;
         pt_xy_gs.greyscale((unsigned short)greyscale);
-        gs_points.push_back(pt_xy_gs);
+        greyscale_points.push_back(pt_xy_gs);
     }
 
-    return gs_points;
+    return greyscale_points;
+}
+
+std::vector<point_xy_mixed> cloud_manip::cloud_to_2d_mixed(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
+{
+    std::vector<point_xy_mixed> mixed_points;
+    std::vector<float> z_coords = cloud_manip::cloud_z_coords(cloud_ptr);
+    float z_min = *(std::min_element(z_coords.begin(), z_coords.end()));
+    float z_max = *(std::max_element(z_coords.begin(), z_coords.end()));
+
+    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->begin();
+         cloud_it < cloud_ptr->end(); cloud_it++)
+    {
+        point_xy_mixed pt_xy_mixed;
+        float greyscale = aux::map(cloud_it->z, z_min, z_max, 0.0, 255.0);
+        pt_xy_mixed.x = cloud_it->x;
+        pt_xy_mixed.y = cloud_it->y;
+        pt_xy_mixed.r(cloud_it->r);
+        pt_xy_mixed.g(cloud_it->g);
+        pt_xy_mixed.b(cloud_it->b);
+        pt_xy_mixed.greyscale(greyscale);
+        mixed_points.push_back(pt_xy_mixed);
+    }
+
+    return mixed_points;
 }
 
 void cloud_manip::cloud_homogenization(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, short epsilon)

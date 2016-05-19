@@ -8,11 +8,11 @@ void normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float r
     std::vector<float> pointRadiusSquaredDistance; // distances from the source to the neighbours
 
     // the vect_ors of which the cross product calculates the normal
-    geom::vectors::vector3 vect_1;
-    geom::vectors::vector3 vect_2;
-    geom::vectors::vector3 normal;
+    vector3 vect_1;
+    vector3 vect_2;
+    vector3 normal;
 
-    std::vector<geom::vectors::vector3> vects_to_avg; // vect_or average used for estimating normal
+    std::vector<vector3> vects_to_avg; // vect_or average used for estimating normal
 
     kdt.setInputCloud(cloud_ptr);
 
@@ -25,25 +25,25 @@ void normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float r
 
             for (unsigned int pt_index = 0; pt_index < (pointIdxRadiusSearch.size() - 1); pt_index++)
             {
-                vect_1 = geom::vectors::vect_2pts((cloud_ptr->points[cloud_it]),
+                vect_1 = vector3_operations::vect_2pts((cloud_ptr->points[cloud_it]),
                                                  cloud_ptr->points[pointIdxRadiusSearch[pt_index + 1]]);
 
                 // defining the second vect_or; making sure there is no 'out of bounds' error
                 if (pt_index == pointIdxRadiusSearch.size() - 2)
-                    vect_2 = geom::vectors::vect_2pts((cloud_ptr->points[cloud_it]),
+                    vect_2 = vector3_operations::vect_2pts((cloud_ptr->points[cloud_it]),
                                                       cloud_ptr->points[pointIdxRadiusSearch[1]]);
 
 
                 else
-                    vect_2 = geom::vectors::vect_2pts((cloud_ptr->points[cloud_it]),
+                    vect_2 = vector3_operations::vect_2pts((cloud_ptr->points[cloud_it]),
                                                       cloud_ptr->points[pointIdxRadiusSearch[pt_index + 2]]);
 
-                vects_to_avg.push_back(geom::aux::abs_vector(geom::vectors::cross_product(vect_1, vect_2)));
+                vects_to_avg.push_back(aux::abs_vector(vector3_operations::cross_product(vect_1, vect_2)));
             }
 
             // calculating the normal and coloring the point based on its coordinates
-            normal = geom::vectors::normalize_normal(geom::vectors::vect_avg(vects_to_avg));
-            geom::aux::normal_to_rgb(&(cloud_ptr->points[cloud_it]), normal);
+            normal = vector3_operations::normalize_normal(vector3_operations::vect_avg(vects_to_avg));
+            aux::normal_to_rgb(&(cloud_ptr->points[cloud_it]), normal);
 
             // freeing memory
             vects_to_avg.clear();

@@ -2,7 +2,7 @@
 #define EFF_NORM_EST_H
 
 #include "normal_estimation.h"
-#include "../cloud_manip/cloud_manip.h"
+#include "../tools/cloud_manip.h"
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>

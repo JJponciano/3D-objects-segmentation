@@ -1,13 +1,15 @@
 #ifndef CLOUD_MANIP_H
 #define CLOUD_MANIP_H
 
-#include "../geom_op/geom_op.h"
-#include "../objects/point_xy_greyscale.h"
-#include "../objects/greyscale_image.h"
+#include "aux.h"
+#include "../2d/point_xy_greyscale.h"
+#include "../2d/point_xy_mixed.h"
 #include "../objects/point_clstr.h"
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+
+#include <boost/lexical_cast.hpp>
 
 #include <float.h>
 #include <exception>
@@ -22,6 +24,9 @@ namespace cloud_manip
 
     /** @return all of the z coordinates found in the parameter cloud */
     std::vector<float> cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
+
+    /** @return the parameter cloud as an RGB cloud **/
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud);
 
     /**
      * @brief copy_cloud copies a cloud into another cloud
@@ -72,16 +77,23 @@ namespace cloud_manip
      * @param cloud_fragments is an array of cloud fragments
      * @return a pointer the cloud resulted from merging the cloud fragments
      */
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr merge_clouds(
-            std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr merge_clouds(std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments);
 
     /**
-     * @brief cloud_to_greyscale turns a 3D colored cloud into a 2D greyscale points vector
+     * @brief cloud_to_greyscale turns a 3D rgb point cloud into a 2D greyscale points vector
      * @param cloud_ptr is a pointer the point cloud to be transformed to greyscale
      * @return an array of 2D greyscale points
      */
-     std::vector<point_xy_greyscale> cloud_to_greyscale(
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
+     std::vector<point_xy_greyscale> cloud_to_2d_greyscale(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
+
+     /**
+      * @brief cloud_to_2d_rgb turns a 3D rgb point cloud into a 2D mixed points vector
+      * @details the image keeps each point's x and y coordinates as well as the rgb value
+      * @details the z coordinate is turned into a grey scale value
+      * @param cloud_ptr is a pointer to the cloud to be turned into a vector
+      * @return an array of 2D mixed points
+      */
+     std::vector<point_xy_mixed> cloud_to_2d_mixed(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
 
      /**
       * @brief cloud_homogenization homogenizes the similar colors within a cloud

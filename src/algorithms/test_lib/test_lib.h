@@ -6,9 +6,10 @@
 #define TEST_LIB_H
 
 #include "e_normal_estimation.h"
-#include "../image_processing/image_processing.h"
-#include "../cloud_manip/cloud_manip.h"
-#include "../io/pcloud_io.h"
+#include "../tools/image_processing.h"
+#include "../tools/cloud_manip.h"
+#include "../io/cloud_io.h"
+#include "../io/image_io.h"
 
 #include <time.h>
 
@@ -34,7 +35,10 @@ float test_precision(float float_num, float precision);
 
 void test_color_to_greyscale(std::string import_path, std::string export_path, int is_rgb);
 
-void test_greyscale_to_image(std::string import_path, std::string export_path, std::string magic_number,
-                             int is_rgb, float epsilon);
+void test_greyscale_to_image(std::string import_path, std::string export_path, int is_rgb, float epsilon);
+
+void test_image_to_cloud(std::string import_path, std::string export_path, int is_rgb, float epsilon);
+
+void test_rail_detection(std::string import_path, std::string export_path, int is_rgb, float epsilon);
 
 #endif // TEST_LIB_H
