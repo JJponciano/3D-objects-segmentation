@@ -7,8 +7,7 @@
 /* function implementation */
 int main()
 {
-    clear_screen();
-    test_menu();
+    application();
 
     return 0;
 }

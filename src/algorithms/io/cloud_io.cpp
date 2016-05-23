@@ -19,9 +19,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud(std::string path, 
             pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *cloud);
         }
 
-        catch(std::exception& e)
+        catch (std::exception err)
         {
-            std::cout << "cloud_io::load_cloud : Invalid .pcd file.";
+            QString err_msg;
+
+            err_msg.append("cloud_io::import_cloud : ");
+            err_msg.append(err.what());
+            throw err_msg;
         }
     }
 
@@ -32,9 +36,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud(std::string path, 
             cloud = cloud_io::import_cloud_txt(path, is_rgb);
         }
 
-        catch(char const* io_err)
+        catch (std::exception err)
         {
-            throw io_err;
+            QString err_msg;
+
+            err_msg.append("cloud_io::import_cloud : ");
+            err_msg.append(err.what());
+            throw err_msg;
         }
     }
 
@@ -48,77 +56,80 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pa
         //if the file is not already open
         if(file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QTextStream flux(&file);
-            QString  ligne; // variable contenant chaque ligne lue
-            std::vector<float> px;
-            std::vector<float> py;
-            std::vector<float> pz;
-            std::vector<float> pt_r;
-            std::vector<float> pt_g;
-            std::vector<float> pt_b;
+                QString err_msg;
 
-            while(!flux.atEnd())
+                err_msg.append("cloud_io::import_cloud : Invalid .txt file.");
+                throw err_msg;
+        }
+
+        QTextStream flux(&file);
+        QString  ligne; // variable contenant chaque ligne lue
+        std::vector<float> px;
+        std::vector<float> py;
+        std::vector<float> pz;
+        std::vector<float> pt_r;
+        std::vector<float> pt_g;
+        std::vector<float> pt_b;
+
+        while(!flux.atEnd())
+        {
+            ligne= flux.readLine();
+            // split the line with space as a separator character
+            QStringList result =ligne.split("\t");
+            //convert coordonated Qstring to float coordinates to add in vector
+            if(result.size()<3) return nullptr;
+
+            else
             {
-                ligne= flux.readLine();
-                // split the line with space as a separator character
-                QStringList result =ligne.split("\t");
-                //convert coordonated Qstring to float coordinates to add in vector
-                if(result.size()<3) return nullptr;
+                //read each number and set it in the corresponding vector
+                QString r;
+
+                r=result.at(0);
+                px.push_back(r.toFloat());
+
+                r=result.at(1);
+                py.push_back(r.toFloat());
+
+                r=result.at(2);
+                pz.push_back(r.toFloat());
+
+                if (is_rgb)
+                {
+                    pt_r.push_back(result.at(3).toFloat());
+                    pt_g.push_back(result.at(4).toFloat());
+                    pt_b.push_back(result.at(5).toFloat());
+                }
 
                 else
                 {
-                    //read each number and set it in the corresponding vector
-                    QString r;
-
-                    r=result.at(0);
-                    px.push_back(r.toFloat());
-
-                    r=result.at(1);
-                    py.push_back(r.toFloat());
-
-                    r=result.at(2);
-                    pz.push_back(r.toFloat());
-
-                    if (is_rgb)
-                    {
-                        pt_r.push_back(result.at(3).toFloat());
-                        pt_g.push_back(result.at(4).toFloat());
-                        pt_b.push_back(result.at(5).toFloat());
-                    }
-
-                    else
-                    {
-                        pt_r.push_back((float)255);
-                        pt_g.push_back((float)255);
-                        pt_b.push_back((float)255);
-                    }
+                    pt_r.push_back((float)255);
+                    pt_g.push_back((float)255);
+                    pt_b.push_back((float)255);
                 }
             }
+        }
 
-            //close file
-            file.close();
+        //close file
+        file.close();
 
-            // create cloud point and cloud file pcl
-            // Fill in the cloud data
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+        // create cloud point and cloud file pcl
+        // Fill in the cloud data
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-            for (unsigned int i = 0; i < px.size(); ++i)
-            {
-               pcl::PointXYZRGB pt;
-               pt.x=px[i];
-               pt.y=py[i];
-               pt.z=pz[i];
-               pt.r = pt_r[i];
-               pt.g = pt_g[i];
-               pt.b = pt_b[i];
+        for (unsigned int i = 0; i < px.size(); ++i)
+        {
+           pcl::PointXYZRGB pt;
+           pt.x=px[i];
+           pt.y=py[i];
+           pt.z=pz[i];
+           pt.r = pt_r[i];
+           pt.g = pt_g[i];
+           pt.b = pt_b[i];
 
-               cloud->push_back(pt);
-            }
+           cloud->push_back(pt);
+        }
 
-            return cloud;
-    }
-
-    else throw "cloud_io::import_cloud : Invalid .txt file.";
+        return cloud;
 }
 
 
@@ -135,28 +146,32 @@ void cloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>:
 
     if (!cloud_file.is_open())
     {
-        throw "cloud_io::export_cloud : Could not write file at \"" + path + "\".";
+        QString err_msg;
+
+        err_msg.append("cloud_io::export_cloud : Could not write file at \"");
+        err_msg.append(QString::fromUtf8(path.c_str()));
+        err_msg.append("\".");
+        throw err_msg;
     }
 
-    else
+    if (!cloud_ptr)
     {
-        if (!cloud_ptr)
-            throw "cloud_io::export_cloud : Invalid cloud.";
+        QString err_msg;
 
-        else
-        {
-            for (cloud_it = cloud_ptr->points.begin(); cloud_it < cloud_ptr->points.end(); cloud_it++)
-            {
-                line = boost::lexical_cast<std::string>((float)(*cloud_it).x) + "\t"
-                        + boost::lexical_cast<std::string>((float)(*cloud_it).y) + "\t"
-                        + boost::lexical_cast<std::string>((float)(*cloud_it).z) + "\t"
-                        + boost::lexical_cast<std::string>((short)(*cloud_it).r) + "\t"
-                        + boost::lexical_cast<std::string>((short)(*cloud_it).g) + "\t"
-                        + boost::lexical_cast<std::string>((short)(*cloud_it).b)
-                        + "\n";
+        err_msg.append("cloud_io::export_cloud : Invalid cloud.");
+        throw err_msg;
+    }
 
-                cloud_file << line;
-            }
-        }
+    for (cloud_it = cloud_ptr->points.begin(); cloud_it < cloud_ptr->points.end(); cloud_it++)
+    {
+        line = boost::lexical_cast<std::string>((float)(*cloud_it).x) + "\t"
+                + boost::lexical_cast<std::string>((float)(*cloud_it).y) + "\t"
+                + boost::lexical_cast<std::string>((float)(*cloud_it).z) + "\t"
+                + boost::lexical_cast<std::string>((short)(*cloud_it).r) + "\t"
+                + boost::lexical_cast<std::string>((short)(*cloud_it).g) + "\t"
+                + boost::lexical_cast<std::string>((short)(*cloud_it).b)
+                + "\n";
+
+        cloud_file << line;
     }
 }

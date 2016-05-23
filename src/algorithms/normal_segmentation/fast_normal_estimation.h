@@ -7,8 +7,10 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
+#include <QString>
+
 /**
- * @brief e_normal_estimation an efficient way of coloring a cloud by its estimated normal vectors
+ * @brief fast_normal_estimation an efficient way of coloring a cloud by its estimated normal vectors
  * @details it uses multi-threading and cloud segmentation
  * @param cloud_ptr is a pointer to the point cloud to find the normals of
  * @param radius is the range in which a k-d tree will find the neighbours of a point
@@ -20,7 +22,7 @@
  * @param precision is the precision for float comparison
  * @return the colored cloud
  */
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr e_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, int max_neighbs,
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr fast_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, int max_neighbs,
                                                     float radius, float x_scale, float y_scale, float z_scale,
                                                     float max_fragment_depth, float precision);
 

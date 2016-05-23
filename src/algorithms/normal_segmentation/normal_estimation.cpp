@@ -2,6 +2,16 @@
 
 void normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float radius, int max_neighbs)
 {
+    if (!cloud_ptr)
+    {
+        QString err_msg = "normal_estimation : Invalid cloud pointer.";
+
+        throw err_msg;
+    }
+
+    if (aux::cmp_floats(radius, 0.00, 0.005))
+        throw std::logic_error("normal_estimation : Invalid radius value.");
+
     pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt; // kd-tree used for finding neighbours
 
     std::vector<int> pointIdxRadiusSearch; // neighbours' ids

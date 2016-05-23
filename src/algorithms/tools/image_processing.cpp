@@ -83,6 +83,11 @@ std::vector<unsigned short> image_processing::greyscale_image_values(image_greys
 
 image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy_greyscale> greyscale_vector, float x_epsilon)
 {
+    if (aux::cmp_floats(x_epsilon, 0.000, 0.005))
+        throw std::logic_error("image_processing::greyscale_vector_to_image : x_epsilon must be bigger than 0.");
+
+    x_epsilon = std::abs(x_epsilon);   // x_epsilon must be positive
+
     std::vector<float> x_coords = image_processing::greyscale_vector_x_coords(greyscale_vector);
     std::vector<float> y_coords = image_processing::greyscale_vector_y_coords(greyscale_vector);
     float x_min = *(std::min_element(x_coords.begin(), x_coords.end()));   // smallest x coordinate
@@ -111,6 +116,9 @@ image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy
     {
         unsigned long image_x = (unsigned long)((vector_it->x - x_min) * x_epsilon * 10);
         unsigned long image_y = vector_it->y - y_min;
+
+        if (image_x > gs_img.width())
+            image_x = gs_img.width() - 1;
 
         if (gs_img.get_grey_at(image_y, image_x) < vector_it->greyscale())
             gs_img.set_grey_at(image_y, image_x, vector_it->greyscale());
@@ -151,8 +159,8 @@ image_mixed image_processing::mixed_vector_to_image(std::vector<point_xy_mixed> 
         unsigned long image_x = (unsigned long)((vector_it->x - x_min) * x_epsilon * 10);
         unsigned long image_y = vector_it->y - y_min;
 
-        if (image_x > 396)
-            image_x = 396;
+        if (image_x >= mixed_img.width())
+            image_x = mixed_img.width() - 1;
 
         if (mixed_img.get_grey_at(image_y, image_x) < vector_it->greyscale())
         {
@@ -193,6 +201,13 @@ image_greyscale image_processing::mixed_image_to_greyscale(image_mixed mixed_img
 pcl::PointCloud<pcl::PointXYZ>::Ptr image_processing::greyscale_image_to_cloud(image_greyscale gs_img,
                                                  pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr)
 {
+    if (!base_cloud_ptr)
+    {
+        QString err_msg = "image_processing::greyscale_image_to_cloud : Invalid point cloud pointer.";
+
+        throw err_msg;
+    }
+
     pcl::PointCloud<pcl::PointXYZ>::Ptr res_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
 
     std::vector<float> x_coords = cloud_manip::cloud_x_coords(base_cloud_ptr);
@@ -231,6 +246,13 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr image_processing::greyscale_image_to_cloud(i
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr image_processing::mixed_image_to_cloud(image_mixed mixed_img,
                                                             pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr)
 {
+    if (!base_cloud_ptr)
+    {
+        QString err_msg = "image_processing::mixed_image_to_cloud : Invalid point cloud pointer.";
+
+        throw err_msg;
+    }
+
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr res_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
 
     std::vector<float> x_coords = cloud_manip::cloud_x_coords(base_cloud_ptr);
@@ -269,8 +291,45 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr image_processing::mixed_image_to_cloud(im
     return res_cloud_ptr;
 }
 
+cv::Mat image_processing::greyscale_image_to_mat(image_greyscale gs_img)
+{
+    cv::Mat greyscale_mat(gs_img.height(), gs_img.width(), CV_8UC1);
+
+    for (unsigned long y = 0; y < gs_img.height(); y++)
+    {
+        for (unsigned long x = 0; x < gs_img.width(); x++)
+            greyscale_mat.at<uchar>(y, x) = gs_img.get_grey_at(y, x);
+    }
+
+    return greyscale_mat;
+}
+
+cv::Mat image_processing::rgb_image_to_mat(image_rgb rgb_img)
+{
+    cv::Mat rgb_mat(rgb_img.height(), rgb_img.width(), CV_8UC3);
+
+    for (unsigned long y = 0; y < rgb_img.height(); y++)
+    {
+        for (unsigned long x = 0; x < rgb_img.width(); x++)
+        {
+            rgb_mat.at<cv::Vec3b>(y, x)[0] = rgb_img.get_red_at(y, x);
+            rgb_mat.at<cv::Vec3b>(y, x)[1] = rgb_img.get_green_at(y, x);
+            rgb_mat.at<cv::Vec3b>(y, x)[2] = rgb_img.get_blue_at(y, x);
+        }
+    }
+
+    return rgb_mat;
+}
+
 void image_processing::normalize(image_greyscale *gs_img_ptr)
 {
+    if (!gs_img_ptr)
+    {
+        QString err_msg = "image_processing::normalize : Invalid grey scale image pointer.";
+
+        throw err_msg;
+    }
+
     std::vector<unsigned short> greyscale_values = image_processing::greyscale_image_values(*gs_img_ptr);
     unsigned short min_gs_val = *(std::min_element(greyscale_values.begin(), greyscale_values.end()));
     unsigned short max_gs_val = *(std::max_element(greyscale_values.begin(), greyscale_values.end()));

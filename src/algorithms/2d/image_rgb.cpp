@@ -17,11 +17,13 @@ uint32_t image_rgb::get_rgb_at(unsigned long y, unsigned long x) const
         return this->_pixels[y][x];
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_rgb::get_rgb_at : ");
+        err_msg.append(err.what());
 
-        throw "rgb_image::get_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -32,11 +34,13 @@ void image_rgb::set_rgb_at(unsigned long y, unsigned long x, uint32_t rgb)
         this->_pixels[y][x] = rgb;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_rgb::set_rgb_at : ");
+        err_msg.append(err.what());
 
-        throw "image_rgb::set_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -47,11 +51,13 @@ uint8_t image_rgb::get_red_at(unsigned long y, unsigned long x) const
         return (this->_pixels[y][x] >> 16) & 0x0000ff;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_rgb::get_red_at : ");
+        err_msg.append(err.what());
 
-        throw "rgb_image::get_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -62,11 +68,13 @@ uint8_t image_rgb::get_green_at(unsigned long y, unsigned long x) const
         return (this->_pixels[y][x] >> 8) & 0x0000ff;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_rgb::get_green_at : ");
+        err_msg.append(err.what());
 
-        throw "rgb_image::get_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -77,11 +85,13 @@ uint8_t image_rgb::get_blue_at(unsigned long y, unsigned long x) const
         return (this->_pixels[y][x]) & 0x0000ff;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_rgb::get_blue_at : ");
+        err_msg.append(err.what());
 
-        throw "rgb_image::get_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 

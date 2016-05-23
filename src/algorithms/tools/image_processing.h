@@ -16,6 +16,8 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
+#include <opencv2/imgproc/imgproc.hpp>
+
 namespace image_processing
 {
     /** @return all the x coordinates in the parameter greyscale vector */
@@ -40,7 +42,7 @@ namespace image_processing
     std::vector<unsigned short> greyscale_image_values(image_greyscale gs_img);
 
     /**
-     * @brief greyscale_vector_to_image converts an 2D greyscale points array into a depth image
+     * @brief greyscale_vector_to_image converts a 2D greyscale points array into a depth image
      * @param greyscale_vector is the the array to be converted
      * @param x_epsilon is used for delimiting the x cases of the image
      * @return the resulted depth image
@@ -86,6 +88,20 @@ namespace image_processing
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr mixed_image_to_cloud(image_mixed mixed_img,
                                                                 pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr);
+
+    /**
+     * @brief greyscale_image_to_mat transforms an image_greyscale object into a cv::Mat object
+     * @param gs_img is the image_greyscale to be transformed into a Mat
+     * @return the grey scale image as a Mat object
+     */
+    cv::Mat greyscale_image_to_mat(image_greyscale gs_img);
+
+    /**
+     * @brief rgb_image_to_mat transforms an image_rgb object into a cv::Mat object
+     * @param rgb_img is the image_rgb to be transformed into a Mat
+     * @return the rgb image as a Mat object
+     */
+    cv::Mat rgb_image_to_mat(image_rgb rgb_img);
 
     /**
      * @brief normalize augments the greyscale differences between the pixels of an image

@@ -14,6 +14,8 @@
 #include <float.h>
 #include <exception>
 
+#include <QString>
+
 namespace cloud_manip
 {
     /** @return all of the x coordinates found in the parameter cloud */
@@ -80,11 +82,18 @@ namespace cloud_manip
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr merge_clouds(std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments);
 
     /**
-     * @brief cloud_to_greyscale turns a 3D rgb point cloud into a 2D greyscale points vector
+     * @brief cloud_to_greyscale turns a 3D rgb point cloud into a 2D grey scale points vector
      * @param cloud_ptr is a pointer the point cloud to be transformed to greyscale
      * @return an array of 2D greyscale points
      */
      std::vector<point_xy_greyscale> cloud_to_2d_greyscale(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
+
+     /**
+      * @brief cloud_to_2d_rgb turns a 3D rgb point cloud into a 2D rgb points vector
+      * @param cloud_ptr is a pointer to the point cloud to be transformed
+      * @return an array of 2D rgb points
+      */
+     std::vector<point_xy_rgb> cloud_to_2d_rgb(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
 
      /**
       * @brief cloud_to_2d_rgb turns a 3D rgb point cloud into a 2D mixed points vector

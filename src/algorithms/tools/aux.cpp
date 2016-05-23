@@ -66,6 +66,9 @@ float aux::set_precision(float float_num, float precision)
 
 bool aux::cmp_angles(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
 {
+    if (precision == 0)
+        throw std::logic_error("aux::cmp_angles : angle comparison precision cannot be 0.");
+
     if ((std::abs(coords_1[1] - coords_2[1]) < precision))
         return false;
 
@@ -77,6 +80,9 @@ bool aux::cmp_angles(std::vector<float> coords_1, std::vector<float> coords_2, f
 
 bool aux::cmp_floats(float float_1, float float_2, float precision)
 {
+    if (precision == 0)
+        throw std::logic_error("aux::cmp_floats : float comparison precision cannot be 0.");
+
     if (std::abs(float_1 - float_2) < precision)
         return true;
 

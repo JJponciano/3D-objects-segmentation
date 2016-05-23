@@ -15,6 +15,8 @@
 
 #include <boost/lexical_cast.hpp>
 
+#include <QString>
+
 namespace vector3_operations
 {
     /**

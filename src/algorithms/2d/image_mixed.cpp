@@ -25,11 +25,13 @@ unsigned short image_mixed::get_grey_at(unsigned long y, unsigned long x) const
         return this->_pixels[y][x]->first;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_mixed::get_grey_at : ");
+        err_msg.append(err.what());
 
-        throw "image_mixed::get_grey_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -40,11 +42,13 @@ void image_mixed::set_grey_at(unsigned long y, unsigned long x, unsigned short g
         this->_pixels[y][x]->first = grey;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_mixed::set_grey_at : ");
+        err_msg.append(err.what());
 
-        throw "image_mixed::set_grey_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -55,11 +59,13 @@ uint32_t image_mixed::get_rgb_at(unsigned long y, unsigned long x) const
         return this->_pixels[y][x]->second;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_mixed::get_rgb_at : ");
+        err_msg.append(err.what());
 
-        throw "mixed_image::get_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -70,11 +76,13 @@ void image_mixed::set_rgb_at(unsigned long y, unsigned long x, uint32_t rgb)
         this->_pixels[y][x]->second = rgb;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_mixed::set_rgb_at : ");
+        err_msg.append(err.what());
 
-        throw "image_rgb::set_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -85,11 +93,13 @@ uint8_t image_mixed::get_red_at(unsigned long y, unsigned long x) const
         return (this->_pixels[y][x]->second >> 16) & 0x0000ff;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_mixed::get_red_at : ");
+        err_msg.append(err.what());
 
-        throw "rgb_image::get_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -100,11 +110,13 @@ uint8_t image_mixed::get_green_at(unsigned long y, unsigned long x) const
         return (this->_pixels[y][x]->second >> 8) & 0x0000ff;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_mixed::get_green_at : ");
+        err_msg.append(err.what());
 
-        throw "rgb_image::get_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -115,11 +127,13 @@ uint8_t image_mixed::get_blue_at(unsigned long y, unsigned long x) const
         return (this->_pixels[y][x]->second) & 0x0000ff;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_mixed::get_blue_at : ");
+        err_msg.append(err.what());
 
-        throw "rgb_image::get_rgb_at : " + err_msg;
+        throw err_msg;
     }
 }
 

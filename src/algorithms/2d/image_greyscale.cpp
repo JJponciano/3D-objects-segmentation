@@ -17,11 +17,13 @@ unsigned short image_greyscale::get_grey_at(unsigned long y, unsigned long x) co
         return this->_pixels[y][x];
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_greyscale::get_grey_at : ");
+        err_msg.append(err.what());
 
-        throw "image_greyscale::get_grey_at : " + err_msg;
+        throw err_msg;
     }
 }
 
@@ -32,11 +34,13 @@ void image_greyscale::set_grey_at(unsigned long y, unsigned long x, unsigned sho
         this->_pixels[y][x] = grey;
     }
 
-    catch (std::out_of_range err)
+    catch (std::exception err)
     {
-        std::string err_msg = err.what();
+        QString err_msg;
+        err_msg.append("image_greyscale::set_grey_at : ");
+        err_msg.append(err.what());
 
-        throw "image_greyscale::set_grey_at : " + err_msg;
+        throw err_msg;
     }
 }
 

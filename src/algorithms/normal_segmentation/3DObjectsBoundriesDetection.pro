@@ -7,7 +7,7 @@ QMAKE_LFLAGS += -fopenmp
 CONFIG += c++11
 
 TARGET = 3DObjectsBoundriesDetection
-CONFIG += console
+CONFIG +=
 CONFIG -= app_bundle
 
 TEMPLATE = app
@@ -15,7 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp \
     normal_estimation.cpp \
     e_normal_estimation.cpp \
-    ../interface/interface.cpp \
     ../objects/bounding_box.cpp \
     ../test_lib/test_lib.cpp \
     ../objects/point_clstr.cpp \
@@ -37,7 +36,6 @@ SOURCES += main.cpp \
 HEADERS += \
     normal_estimation.h \
     e_normal_estimation.h \
-    ../interface/interface.h \
     ../objects/bounding_box.h \
     ../test_lib/test_lib.h \
     ../objects/point_clstr.h \
@@ -86,6 +84,7 @@ DEPENDPATH += /usr/include
 INCLUDEPATH += /usr/include/vtk-5.8
 DEPENDPATH += /usr/include/vtk-5.8
 
+# linking pcl library
 LIBS += -L/usr/lib/ -lpcl_apps
 LIBS += -L/usr/lib/ -lpcl_common
 LIBS += -L/usr/lib/ -lpcl_features
@@ -106,6 +105,7 @@ LIBS += -L/usr/lib/ -lpcl_surface
 LIBS += -L/usr/lib/ -lpcl_tracking
 LIBS += -L/usr/lib/ -lpcl_visualization
 
+# linking boost library
 LIBS += -L/usr/lib/x86_64-linux-gnu/ -lboost_atomic
 LIBS += -L/usr/lib/x86_64-linux-gnu/ -lboost_chrono
 LIBS += -L/usr/lib/x86_64-linux-gnu/ -lboost_date_time
@@ -116,3 +116,18 @@ LIBS += -L/usr/lib/x86_64-linux-gnu/ -lboost_serialization
 LIBS += -L/usr/lib/x86_64-linux-gnu/ -lboost_system
 LIBS += -L/usr/lib/x86_64-linux-gnu/ -lboost_thread
 LIBS += -L/usr/lib/x86_64-linux-gnu/ -lboost_wserialization
+
+# linking opencv library
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_core
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_imgproc
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_highgui
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_ml
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_video
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_features2d
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_calib3d
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_objdetect
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_contrib
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_legacy
+LIBS += -L/usr/lib/i386-linux-gnu/ -lopencv_flann
+
+

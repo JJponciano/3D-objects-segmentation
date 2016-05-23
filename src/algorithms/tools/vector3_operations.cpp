@@ -97,6 +97,13 @@ vector3 vector3_operations::vect_avg(std::vector<vector3> vectors)
 
 void vector3_operations::pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
+      if (!cloud_ptr)
+      {
+        QString err_msg = "vector3_operations::pcl_normal_estimation : Cloud pointer cannot be null.";
+
+        throw err_msg;
+      }
+
       // Create the normal estimation class, and pass the input dataset to it
       pcl::NormalEstimation<pcl::PointXYZRGB, pcl::Normal> ne;
       ne.setInputCloud(cloud_ptr);
