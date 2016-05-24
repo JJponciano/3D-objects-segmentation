@@ -1,33 +1,60 @@
 #include "test_lib.h"
 
-void test_normal_estimation(std::string import_path, std::string export_path, float radius,
+int test_normal_estimation(std::string import_path, std::string export_path, float radius,
                             int max_neighbs, float x_scale, float y_scale, float z_scale,
                             float max_fragment_depth)
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud;
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud;   // output cloud
+    int code = 0;
 
-    base_cloud = cloud_io::import_cloud(import_path);
-    colored_cloud = fast_normal_estimation(base_cloud, max_neighbs, radius, x_scale, y_scale, z_scale,
-                                           max_fragment_depth);
-    cloud_io::export_cloud(export_path + "normal_estimation_test_" + boost::lexical_cast<std::string>(radius) + "_"
-                            + boost::lexical_cast<std::string>(max_neighbs) + "_" + boost::lexical_cast<std::string>(x_scale) + "_"
-                            + boost::lexical_cast<std::string>(y_scale) + "_" + boost::lexical_cast<std::string>(z_scale) + "_"
-                            + boost::lexical_cast<std::string>(max_fragment_depth) + ".txt", colored_cloud);
+    try
+    {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud;   // output cloud
+
+        base_cloud = cloud_io::import_cloud(import_path);
+        colored_cloud = fast_normal_estimation(base_cloud, max_neighbs, radius, x_scale, y_scale, z_scale,
+                                               max_fragment_depth);
+        cloud_io::export_cloud(export_path + "/normal_estimation_test_" + boost::lexical_cast<std::string>(radius) + "_"
+                                + boost::lexical_cast<std::string>(max_neighbs) + "_" + boost::lexical_cast<std::string>(x_scale) + "_"
+                                + boost::lexical_cast<std::string>(y_scale) + "_" + boost::lexical_cast<std::string>(z_scale) + "_"
+                                + boost::lexical_cast<std::string>(max_fragment_depth) + ".txt", colored_cloud);
+
+    }
+
+    catch (const std::exception& e)
+    {
+        code = -1;
+    }
+
+    return code;
 }
 
-void test_cloud_homogenization(std::string import_path, std::string export_path, short epsilon)
+int test_cloud_homogenization(std::string import_path, std::string export_path, short epsilon)
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud = cloud_io::import_cloud(import_path);
+    int code = 0;
 
-    cloud_manip::cloud_homogenization(base_cloud, epsilon);
-    cloud_io::export_cloud(export_path + "cloud_homogenization_test_" + boost::lexical_cast<std::string>(epsilon)
-                            + ".txt", base_cloud);
+    try
+    {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud = cloud_io::import_cloud(import_path);
+
+        cloud_manip::homogenize_cloud(base_cloud, epsilon);
+        cloud_io::export_cloud(export_path + "/cloud_homogenization_test_" + boost::lexical_cast<std::string>(epsilon)
+                                + ".txt", base_cloud);
+    }
+
+    catch (const std::exception& e)
+    {
+        code = -1;
+    }
+
+    return code;
 }
 
-void test_crop_cloud(std::string import_path, std::string export_path,
+int test_crop_cloud(std::string import_path, std::string export_path,
                      float x_thresh, float y_thresh, float z_thresh)
 {
+    int code = 0;
+
     try
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud;
@@ -35,27 +62,23 @@ void test_crop_cloud(std::string import_path, std::string export_path,
 
         base_cloud = cloud_io::import_cloud(import_path);
         cropped_cloud = cloud_manip::crop_cloud(base_cloud, x_thresh, y_thresh, z_thresh);
-        cloud_io::export_cloud(export_path + "cloud_crop_test_" + boost::lexical_cast<std::string>(x_thresh) + "_"
+        cloud_io::export_cloud(export_path + "/cloud_crop_test_" + boost::lexical_cast<std::string>(x_thresh) + "_"
                                 + boost::lexical_cast<std::string>(y_thresh) + "_" + boost::lexical_cast<std::string>(z_thresh)
                                 + ".txt", cropped_cloud);
     }
 
-    catch(std::exception err)
+    catch (const std::exception& e)
     {
-        QString err_msg;
-
-        err_msg.append(err.what());
-        throw err_msg;
+        code = -1;
     }
 
-    catch(QString err_msg)
-    {
-        throw err_msg;
-    }
+    return code;
 }
 
-void test_greyscale_image_to_file(std::string import_path, std::string export_path, float epsilon)
+int test_greyscale_image_to_file(std::string import_path, std::string export_path, float epsilon)
 {
+    int code = 0;
+
     try
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
@@ -66,25 +89,22 @@ void test_greyscale_image_to_file(std::string import_path, std::string export_pa
 
         image_mixed mixed_img = image_processing::mixed_vector_to_image(mixed_result, epsilon);
         image_greyscale gs_img = image_processing::mixed_image_to_greyscale(mixed_img);
-        image_io::export_greyscale_image(export_path + "gscale_to_image_test_" + boost::lexical_cast<std::string>(epsilon)
-                                + "_.pgm", 255, gs_img);
+        image_io::export_greyscale_image(export_path + "/gscale_to_image_test_" + boost::lexical_cast<std::string>(epsilon)
+                                + ".pgm", 255, gs_img);
     }
 
-    catch(std::exception err)
+    catch (const std::exception& e)
     {
-        std::string err_string = "test_greyscale_to_image: ";
-        err_string.append(err.what());
-        throw err_string;
+        code = -1;
     }
 
-    catch(QString err_msg)
-    {
-        throw err_msg;
-    }
+    return code;
 }
 
-void test_rgb_image_to_file(std::string import_path, std::string export_path, float epsilon)
+int test_rgb_image_to_file(std::string import_path, std::string export_path, float epsilon)
 {
+    int code = 0;
+
     try
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
@@ -95,30 +115,22 @@ void test_rgb_image_to_file(std::string import_path, std::string export_path, fl
 
         image_mixed mixed_img = image_processing::mixed_vector_to_image(mixed_result, epsilon);
         image_rgb rgb_img = image_processing::mixed_image_to_rgb(mixed_img);
-        image_io::export_rgb_image(export_path + "rgb_to_image_test_" + boost::lexical_cast<std::string>(epsilon)
-                                + "_.ppm", 255, rgb_img);
+        image_io::export_rgb_image(export_path + "/rgb_to_image_test_" + boost::lexical_cast<std::string>(epsilon)
+                                + ".ppm", 255, rgb_img);
     }
 
-    catch(std::exception const& err)
+    catch (const std::exception& e)
     {
-        std::string err_string = "test_rgb_to_image: ";
-        err_string.append(err.what());
-        throw err_string;
+        code = -1;
     }
 
-    catch(char const* char_ptr_err)
-    {
-        throw char_ptr_err;
-    }
-
-    catch(std::string str_err)
-    {
-        throw str_err;
-    }
+    return code;
 }
 
-void test_mixed_image_to_cloud(std::string import_path, std::string export_path, float epsilon)
+int test_mixed_image_to_cloud(std::string import_path, std::string export_path, float epsilon)
 {
+    int code = 0;
+
     try
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
@@ -135,26 +147,18 @@ void test_mixed_image_to_cloud(std::string import_path, std::string export_path,
                                 + "_.txt", reverse_cloud);
     }
 
-    catch(std::exception const& err)
+    catch (const std::exception& e)
     {
-        std::string err_string = "test_image_to_cloud: ";
-        err_string.append(err.what());
-        throw err_string;
+        code = -1;
     }
 
-    catch(char const* char_ptr_err)
-    {
-        throw char_ptr_err;
-    }
-
-    catch(std::string str_err)
-    {
-        throw str_err;
-    }
+    return code;
 }
 
-void test_rail_detection(std::string import_path, std::string export_path, float epsilon)
+int test_rail_detection(std::string import_path, std::string export_path, float epsilon)
 {
+    int code = 0;
+
     try
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud;
@@ -162,7 +166,7 @@ void test_rail_detection(std::string import_path, std::string export_path, float
         std::vector<point_xy_mixed> mixed_result;
 
         base_cloud = cloud_io::import_cloud(import_path);
-        cloud_manip::cloud_homogenization(base_cloud, 200);
+        cloud_manip::homogenize_cloud(base_cloud, 200);
         mixed_result = cloud_manip::cloud_to_2d_mixed(base_cloud);
 
         image_mixed mixed_img = image_processing::mixed_vector_to_image(mixed_result, epsilon);
@@ -185,20 +189,10 @@ void test_rail_detection(std::string import_path, std::string export_path, float
                                 + "_.txt", railway_cloud);
     }
 
-    catch(std::exception const& err)
+    catch (const std::exception& e)
     {
-        std::string err_string = "test_raiL_detection: ";
-        err_string.append(err.what());
-        throw err_string;
+        code = -1;
     }
 
-    catch(char const* char_ptr_err)
-    {
-        throw char_ptr_err;
-    }
-
-    catch(std::string str_err)
-    {
-        throw str_err;
-    }
+    return code;
 }

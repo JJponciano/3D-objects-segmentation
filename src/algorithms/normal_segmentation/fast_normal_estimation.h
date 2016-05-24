@@ -8,8 +8,6 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
-#include <QString>
-
 /**
  * @brief fast_normal_estimation an efficient way of coloring a cloud by its estimated normal vectors
  * @details it uses multi-threading and cloud segmentation

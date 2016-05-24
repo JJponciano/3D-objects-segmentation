@@ -1,5 +1,14 @@
 #include "aux.h"
 
+float aux::set_precision(float float_num, float precision)
+{
+    if (aux::float_cmp(precision, 0.0, 0.005) || precision < 0 || ((int)precision % 10 != 0))
+    {
+        throw std::logic_error("Precision cannot be 0, negative and has to be a multiple of 10.");
+    }
+
+    return ((float)(int)(float_num * precision)) / precision;
+}
 
 float aux::map(float x, float in_min, float in_max, float out_min, float out_max)
 {
@@ -17,16 +26,29 @@ float aux::float_avg(std::vector<float> floats)
     }
 
     if (floats.size() != 0)
+    {
         float_avg = sum / floats.size();
+    }
 
     return float_avg;
 }
 
-void aux::normal_to_rgb(pcl::PointXYZRGB *pt, vector3 normal)
+bool aux::float_cmp(float float_1, float float_2, float precision)
 {
-    pt->r = normal.get_x() * 255;
-    pt->g = normal.get_y() * 255;
-    pt->b = normal.get_z() * 255;
+    if (precision == 0)
+    {
+        throw std::logic_error("Float comparison precision cannot be 0.");
+    }
+
+    if (std::abs(float_1 - float_2) < precision)
+    {
+        return true;
+    }
+
+    else
+    {
+        return false;
+    }
 }
 
 std::vector<float> aux::spherical_coords(vector3 vect)
@@ -55,44 +77,39 @@ std::vector<float> aux::spherical_coords(vector3 vect)
     return spherical_coords;
 }
 
-float aux::set_precision(float float_num, float precision)
-{
-    if (aux::cmp_floats(precision, 0.0, 0.005) || precision < 0 || ((int)precision % 10 != 0))
-        throw std::logic_error("Precision cannot be 0, negative and has to be a multiple of 10.");
-
-    return ((float)(int)(float_num * precision)) / precision;
-}
-
-bool aux::cmp_spherical_angles(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
+bool aux::coord_cmp(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
 {
     if (precision == 0)
+    {
         throw std::logic_error("Angle comparison precision cannot be 0.");
+    }
 
     if (coords_1.size() > 2 || coords_2.size() > 2)
+    {
         throw std::logic_error("Invalid vector parameters.");
+    }
 
     if ((std::abs(coords_1[1] - coords_2[1]) < precision))
+    {
         return false;
+    }
 
     if ((std::abs(coords_1[2] - coords_2[2]) < precision))
+    {
         return false;
+    }
 
     return true;
 }
 
-bool aux::cmp_floats(float float_1, float float_2, float precision)
+void aux::normal_to_rgb(pcl::PointXYZRGB *pt, vector3 normal)
 {
-    if (precision == 0)
-        throw std::logic_error("Float comparison precision cannot be 0.");
-
-    if (std::abs(float_1 - float_2) < precision)
-        return true;
-
-    else
-        return false;
+    pt->r = normal.get_x() * 255;
+    pt->g = normal.get_y() * 255;
+    pt->b = normal.get_z() * 255;
 }
 
-vector3 aux::abs_vector(vector3 vect)
+vector3 aux::vector_abs(vector3 vect)
 {
     vector3 abs_vector(std::abs(vect.get_x()), std::abs(vect.get_y()), std::abs(vect.get_z()));
 

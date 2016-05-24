@@ -38,7 +38,6 @@ private slots:
 private:
     Ui::normal_estimation_test_form *ui;
     data::normal_estimation_data *_ned;
-    std::exception_ptr _except_ptr = nullptr;
 };
 
 #endif // NORMAL_ESTIMATION_TEST_FORM_H

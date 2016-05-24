@@ -17,15 +17,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_test_btn_clicked()
 {
+    QMessageBox info_box;
+
     if (ui->test_fct_cb->currentIndex() == -1)
     {
-       QErrorMessage q_err_msg;
-
-       q_err_msg.showMessage("Invalid selection.", "Selection Error");
+       info_box.setText("Select one function.");
     }
 
     else
     {
+        info_box.setText("Not yet implemented.");
+
         // windows
         normal_estimation_test_form ne_test_form(this);
 
@@ -33,10 +35,12 @@ void MainWindow::on_test_btn_clicked()
 
         switch (current_index)
         {
-            case 0:
-                ne_test_form.setModal(true);
-                ne_test_form.exec();
-                break;
+        case 0:
+            ne_test_form.setModal(true);
+            ne_test_form.exec();
+            break;
+        default:
+            info_box.exec();
         }
     }
 }

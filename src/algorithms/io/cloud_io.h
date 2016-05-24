@@ -27,7 +27,7 @@ namespace cloud_io
     /**
      * @brief import_cloud_txt generates a cloud from a .txt file
      * @param path is a string representing a unique location in the file system
-     * @throw invalid_path if file cannot be opened
+     * @throw invalid_path if failed to open file
      * @return a pointer to the cloud that has been read
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr import_cloud_txt(std::string path);
@@ -35,7 +35,7 @@ namespace cloud_io
     /**
      * @brief import_cloud generates a cloud from a .txt or .pcd file
      * @param path is a string representing a unique location in the file system
-     * @throw invalid_path if the file cannot be opened
+     * @throw invalid_path if failed to open file
      * @return the a pointer to the cloud that has been read
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr import_cloud(std::string path);
@@ -43,7 +43,7 @@ namespace cloud_io
     /**
      * @brief export_cloud writes a point cloud to a text file.
      * @param path is a string representing a unique location in the file system
-     * @throw invalid_path if the file cannot be opened
+     * @throw invalid_path if failed to open file
      * @throw invalid_cloud_pointer if cloud_ptr is nullptr
      * @param cloud_ptr is a pointer to the cloud to be exported
      **/ 

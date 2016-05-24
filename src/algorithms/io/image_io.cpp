@@ -63,8 +63,11 @@ void image_io::export_greyscale_image(std::string path, unsigned short max_grey_
         throw std::logic_error("Invalid grey scale image.");
     }
 
+    // invalid max grey value
     if (max_grey_value > 255)
+    {
         throw std::logic_error("Invalid max_grey_value (must be smaller than 255).");
+    }
 
     std::ofstream image_file;
     std::string line;
@@ -77,6 +80,7 @@ void image_io::export_greyscale_image(std::string path, unsigned short max_grey_
         throw invalid_path();
     }
 
+    // writing data to file
     line = magic_number;
     line.append("\n");
     image_file << line;
@@ -93,7 +97,9 @@ void image_io::export_greyscale_image(std::string path, unsigned short max_grey_
         line.clear();
 
         for (unsigned long x = 0; x < gs_img.width(); x++)
+        {
             line += boost::lexical_cast<std::string>(gs_img.get_grey_at(y, x)) + "\t";
+        }
 
         line += "\n";
         image_file << line;
@@ -120,6 +126,7 @@ image_rgb image_io::import_rgb_image(std::string path)
         throw invalid_path();
     }
 
+    // writing data to file
     while (std::getline(image_file, line))
     {
         std::istringstream iss(line);
@@ -142,7 +149,6 @@ image_rgb image_io::import_rgb_image(std::string path)
                 unsigned short r, g, b;
                 uint32_t rgb;
 
-                // filling current row
                 for (unsigned long x = 0; x < width; x++)
                 {
                     for (unsigned short color_component = 0; color_component < 3; color_component++)
@@ -153,7 +159,7 @@ image_rgb image_io::import_rgb_image(std::string path)
                     }
                 }
 
-                y++;    // incrementing the next row of the image
+                y++;    // getting to the next row
             }
         }
     }
@@ -163,11 +169,13 @@ image_rgb image_io::import_rgb_image(std::string path)
 
 void image_io::export_rgb_image(std::string path, unsigned int max_rgb_value, image_rgb rgb_img)
 {
+    // empty image
     if (rgb_img.width() == 0 || rgb_img.height() == 0)
     {
         throw std::logic_error("Invalid rgb image.");
     }
 
+    // invalid max rgb value
     if (max_rgb_value > 255)
     {
         throw std::logic_error("Invalid max_rgb_value (must be smaller than 255).");
@@ -184,6 +192,7 @@ void image_io::export_rgb_image(std::string path, unsigned int max_rgb_value, im
         throw invalid_path();
     }
 
+    // writing data to file
     line = magic_number;
     line.append("\n");
     image_file << line;

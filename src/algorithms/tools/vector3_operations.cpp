@@ -49,24 +49,6 @@ vector3 vector3_operations::translate_origin(float x_1, float y_1, float z_1, fl
     return translated_vect;
 }
 
-vector3 vector3_operations::normalize_normal(vector3 normal)
-{
-    vector3 normalized_normal;
-    float length;
-
-    if (normal.get_magn() == 0.0f)
-        length = 1.0f;
-
-    else
-        length = normal.get_magn();
-
-    normalized_normal.set_x(normal.get_x() / length);
-    normalized_normal.set_y(normal.get_y() / length);
-    normalized_normal.set_z(normal.get_z() / length);
-
-    return normalized_normal;
-}
-
 vector3 vector3_operations::vect_avg(std::vector<vector3> vectors)
 {
     vector3 vect_avg;
@@ -93,6 +75,28 @@ vector3 vector3_operations::vect_avg(std::vector<vector3> vectors)
     vect_avg.set_z(avg_z);
 
     return vect_avg;
+}
+
+vector3 vector3_operations::normalize_normal(vector3 normal)
+{
+    vector3 normalized_normal;
+    float length;
+
+    if (normal.get_magn() == 0.0f)
+    {
+        length = 1.0f;
+    }
+
+    else
+    {
+        length = normal.get_magn();
+    }
+
+    normalized_normal.set_x(normal.get_x() / length);
+    normalized_normal.set_y(normal.get_y() / length);
+    normalized_normal.set_z(normal.get_z() / length);
+
+    return normalized_normal;
 }
 
 void vector3_operations::pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)

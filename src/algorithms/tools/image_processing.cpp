@@ -6,7 +6,9 @@ std::vector<float> image_processing::greyscale_vector_x_coords(std::vector<point
 
     for (std::vector<point_xy_greyscale>::iterator vector_it = greyscale_vector.begin();
          vector_it < greyscale_vector.end(); vector_it++)
+    {
         x_coords.push_back((float)(vector_it->x));
+    }
 
     return x_coords;
 }
@@ -17,7 +19,9 @@ std::vector<float> image_processing::greyscale_vector_y_coords(std::vector<point
 
     for (std::vector<point_xy_greyscale>::iterator vector_it = greyscale_vector.begin();
          vector_it < greyscale_vector.end(); vector_it++)
+    {
         y_coords.push_back((float)(vector_it->y));
+    }
 
     return y_coords;
 }
@@ -28,7 +32,9 @@ std::vector<float> image_processing::rgb_vector_x_coords(std::vector<point_xy_rg
 
     for (std::vector<point_xy_rgb>::iterator vector_it = rgb_vector.begin();
          vector_it < rgb_vector.end(); vector_it++)
+    {
         x_coords.push_back((float)(vector_it->x));
+    }
 
     return x_coords;
 }
@@ -39,7 +45,9 @@ std::vector<float> image_processing::rgb_vector_y_coords(std::vector<point_xy_rg
 
     for (std::vector<point_xy_rgb>::iterator vector_it = rgb_vector.begin();
          vector_it < rgb_vector.end(); vector_it++)
+    {
         y_coords.push_back((float)(vector_it->y));
+    }
 
     return y_coords;
 }
@@ -50,7 +58,9 @@ std::vector<float> image_processing::mixed_vector_x_coords(std::vector<point_xy_
 
     for (std::vector<point_xy_mixed>::iterator vector_it = mixed_vector.begin();
          vector_it < mixed_vector.end(); vector_it++)
+    {
         x_coords.push_back((float)(vector_it->x));
+    }
 
     return x_coords;
 }
@@ -61,7 +71,9 @@ std::vector<float> image_processing::mixed_vector_y_coords(std::vector<point_xy_
 
     for (std::vector<point_xy_mixed>::iterator vector_it = mixed_vector.begin();
          vector_it < mixed_vector.end(); vector_it++)
+    {
         y_coords.push_back((float)(vector_it->y));
+    }
 
     return y_coords;
 }
@@ -83,8 +95,10 @@ std::vector<unsigned short> image_processing::greyscale_image_values(image_greys
 
 image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy_greyscale> greyscale_vector, float x_epsilon)
 {
-    if (aux::cmp_floats(x_epsilon, 0.000, 0.0050) || x_epsilon < 0)
+    if (aux::float_cmp(x_epsilon, 0.000, 0.0050) || x_epsilon < 0)
+    {
         throw std::logic_error("x_epsilon must be bigger than 0.");
+    }
 
     std::vector<float> x_coords = image_processing::greyscale_vector_x_coords(greyscale_vector);
     std::vector<float> y_coords = image_processing::greyscale_vector_y_coords(greyscale_vector);
@@ -101,7 +115,9 @@ image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy
         unsigned long point_x_cell = (unsigned long)((vector_it->x - x_min) * x_epsilon * 10);
 
         if (point_x_cell > width)
+        {
             width = point_x_cell + 1;
+        }
     }
 
     image_greyscale gs_img(width, height);
@@ -116,10 +132,14 @@ image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy
         unsigned long image_y = vector_it->y - y_min;
 
         if (image_x > gs_img.width())
+        {
             image_x = gs_img.width() - 1;
+        }
 
         if (gs_img.get_grey_at(image_y, image_x) < vector_it->greyscale())
+        {
             gs_img.set_grey_at(image_y, image_x, vector_it->greyscale());
+        }
     }
 
     return gs_img;
@@ -127,8 +147,10 @@ image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy
 
 image_mixed image_processing::mixed_vector_to_image(std::vector<point_xy_mixed> mixed_vector, float x_epsilon)
 {
-    if (aux::cmp_floats(x_epsilon, 0.000, 0.005) || x_epsilon < 0)
+    if (aux::float_cmp(x_epsilon, 0.000, 0.005) || x_epsilon < 0)
+    {
         throw std::logic_error("x_epsilon must be bigger than 0.");
+    }
 
     std::vector<float> x_coords = image_processing::mixed_vector_x_coords(mixed_vector);
     std::vector<float> y_coords = image_processing::mixed_vector_y_coords(mixed_vector);
@@ -146,7 +168,9 @@ image_mixed image_processing::mixed_vector_to_image(std::vector<point_xy_mixed> 
         unsigned long point_x_cell = (unsigned long)((vector_it->x - x_min) * x_epsilon * 10);
 
         if (point_x_cell > width)
+        {
             width = point_x_cell + 1;
+        }
     }
 
     image_mixed mixed_img(width, height);
@@ -161,7 +185,9 @@ image_mixed image_processing::mixed_vector_to_image(std::vector<point_xy_mixed> 
         unsigned long image_y = vector_it->y - y_min;
 
         if (image_x >= mixed_img.width())
+        {
             image_x = mixed_img.width() - 1;
+        }
 
         if (mixed_img.get_grey_at(image_y, image_x) < vector_it->greyscale())
         {
@@ -180,7 +206,9 @@ image_rgb image_processing::mixed_image_to_rgb(image_mixed mixed_img)
     for (unsigned long y = 0; y < mixed_img.height(); y++)
     {
         for (unsigned long x = 0; x < mixed_img.width(); x++)
+        {
             rgb_img.set_rgb_at(y, x, mixed_img.get_rgb_at(y, x));
+        }
     }
 
     return rgb_img;
@@ -193,7 +221,9 @@ image_greyscale image_processing::mixed_image_to_greyscale(image_mixed mixed_img
     for (unsigned long y = 0; y < mixed_img.height(); y++)
     {
         for (unsigned long x = 0; x < mixed_img.width(); x++)
+        {
             gs_img.set_grey_at(y, x, mixed_img.get_grey_at(y, x));
+        }
     }
 
     return gs_img;

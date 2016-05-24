@@ -20,93 +20,37 @@ image_mixed::image_mixed(unsigned long width, unsigned long height) : image(widt
 
 unsigned short image_mixed::get_grey_at(unsigned long y, unsigned long x) const    
 {
-    try
-    {
-        return this->_pixels[y][x]->first;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    return this->_pixels[y][x]->first;
 }
 
 void image_mixed::set_grey_at(unsigned long y, unsigned long x, unsigned short grey)    
 {
-    try
-    {
-        this->_pixels[y][x]->first = grey;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    this->_pixels[y][x]->first = grey;
 }
 
 uint32_t image_mixed::get_rgb_at(unsigned long y, unsigned long x) const    
 {
-    try
-    {
-        return this->_pixels[y][x]->second;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    return this->_pixels[y][x]->second;
 }
 
 void image_mixed::set_rgb_at(unsigned long y, unsigned long x, uint32_t rgb)    
 {
-    try
-    {
-        this->_pixels[y][x]->second = rgb;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    this->_pixels[y][x]->second = rgb;
 }
 
 uint8_t image_mixed::get_red_at(unsigned long y, unsigned long x) const   
 {
-    try
-    {
-        return (this->_pixels[y][x]->second >> 16) & 0x0000ff;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+   return (this->_pixels[y][x]->second >> 16) & 0x0000ff;
 }
 
 uint8_t image_mixed::get_green_at(unsigned long y, unsigned long x) const    
 {
-    try
-    {
-        return (this->_pixels[y][x]->second >> 8) & 0x0000ff;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    return (this->_pixels[y][x]->second >> 8) & 0x0000ff;
 }
 
 uint8_t image_mixed::get_blue_at(unsigned long y, unsigned long x) const
 {
-    try
-    {
-        return (this->_pixels[y][x]->second) & 0x0000ff;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    return (this->_pixels[y][x]->second) & 0x0000ff;
 }
 
 void image_mixed::init()

@@ -7,12 +7,12 @@ void normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float r
         throw invalid_cloud_pointer();
     }
 
-    if (aux::cmp_floats(radius, 0.00, 0.005))
+    if (aux::float_cmp(radius, 0.00, 0.005))
     {
         throw std::logic_error("Invalid radius value.");
     }
 
-    if (aux::cmp_floats(max_neighbs, 0.00, 0.005))
+    if (aux::float_cmp(max_neighbs, 0.00, 0.005))
     {
         throw std::logic_error("Invalid max neighbours value.");
     }
@@ -57,7 +57,7 @@ void normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float r
                                                       cloud_ptr->points[pointIdxRadiusSearch[pt_index + 2]]);
                 }
 
-                vects_to_avg.push_back(aux::abs_vector(vector3_operations::cross_product(vect_1, vect_2)));
+                vects_to_avg.push_back(aux::vector_abs(vector3_operations::cross_product(vect_1, vect_2)));
             }
 
             // calculating the normal and coloring the point based on its coordinates

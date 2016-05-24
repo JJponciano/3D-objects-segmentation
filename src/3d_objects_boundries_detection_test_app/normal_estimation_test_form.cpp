@@ -26,9 +26,11 @@ normal_estimation_test_form::normal_estimation_test_form(QWidget *parent) :
     ui->radius_dsb->setSingleStep(0.01);
     ui->radius_dsb->setMaximum(5);
     ui->max_neighbs_sb->setSingleStep(25);
+    ui->max_neighbs_sb->setMinimum(1.0);
     ui->max_neighbs_sb->setMaximum(1000.0);
 
     // max. fragm. depth
+    ui->max_fragm_depth_sb->setMinimum(1);
     ui->max_fragm_depth_sb->setMaximum(5000);
     ui->max_fragm_depth_sb->setSingleStep(100);
 
@@ -84,7 +86,8 @@ void normal_estimation_test_form::on_cloud_out_browse_btn_clicked()
 void normal_estimation_test_form::on_launch_test_btn_clicked()
 {
     // for when the test is done
-    QMessageBox done;
+    int test_function_return_code;
+    QMessageBox info_box;
 
     this->setEnabled(false);
 
@@ -95,26 +98,23 @@ void normal_estimation_test_form::on_launch_test_btn_clicked()
     _ned->z_scale = ui->z_scale_dsb->value();
     _ned->max_fragment_depth = ui->max_fragm_depth_sb->value();
 
-    try
-    {
-        test_normal_estimation(_ned->cloud_in_path, _ned->cloud_out_path, _ned->radius,
+
+    test_function_return_code = test_normal_estimation(_ned->cloud_in_path, _ned->cloud_out_path, _ned->radius,
                                _ned->max_neighbs, _ned->x_scale, _ned->y_scale,
                                _ned->z_scale, _ned->max_fragment_depth);
 
-        if (_except_ptr) std::rethrow_exception(_except_ptr);
-
-        done.setText("Cloud normal estimation test completed.");
-        done.exec();
-    }
-
-    catch (const std::exception& e)
+    if (test_function_return_code)
     {
-        QErrorMessage q_err_msg;
-        QString err_msg;
-
-        err_msg.append(QString::fromUtf8(e.what()));
-        q_err_msg.showMessage(err_msg);
+        info_box.setText("Invalid input.");
     }
+
+    else
+    {
+        info_box.setText("Cloud normal estimation test successfully ended.");
+    }
+
+    info_box.exec();
+    this->setEnabled(true);
 }
 
 void normal_estimation_test_form::on_cancel_btn_clicked()

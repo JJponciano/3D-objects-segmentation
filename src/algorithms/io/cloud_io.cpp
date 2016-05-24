@@ -1,33 +1,5 @@
 #include "cloud_io.h"
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud(std::string path)
-{
-    std::string ext;    // files extension
-
-    size_t i = path.rfind('.', path.length());
-
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
-
-    if (i != std::string::npos)
-      ext = path.substr(i+1, path.length() - i);
-
-    if (ext.compare("pcd") == 0)
-
-    {
-        pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *cloud);
-
-        if (!cloud)
-            throw invalid_path();
-    }
-
-    else if (ext.compare("txt") == 0)
-    {
-        cloud = cloud_io::import_cloud_txt(path);
-    }
-
-    return cloud;
-}
-
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pathname)
 {
     QFile file(QString(pathname.c_str()));
@@ -52,7 +24,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pa
         QStringList result = line.split("\t"); // split the line with space as a separator character
 
         if(result.size() < 3)
+        {
             throw invalid_path();
+        }
 
         QString r;  // reads each coordinate
 
@@ -109,6 +83,37 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pa
     return cloud;
 }
 
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud(std::string path)
+{
+    std::string ext;    // files extension
+
+    size_t i = path.rfind('.', path.length());
+
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+
+    if (i != std::string::npos)
+    {
+      ext = path.substr(i+1, path.length() - i);
+    }
+
+    if (ext.compare("pcd") == 0)
+
+    {
+        pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *cloud);
+
+        if (!cloud)
+        {
+            throw invalid_path();
+        }
+    }
+
+    else if (ext.compare("txt") == 0)
+    {
+        cloud = cloud_io::import_cloud_txt(path);
+    }
+
+    return cloud;
+}
 
 void cloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {

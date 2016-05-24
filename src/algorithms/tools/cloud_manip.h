@@ -28,9 +28,6 @@ namespace cloud_manip
     /** @return all of the z coordinates found in the parameter cloud */
     std::vector<float> cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
 
-    /** @return the parameter cloud as an RGB cloud **/
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud);
-
     /**
      * @brief copy_cloud copies a cloud into another cloud
      * @param src is a pointer to the source cloud
@@ -52,19 +49,6 @@ namespace cloud_manip
                      float z_scale);
 
     /**
-     * @brief fragment_cloud breaks a cloud down into smaller pieces along the y axis
-     * @details only works on clouds using the y axis to represent depth
-     * @param cloud_ptr is a pointer to the point cloud to be fragmented
-     * @param max_scaled_fragment_depth is the maximum depth of a fragment taking scale into account
-     * @throw invalid_cloud_pointer if cloud_ptr is equal to nullptr
-     * @throw std::invalid_argument if max_scaled_fragment_depth is negative or 0
-     * @return a vector containing former cloud fragments
-     */
-    std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragment_cloud(
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float max_scaled_fragment_depth);
-
-
-    /**
      * @brief crop_cloud removes the points of which the coordinates are beyond a certain threshold
      * @param cloud_ptr is a pointer to the point cloud to be treated
      * @param x_thresh is the threshold for the x coordinate
@@ -77,12 +61,36 @@ namespace cloud_manip
                            float x_thresh, float y_thresh, float z_thresh);
 
     /**
+     * @brief homogenize_cloud homogenizes the similar colors within a cloud
+     * @details if two points have similar but not identical colors they will be attributed the same color
+     * @param cloud a pointer to the point cloud to be homogenized
+     * @param epsilon defines the 3 dimensions of the cube used to regroup colors
+     * @throw std::invalid_argument if cloud_ptr is equal to nullptr or if epsilon is null
+     */
+    void homogenize_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, short epsilon);
+
+    /**
+     * @brief fragment_cloud breaks a cloud down into smaller pieces along the y axis
+     * @details only works on clouds using the y axis to represent depth
+     * @param cloud_ptr is a pointer to the point cloud to be fragmented
+     * @param max_scaled_fragment_depth is the maximum depth of a fragment taking scale into account
+     * @throw invalid_cloud_pointer if cloud_ptr is equal to nullptr
+     * @throw std::invalid_argument if max_scaled_fragment_depth is negative or 0
+     * @return a vector containing former cloud fragments
+     */
+    std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> fragment_cloud(
+            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float max_scaled_fragment_depth);
+
+    /**
      * @brief merge_clouds merges cloud fragments into one cloud
      * @param cloud_fragments is an array of cloud fragments
      * @return a pointer the cloud resulted from merging the cloud fragments
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr merge_clouds(
             std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments);
+
+    /** @return the parameter cloud as an RGB cloud **/
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud);
 
     /**
      * @brief cloud_to_greyscale turns a 3D rgb point cloud into a 2D grey scale points vector
@@ -109,16 +117,6 @@ namespace cloud_manip
       * @return an array of 2D mixed points
       */
      std::vector<point_xy_mixed> cloud_to_2d_mixed(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
-
-     /**
-      * @brief cloud_homogenization homogenizes the similar colors within a cloud
-      * @details if two points have similar but not identical colors they will be attributed the same color
-      * @param cloud a pointer to the point cloud to be homogenized
-      * @param epsilon defines the 3 dimensions of the cube used to regroup colors
-      * @throw std::invalid_argument if cloud_ptr is equal to nullptr or if epsilon is null
-      */
-     void cloud_homogenization(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, short epsilon)
-        ;
 
      /**
      * @brief convertBoolToXYZRGB converts a CLSTR point_clstr cloud into a PCL RGB cloud, so its point can be written in a file

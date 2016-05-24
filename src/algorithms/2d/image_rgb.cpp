@@ -12,67 +12,27 @@ image_rgb::image_rgb(unsigned long width, unsigned long height) : image(width, h
 
 uint32_t image_rgb::get_rgb_at(unsigned long y, unsigned long x) const    
 {
-    try
-    {
-        return this->_pixels[y][x];
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    return this->_pixels[y][x];
 }
 
 void image_rgb::set_rgb_at(unsigned long y, unsigned long x, uint32_t rgb)    
 {
-    try
-    {
-        this->_pixels[y][x] = rgb;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    this->_pixels[y][x] = rgb;
 }
 
 uint8_t image_rgb::get_red_at(unsigned long y, unsigned long x) const    
 {
-    try
-    {
-        return (this->_pixels[y][x] >> 16) & 0x0000ff;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    return (this->_pixels[y][x] >> 16) & 0x0000ff;
 }
 
 uint8_t image_rgb::get_green_at(unsigned long y, unsigned long x) const   
 {
-    try
-    {
-        return (this->_pixels[y][x] >> 8) & 0x0000ff;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    return (this->_pixels[y][x] >> 8) & 0x0000ff;
 }
 
 uint8_t image_rgb::get_blue_at(unsigned long y, unsigned long x) const    
 {
-    try
-    {
-        return (this->_pixels[y][x]) & 0x0000ff;
-    }
-
-    catch (const std::out_of_range& oor)
-    {
-        throw oor;
-    }
+    return (this->_pixels[y][x]) & 0x0000ff;
 }
 
 void image_rgb::init()

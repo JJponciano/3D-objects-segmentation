@@ -11,7 +11,9 @@ std::vector<float> cloud_manip::cloud_x_coords(pcl::PointCloud<pcl::PointXYZRGB>
 
     for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->begin();
          cloud_it < cloud_ptr->end(); cloud_it++)
+    {
         x_coords.push_back((float)(cloud_it->x));
+    }
 
     return x_coords;
 }
@@ -27,7 +29,9 @@ std::vector<float> cloud_manip::cloud_y_coords(pcl::PointCloud<pcl::PointXYZRGB>
 
     for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->begin();
          cloud_it < cloud_ptr->end(); cloud_it++)
+    {
         y_coords.push_back((float)(cloud_it->y));
+    }
 
     return y_coords;
 }
@@ -43,7 +47,9 @@ std::vector<float> cloud_manip::cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>
 
     for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->begin();
          cloud_it < cloud_ptr->end(); cloud_it++)
+    {
         z_coords.push_back((float)(cloud_it->z));
+    }
 
     return z_coords;
 }
@@ -57,30 +63,9 @@ void cloud_manip::copy_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr src_ptr,
     }
 
     for (unsigned int cloud_it = 0; cloud_it < src_ptr->points.size(); cloud_it++)
+    {
         dest_ptr->points.push_back(src_ptr->points[cloud_it]);
-}
-
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud_ptr)
-{
-    if (white_cloud_ptr)
-    {
-        throw invalid_cloud_pointer();
     }
-
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgb_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
-    uint8_t r, g, b = 255;   // make it white
-
-    for (unsigned int point_index = 0; point_index < white_cloud_ptr->size(); point_index++)
-    {
-        pcl::PointXYZRGB rgb_point(r, g, b);
-        rgb_point.x = white_cloud_ptr->points[point_index].x;
-        rgb_point.y = white_cloud_ptr->points[point_index].y;
-        rgb_point.z = white_cloud_ptr->points[point_index].z;
-
-        rgb_cloud->push_back(rgb_point);
-    }
-
-    return rgb_cloud;
 }
 
 void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float x_scale, float y_scale,
@@ -91,10 +76,11 @@ void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, 
         throw invalid_cloud_pointer();
     }
 
-    if (aux::cmp_floats(x_scale, 0.00, 0.005)
-            || aux::cmp_floats(y_scale, 0.00, 0.005)
-            || aux::cmp_floats(z_scale, 0.00, 0.005))
+    if (aux::float_cmp(x_scale, 0.00, 0.005) || aux::float_cmp(y_scale, 0.00, 0.005)
+            || aux::float_cmp(z_scale, 0.00, 0.005))
+    {
         throw std::invalid_argument("Scaling cloud by 0 will destroy the cloud.");
+    }
 
     for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->points.begin();
          cloud_it < cloud_ptr->points.end(); cloud_it++)
@@ -103,39 +89,6 @@ void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, 
         (*cloud_it).y *= y_scale;
         (*cloud_it).z *= z_scale;
     }
-}
-
-std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_manip::fragment_cloud(
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float max_scaled_fragment_depth)
-{
-    if (!cloud_ptr)
-    {
-        throw invalid_cloud_pointer();
-    }
-
-    if ((aux::cmp_floats(max_scaled_fragment_depth, 0.00, 0.005)) || (max_scaled_fragment_depth < 0))
-        throw std::invalid_argument("Invalid max fragment depth.");
-
-    float curr_depth = FLT_MAX;
-    std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments;
-
-    for (unsigned int cloud_it = 0; cloud_it < cloud_ptr->points.size(); cloud_it++)
-    {
-        // end of a fragment
-        if ((cloud_ptr->points[cloud_it].y > (curr_depth + max_scaled_fragment_depth))
-                || (cloud_ptr->points[cloud_it].y < (curr_depth - max_scaled_fragment_depth)) )
-        {
-            curr_depth = cloud_ptr->points[cloud_it].y;
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr new_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-            cloud_fragments.push_back(new_cloud);
-        }
-
-        // filling current cloud
-        else
-            (cloud_fragments.back())->points.push_back(cloud_ptr->points[cloud_it]);
-    }
-
-    return cloud_fragments;
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr,
@@ -153,22 +106,119 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(pcl::PointCloud<p
         bool remove_point = false;
 
         if ((std::abs(cloud_ptr->points[cloud_it].x) > std::abs(x_thresh))
-                && (!aux::cmp_floats(x_thresh, 0, 0.005)))
+                && (!aux::float_cmp(x_thresh, 0, 0.005)))
+        {
             remove_point = true;
+        }
 
         if ((std::abs(cloud_ptr->points[cloud_it].y) > std::abs(y_thresh))
-                && (!aux::cmp_floats(y_thresh, 0, 0.005)))
+                && (!aux::float_cmp(y_thresh, 0, 0.005)))
+        {
             remove_point = true;
+        }
 
         if (std::abs(cloud_ptr->points[cloud_it].z) > std::abs(z_thresh)
-                && (!aux::cmp_floats(z_thresh, 0, 0.005)))
+                && (!aux::float_cmp(z_thresh, 0, 0.005)))
+        {
             remove_point = true;
+        }
 
         if (!remove_point)
+        {
             cropped_cloud_ptr->points.push_back(cloud_ptr->points[cloud_it]);
+        }
     }
 
     return cropped_cloud_ptr;
+}
+
+void cloud_manip::homogenize_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, short epsilon)
+{
+    if (!cloud_ptr)
+    {
+        throw invalid_cloud_pointer();
+    }
+
+    if (epsilon == 0)
+    {
+        throw std::invalid_argument("Epsilon cannot be 0 for cloud homogenization.");
+    }
+
+    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->begin();
+     cloud_it < cloud_ptr->end(); cloud_it++)
+    {
+        short r_times_epsilon = (short)(*cloud_it).r / epsilon;
+        short g_times_epsilon = (short)(*cloud_it).g / epsilon;
+        short b_times_epsilon = (short)(*cloud_it).b / epsilon;
+
+        if ((r_times_epsilon * epsilon) > 255)
+        {
+            (*cloud_it).r = 255;
+        }
+
+        else
+        {
+            (*cloud_it).r = r_times_epsilon * epsilon;
+        }
+
+        if ((g_times_epsilon * epsilon) > 255)
+        {
+            (*cloud_it).g = 255;
+        }
+
+        else
+        {
+            (*cloud_it).g = g_times_epsilon * epsilon;
+        }
+
+        if ((b_times_epsilon * epsilon) > 255)
+        {
+            (*cloud_it).b = 255;
+        }
+
+        else
+        {
+            (*cloud_it).b = b_times_epsilon * epsilon;
+        }
+    }
+}
+
+std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_manip::fragment_cloud(
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float max_scaled_fragment_depth)
+{
+    if (!cloud_ptr)
+    {
+        throw invalid_cloud_pointer();
+    }
+
+    if ((aux::float_cmp(max_scaled_fragment_depth, 0.00, 0.005)) || (max_scaled_fragment_depth < 0))
+    {
+        throw std::invalid_argument("Invalid max fragment depth.");
+    }
+
+    float curr_depth = FLT_MAX;
+    std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments;
+
+    for (unsigned int cloud_it = 0; cloud_it < cloud_ptr->points.size(); cloud_it++)
+    {
+        // end of a fragment
+        if ((cloud_ptr->points[cloud_it].y > (curr_depth + max_scaled_fragment_depth))
+                || (cloud_ptr->points[cloud_it].y < (curr_depth - max_scaled_fragment_depth)) )
+        {
+            curr_depth = cloud_ptr->points[cloud_it].y;
+            pcl::PointCloud<pcl::PointXYZRGB>::Ptr new_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+            cloud_fragments.push_back(new_cloud);
+        }
+
+        // filling current cloud
+        else
+        {
+            (cloud_fragments.back())->points.push_back(cloud_ptr->points[cloud_it]);
+
+        }
+    }
+
+    return cloud_fragments;
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
@@ -185,6 +235,31 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
     }
 
     return merge_result;
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud_ptr)
+{
+    if (white_cloud_ptr)
+    {
+        throw invalid_cloud_pointer();
+    }
+
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgb_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
+    uint8_t r = 255;
+    uint8_t g = 255;
+    uint8_t b = 255;   // make it white
+
+    for (unsigned int point_index = 0; point_index < white_cloud_ptr->size(); point_index++)
+    {
+        pcl::PointXYZRGB rgb_point(r, g, b);
+        rgb_point.x = white_cloud_ptr->points[point_index].x;
+        rgb_point.y = white_cloud_ptr->points[point_index].y;
+        rgb_point.z = white_cloud_ptr->points[point_index].z;
+
+        rgb_cloud->push_back(rgb_point);
+    }
+
+    return rgb_cloud;
 }
 
 std::vector<point_xy_greyscale> cloud_manip::cloud_to_2d_greyscale(
@@ -268,57 +343,21 @@ std::vector<point_xy_mixed> cloud_manip::cloud_to_2d_mixed(pcl::PointCloud<pcl::
     return mixed_points;
 }
 
-void cloud_manip::cloud_homogenization(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, short epsilon)
-{
-    if (!cloud_ptr)
-    {
-        throw invalid_cloud_pointer();
-    }
-
-    if (epsilon == 0)
-        throw std::invalid_argument("Epsilon cannot be 0 for cloud homogenization.");
-
-    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->begin();
-     cloud_it < cloud_ptr->end(); cloud_it++)
-    {
-        short r_times_epsilon = (short)(*cloud_it).r / epsilon;
-        short g_times_epsilon = (short)(*cloud_it).g / epsilon;
-        short b_times_epsilon = (short)(*cloud_it).b / epsilon;
-
-        if ((r_times_epsilon * epsilon) > 255)
-            (*cloud_it).r = 255;
-
-        else
-            (*cloud_it).r = r_times_epsilon * epsilon;
-
-        if ((g_times_epsilon * epsilon) > 255)
-            (*cloud_it).g = 255;
-
-        else
-            (*cloud_it).g = g_times_epsilon * epsilon;
-
-        if ((b_times_epsilon * epsilon) > 255)
-            (*cloud_it).b = 255;
-
-        else
-            (*cloud_it).b = b_times_epsilon * epsilon;
-    }
-}
-
 void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool,
                                       pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
 {
     cloud_RGB->width = cloud_bool->width;
     cloud_RGB->height = cloud_bool->height;
     cloud_RGB->resize(cloud_RGB->width * cloud_RGB->height);
+
     for(size_t i=0; i<cloud_bool->points.size(); i++)
     {
         cloud_RGB->points[i].x = cloud_bool->points[i].x;
         cloud_RGB->points[i].y = cloud_bool->points[i].y;
         cloud_RGB->points[i].z = cloud_bool->points[i].z;
         cloud_RGB->points[i].r = cloud_bool->points[i].r;
-	cloud_RGB->points[i].g = cloud_bool->points[i].g;
-	cloud_RGB->points[i].b = cloud_bool->points[i].b;
+        cloud_RGB->points[i].g = cloud_bool->points[i].g;
+        cloud_RGB->points[i].b = cloud_bool->points[i].b;
     }
 }
 
@@ -328,14 +367,15 @@ void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr clo
     cloud_bool->width = cloud_RGB->width;
     cloud_bool->height = cloud_RGB->height;
     cloud_bool->resize(cloud_bool->width * cloud_bool->height);
+
     for(size_t i=0; i<cloud_RGB->points.size(); i++)
     {
         cloud_bool->points[i].x = cloud_RGB->points[i].x;
         cloud_bool->points[i].y = cloud_RGB->points[i].y;
         cloud_bool->points[i].z = cloud_RGB->points[i].z;
         cloud_bool->points[i].r = cloud_RGB->points[i].r;
-	cloud_bool->points[i].g = cloud_RGB->points[i].g;
-	cloud_bool->points[i].b = cloud_RGB->points[i].b;
+        cloud_bool->points[i].g = cloud_RGB->points[i].g;
+        cloud_bool->points[i].b = cloud_RGB->points[i].b;
     }
 }
 
