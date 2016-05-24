@@ -3,6 +3,7 @@
 
 #include "normal_estimation.h"
 #include "../tools/cloud_manip.h"
+#include "../except/invalid_cloud_pointer.h"
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -19,11 +20,9 @@
  * @param y_scale is a scaling parameter for the y axis of a cloud
  * @param z_scale is a scaling parameter for the z axis of a cloud
  * @param max_fragment_depth is the maximum depth a cloud fragment can measure; it is not scaled
- * @param precision is the precision for float comparison
  * @return the colored cloud
  */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr fast_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, int max_neighbs,
-                                                    float radius, float x_scale, float y_scale, float z_scale,
-                                                    float max_fragment_depth, float precision);
+                                                    float radius, float x_scale, float y_scale, float z_scale, float max_fragment_depth);
 
 #endif // EFF_NORM_EST_H

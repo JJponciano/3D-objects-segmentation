@@ -18,7 +18,7 @@ public:
      */
     image_greyscale(unsigned long width, unsigned long height);
 
-    /** @brief getters and setters */
+    // getters and setters
     unsigned short get_grey_at(unsigned long y, unsigned long x) const;
     void set_grey_at(unsigned long y, unsigned long x, unsigned short grey);
 

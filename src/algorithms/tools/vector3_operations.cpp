@@ -99,9 +99,7 @@ void vector3_operations::pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>
 {
       if (!cloud_ptr)
       {
-        QString err_msg = "vector3_operations::pcl_normal_estimation : Cloud pointer cannot be null.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
       }
 
       // Create the normal estimation class, and pass the input dataset to it

@@ -38,26 +38,30 @@ namespace aux
      * @brief set_precision sets the number of digits after the decimal
      * @param float_num is the number to be truncated
      * @param precision is the number of digits after the decimal
+     * @throw std::logic_error when precision is negative, null or not a multiple of 10
      */
-    float set_precision(float float_num, float precision);
+    float set_precision(float float_num, float precision) ;
 
     /**
-     * @brief cmp_angles compares the inclination and azimuth angles (spherical coordinate system) of two points
+     * @brief cmp_spherical_angles compares the inclination and azimuth angles (spherical coordinate system) of two points
      * @param coords_1 is an array containing the radius, inclination and azimuth of the first point
      * @param coords_2 is an array containing the radius, inclination and azimuth of the second point
      * @param precision is a float that defines the degree of precision of the comparison
+     * @throw std::logic_error when precision is 0
      * @return true if the angles are equal within the boundries of epsilon
      */
-    bool cmp_angles(std::vector<float> coords_1, std::vector<float> coords_2, float precision);
+    bool cmp_spherical_angles(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
+        ;
 
     /**
-     * @brief cmp_floats compares
-     * @param float_1
-     * @param float_2
-     * @param precision
+     * @brief cmp_floats compares two floats with a certain precision
+     * @param float_1 is the first float of the comparison
+     * @param float_2 is the second float of the comparison
+     * @param precision is a float that defines the degree of precision of the comparison
+     * @throw std::logic_error when precision is 0
      * @return true if the two parameter floats are equal within a certain range
      */
-    bool cmp_floats(float float_1, float float_2, float precision);
+    bool cmp_floats(float float_1, float float_2, float precision) ;
 
     /**
      * @brief norm_to_rgb calculates the r, g and b values of a point in function of the coordinates of a given normal

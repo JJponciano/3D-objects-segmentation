@@ -7,6 +7,7 @@
 #define GEOM_OP_H
 
 #include "vector3.h"
+#include "../except/invalid_cloud_pointer.h"
 
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
 #include <pcl/point_cloud.h>
@@ -72,6 +73,7 @@ namespace vector3_operations
     /**
      * @brief pcl_normal_estimation is a function that estimates the normals of the parameter cloud using the standard pcl library
      * @param cloud_ptr is a pointer to the point cloud to find the normals of
+     * @throw std::invalid_argument if cloud_ptr is nullptr
      */
     void pcl_normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);
 }

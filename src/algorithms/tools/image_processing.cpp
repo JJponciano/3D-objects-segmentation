@@ -83,10 +83,8 @@ std::vector<unsigned short> image_processing::greyscale_image_values(image_greys
 
 image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy_greyscale> greyscale_vector, float x_epsilon)
 {
-    if (aux::cmp_floats(x_epsilon, 0.000, 0.005))
-        throw std::logic_error("image_processing::greyscale_vector_to_image : x_epsilon must be bigger than 0.");
-
-    x_epsilon = std::abs(x_epsilon);   // x_epsilon must be positive
+    if (aux::cmp_floats(x_epsilon, 0.000, 0.0050) || x_epsilon < 0)
+        throw std::logic_error("x_epsilon must be bigger than 0.");
 
     std::vector<float> x_coords = image_processing::greyscale_vector_x_coords(greyscale_vector);
     std::vector<float> y_coords = image_processing::greyscale_vector_y_coords(greyscale_vector);
@@ -129,6 +127,9 @@ image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy
 
 image_mixed image_processing::mixed_vector_to_image(std::vector<point_xy_mixed> mixed_vector, float x_epsilon)
 {
+    if (aux::cmp_floats(x_epsilon, 0.000, 0.005) || x_epsilon < 0)
+        throw std::logic_error("x_epsilon must be bigger than 0.");
+
     std::vector<float> x_coords = image_processing::mixed_vector_x_coords(mixed_vector);
     std::vector<float> y_coords = image_processing::mixed_vector_y_coords(mixed_vector);
     float x_min = *(std::min_element(x_coords.begin(), x_coords.end()));
@@ -203,9 +204,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr image_processing::greyscale_image_to_cloud(i
 {
     if (!base_cloud_ptr)
     {
-        QString err_msg = "image_processing::greyscale_image_to_cloud : Invalid point cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr res_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
@@ -248,9 +247,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr image_processing::mixed_image_to_cloud(im
 {
     if (!base_cloud_ptr)
     {
-        QString err_msg = "image_processing::mixed_image_to_cloud : Invalid point cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr res_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -325,9 +322,7 @@ void image_processing::normalize(image_greyscale *gs_img_ptr)
 {
     if (!gs_img_ptr)
     {
-        QString err_msg = "image_processing::normalize : Invalid grey scale image pointer.";
-
-        throw err_msg;
+        throw std::invalid_argument("Invalid grey scale image pointer parameter.");
     }
 
     std::vector<unsigned short> greyscale_values = image_processing::greyscale_image_values(*gs_img_ptr);

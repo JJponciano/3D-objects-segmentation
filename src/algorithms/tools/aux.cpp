@@ -2,7 +2,9 @@
 
 
 float aux::map(float x, float in_min, float in_max, float out_min, float out_max)
-{ return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min; }
+{
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 float aux::float_avg(std::vector<float> floats)
 {
@@ -55,19 +57,19 @@ std::vector<float> aux::spherical_coords(vector3 vect)
 
 float aux::set_precision(float float_num, float precision)
 {
-    if (aux::cmp_floats(precision, 0.0, 0.005)
-            || precision < 0
-            || ((int)precision % 10 != 0))
-        throw std::logic_error("aux::set_precision : precision cannot be 0, negative and has to be a multiple of 10.");
+    if (aux::cmp_floats(precision, 0.0, 0.005) || precision < 0 || ((int)precision % 10 != 0))
+        throw std::logic_error("Precision cannot be 0, negative and has to be a multiple of 10.");
 
-    else
-        return ((float)(int)(float_num * precision)) / precision;
+    return ((float)(int)(float_num * precision)) / precision;
 }
 
-bool aux::cmp_angles(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
+bool aux::cmp_spherical_angles(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
 {
     if (precision == 0)
-        throw std::logic_error("aux::cmp_angles : angle comparison precision cannot be 0.");
+        throw std::logic_error("Angle comparison precision cannot be 0.");
+
+    if (coords_1.size() > 2 || coords_2.size() > 2)
+        throw std::logic_error("Invalid vector parameters.");
 
     if ((std::abs(coords_1[1] - coords_2[1]) < precision))
         return false;
@@ -81,7 +83,7 @@ bool aux::cmp_angles(std::vector<float> coords_1, std::vector<float> coords_2, f
 bool aux::cmp_floats(float float_1, float float_2, float precision)
 {
     if (precision == 0)
-        throw std::logic_error("aux::cmp_floats : float comparison precision cannot be 0.");
+        throw std::logic_error("Float comparison precision cannot be 0.");
 
     if (std::abs(float_1 - float_2) < precision)
         return true;

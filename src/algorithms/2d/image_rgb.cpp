@@ -10,88 +10,68 @@ image_rgb::image_rgb(unsigned long width, unsigned long height) : image(width, h
     }
 }
 
-uint32_t image_rgb::get_rgb_at(unsigned long y, unsigned long x) const
+uint32_t image_rgb::get_rgb_at(unsigned long y, unsigned long x) const    
 {
     try
     {
         return this->_pixels[y][x];
     }
 
-    catch (std::exception err)
+    catch (const std::out_of_range& oor)
     {
-        QString err_msg;
-        err_msg.append("image_rgb::get_rgb_at : ");
-        err_msg.append(err.what());
-
-        throw err_msg;
+        throw oor;
     }
 }
 
-void image_rgb::set_rgb_at(unsigned long y, unsigned long x, uint32_t rgb)
+void image_rgb::set_rgb_at(unsigned long y, unsigned long x, uint32_t rgb)    
 {
     try
     {
         this->_pixels[y][x] = rgb;
     }
 
-    catch (std::exception err)
+    catch (const std::out_of_range& oor)
     {
-        QString err_msg;
-        err_msg.append("image_rgb::set_rgb_at : ");
-        err_msg.append(err.what());
-
-        throw err_msg;
+        throw oor;
     }
 }
 
-uint8_t image_rgb::get_red_at(unsigned long y, unsigned long x) const
+uint8_t image_rgb::get_red_at(unsigned long y, unsigned long x) const    
 {
     try
     {
         return (this->_pixels[y][x] >> 16) & 0x0000ff;
     }
 
-    catch (std::exception err)
+    catch (const std::out_of_range& oor)
     {
-        QString err_msg;
-        err_msg.append("image_rgb::get_red_at : ");
-        err_msg.append(err.what());
-
-        throw err_msg;
+        throw oor;
     }
 }
 
-uint8_t image_rgb::get_green_at(unsigned long y, unsigned long x) const
+uint8_t image_rgb::get_green_at(unsigned long y, unsigned long x) const   
 {
     try
     {
         return (this->_pixels[y][x] >> 8) & 0x0000ff;
     }
 
-    catch (std::exception err)
+    catch (const std::out_of_range& oor)
     {
-        QString err_msg;
-        err_msg.append("image_rgb::get_green_at : ");
-        err_msg.append(err.what());
-
-        throw err_msg;
+        throw oor;
     }
 }
 
-uint8_t image_rgb::get_blue_at(unsigned long y, unsigned long x) const
+uint8_t image_rgb::get_blue_at(unsigned long y, unsigned long x) const    
 {
     try
     {
         return (this->_pixels[y][x]) & 0x0000ff;
     }
 
-    catch (std::exception err)
+    catch (const std::out_of_range& oor)
     {
-        QString err_msg;
-        err_msg.append("image_rgb::get_blue_at : ");
-        err_msg.append(err.what());
-
-        throw err_msg;
+        throw oor;
     }
 }
 

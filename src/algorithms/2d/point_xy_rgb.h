@@ -21,8 +21,7 @@ public:
      */
     point_xy_rgb(uint32_t rgb);
 
-    /** @brief getters and setters */
-
+    // getters and setters
     uint32_t rgb() const { return _rgb; }
     void rgb(uint32_t rgb) { this->_rgb = rgb; }
     uint8_t r() const { return (rgb() >> 16) & 0x0000ff; }

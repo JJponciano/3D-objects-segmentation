@@ -19,7 +19,7 @@ public:
      */
     image_mixed(unsigned long width, unsigned long height);
 
-    /** @brief getters and setters */
+    // getters and setters
     unsigned short get_grey_at(unsigned long y, unsigned long x) const;
     void set_grey_at(unsigned long y, unsigned long x, unsigned short grey);
     uint32_t get_rgb_at(unsigned long y, unsigned long x) const;

@@ -19,7 +19,7 @@ public:
      */
     image_rgb(unsigned long width, unsigned long height);
 
-    /** @brief getters and setters */
+    // getters and setters
     uint32_t get_rgb_at(unsigned long y, unsigned long x) const;
     void set_rgb_at(unsigned long y, unsigned long x, uint32_t rgb);
     uint8_t get_red_at(unsigned long y, unsigned long x) const;

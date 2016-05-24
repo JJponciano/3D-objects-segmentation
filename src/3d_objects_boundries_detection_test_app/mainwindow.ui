@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>409</width>
+    <height>156</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>3D Objects Boundries Detection Test App</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="test_btn">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>50</y>
+      <width>115</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Test</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="test_fct_label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Test functions</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="test_fct_cb">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>50</y>
+      <width>251</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Cloud normal estimation</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cloud homogenization</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cloud crop</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>greyscale_image histogram calculation</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>greyscale_image to file</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>File to greyscale_image</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>rgb_image to file</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>File to rgb_image</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>mixed_image to cloud</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>409</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="file_menu">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="file_menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

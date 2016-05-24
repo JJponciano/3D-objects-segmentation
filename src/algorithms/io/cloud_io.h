@@ -1,6 +1,9 @@
 #ifndef CLOUD_IO_H
 #define CLOUD_IO_H
 
+#include "../except/invalid_path.h"
+#include "../except/invalid_cloud_pointer.h"
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -24,22 +27,24 @@ namespace cloud_io
     /**
      * @brief import_cloud_txt generates a cloud from a .txt file
      * @param path is a string representing a unique location in the file system
-     * @param is_rgb is true if the text file is supposed to generate an rgb cloud as opposed to a greyscale cloud
+     * @throw invalid_path if file cannot be opened
      * @return a pointer to the cloud that has been read
      */
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr import_cloud_txt(std::string path, bool is_rgb);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr import_cloud_txt(std::string path);
 
     /**
      * @brief import_cloud generates a cloud from a .txt or .pcd file
      * @param path is a string representing a unique location in the file system
-     * @param is_rgb is true if the text file is supposed to generate an rgb cloud as opposed to a greyscale cloud
+     * @throw invalid_path if the file cannot be opened
      * @return the a pointer to the cloud that has been read
      */
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr import_cloud(std::string path, bool is_rgb);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr import_cloud(std::string path);
 
     /**
      * @brief export_cloud writes a point cloud to a text file.
      * @param path is a string representing a unique location in the file system
+     * @throw invalid_path if the file cannot be opened
+     * @throw invalid_cloud_pointer if cloud_ptr is nullptr
      * @param cloud_ptr is a pointer to the cloud to be exported
      **/ 
     void export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr);

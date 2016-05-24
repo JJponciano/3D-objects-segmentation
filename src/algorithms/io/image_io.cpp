@@ -17,12 +17,7 @@ image_greyscale image_io::import_greyscale_image(std::string path)
 
     if (!image_file.is_open())
     {
-        QString err_msg;
-
-        err_msg.append("image_io::import_greyscale_image : Could not read file at \"");
-        err_msg.append(QString::fromUtf8(path.c_str()));
-        err_msg.append("\".");
-        throw err_msg;
+        throw invalid_path();
     }
 
     while (std::getline(image_file, line))
@@ -63,6 +58,14 @@ image_greyscale image_io::import_greyscale_image(std::string path)
 
 void image_io::export_greyscale_image(std::string path, unsigned short max_grey_value, image_greyscale gs_img)
 {
+    if (gs_img.width() == 0 || gs_img.height() == 0)
+    {
+        throw std::logic_error("Invalid grey scale image.");
+    }
+
+    if (max_grey_value > 255)
+        throw std::logic_error("Invalid max_grey_value (must be smaller than 255).");
+
     std::ofstream image_file;
     std::string line;
     const std::string magic_number = "P2";  // defines the format of the file
@@ -71,20 +74,7 @@ void image_io::export_greyscale_image(std::string path, unsigned short max_grey_
 
     if (!image_file.is_open())
     {
-        QString err_msg;
-
-        err_msg.append("cloud_io::export_greyscale_image : Could not write image at \"");
-        err_msg.append(QString::fromUtf8(path.c_str()));
-        err_msg.append("\".");
-        throw err_msg;
-    }
-
-    if (gs_img.width() == 0 || gs_img.height() == 0)
-    {
-        QString err_msg;
-
-        err_msg.append("image_io::export_greyscale_image : Invalid image.");
-        throw err_msg;
+        throw invalid_path();
     }
 
     line = magic_number;
@@ -127,12 +117,7 @@ image_rgb image_io::import_rgb_image(std::string path)
 
     if (!image_file.is_open())
     {
-        QString err_msg;
-
-        err_msg.append("cloud_io::export_cloud : Could not read file at \"");
-        err_msg.append(QString::fromUtf8(path.c_str()));
-        err_msg.append("\".");
-        throw err_msg;
+        throw invalid_path();
     }
 
     while (std::getline(image_file, line))
@@ -178,6 +163,16 @@ image_rgb image_io::import_rgb_image(std::string path)
 
 void image_io::export_rgb_image(std::string path, unsigned int max_rgb_value, image_rgb rgb_img)
 {
+    if (rgb_img.width() == 0 || rgb_img.height() == 0)
+    {
+        throw std::logic_error("Invalid rgb image.");
+    }
+
+    if (max_rgb_value > 255)
+    {
+        throw std::logic_error("Invalid max_rgb_value (must be smaller than 255).");
+    }
+
     std::ofstream image_file;
     std::string line;
     const std::string magic_number = "P3";  // defines the format of the file
@@ -186,20 +181,7 @@ void image_io::export_rgb_image(std::string path, unsigned int max_rgb_value, im
 
     if (!image_file.is_open())
     {
-        QString err_msg;
-
-        err_msg.append("cloud_io::export_cloud : Could not write image at \"");
-        err_msg.append(QString::fromUtf8(path.c_str()));
-        err_msg.append("\".");
-        throw err_msg;
-    }
-
-    if (rgb_img.width() == 0 || rgb_img.height() == 0)
-    {
-        QString err_msg;
-
-        err_msg.append("image_io::export_rgb_image : Invalid image.");
-        throw err_msg;
+        throw invalid_path();
     }
 
     line = magic_number;

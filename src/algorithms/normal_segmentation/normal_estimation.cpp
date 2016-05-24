@@ -4,13 +4,18 @@ void normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float r
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "normal_estimation : Invalid cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     if (aux::cmp_floats(radius, 0.00, 0.005))
-        throw std::logic_error("normal_estimation : Invalid radius value.");
+    {
+        throw std::logic_error("Invalid radius value.");
+    }
+
+    if (aux::cmp_floats(max_neighbs, 0.00, 0.005))
+    {
+        throw std::logic_error("Invalid max neighbours value.");
+    }
 
     pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt; // kd-tree used for finding neighbours
 
@@ -40,13 +45,17 @@ void normal_estimation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float r
 
                 // defining the second vect_or; making sure there is no 'out of bounds' error
                 if (pt_index == pointIdxRadiusSearch.size() - 2)
+                {
                     vect_2 = vector3_operations::vect_2pts((cloud_ptr->points[cloud_it]),
                                                       cloud_ptr->points[pointIdxRadiusSearch[1]]);
+                }
 
 
                 else
+                {
                     vect_2 = vector3_operations::vect_2pts((cloud_ptr->points[cloud_it]),
                                                       cloud_ptr->points[pointIdxRadiusSearch[pt_index + 2]]);
+                }
 
                 vects_to_avg.push_back(aux::abs_vector(vector3_operations::cross_product(vect_1, vect_2)));
             }

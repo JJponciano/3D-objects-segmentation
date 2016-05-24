@@ -9,6 +9,7 @@
 #include "../2d/point_xy_rgb.h"
 #include "../2d/point_xy_mixed.h"
 #include "cloud_manip.h"
+#include "../except/invalid_cloud_pointer.h"
 
 #include <vector>
 #include <stdint.h>
@@ -45,6 +46,7 @@ namespace image_processing
      * @brief greyscale_vector_to_image converts a 2D greyscale points array into a depth image
      * @param greyscale_vector is the the array to be converted
      * @param x_epsilon is used for delimiting the x cases of the image
+     * @throw std::logic_error if x_epsilon is smaller or equal to 0
      * @return the resulted depth image
      */
     image_greyscale greyscale_vector_to_image(std::vector<point_xy_greyscale> greyscale_vector, float x_epsilon);
@@ -53,6 +55,7 @@ namespace image_processing
      * @brief mixed_vector_to_image converts a 2D mixed points array into a mixed image
      * @param mixed_vector is the array to be converted
      * @param x_epsilon is used for delimiting the x cases of the image
+     * @throw std::logic_error if x_epsilon is smaller or equal to 0
      * @return the resulted mixed image
      */
     image_mixed mixed_vector_to_image(std::vector<point_xy_mixed> mixed_vector, float x_epsilon);
@@ -75,6 +78,7 @@ namespace image_processing
      * @brief greyscale_image_to_cloud creates a pointer to a point cloud based on a greyscale image
      * @param gs_img is the image that serves as the base for the creation of the point cloud
      * @param base_cloud_ptr is a pointer to the cloud used to create the image
+     * @throw invalid_cloud_pointer if base_cloud_ptr is equal to nullptr
      * @return a pointer to the resulted cloud
      */
     pcl::PointCloud<pcl::PointXYZ>::Ptr greyscale_image_to_cloud(image_greyscale gs_img,
@@ -84,6 +88,7 @@ namespace image_processing
      * @brief mixed_image_to_cloud creates a pointer to a point cloud based on a mixed image
      * @param mixed is the image that serves as the base for the creation of the point cloud
      * @param base_cloud_ptr is a pointer to the cloud used to create the image
+     * @throw invalid_cloud_pointer if base_cloud_ptr is equal to nullptr
      * @return a pointer to the resulted cloud
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr mixed_image_to_cloud(image_mixed mixed_img,
@@ -106,6 +111,7 @@ namespace image_processing
     /**
      * @brief normalize augments the greyscale differences between the pixels of an image
      * @param gs_img_ptr is a pointer to the greyscale image to be normalized
+     * @throw std::invalid_argument if gs_img_ptr is equal to nullptr
      */
     void normalize(image_greyscale *gs_img_ptr);
 }

@@ -4,9 +4,7 @@ std::vector<float> cloud_manip::cloud_x_coords(pcl::PointCloud<pcl::PointXYZRGB>
 {
     if (!cloud_ptr)
     {
-        QString err_msg = " ::cloud_x_coords : Invalid point cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     std::vector<float> x_coords;
@@ -22,9 +20,7 @@ std::vector<float> cloud_manip::cloud_y_coords(pcl::PointCloud<pcl::PointXYZRGB>
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::cloud_y_coords : Invalid point cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     std::vector<float> y_coords;
@@ -40,9 +36,7 @@ std::vector<float> cloud_manip::cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::cloud_z_coords : Invalid point cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     std::vector<float> z_coords;
@@ -59,9 +53,7 @@ void cloud_manip::copy_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr src_ptr,
 {
     if (!src_ptr || !dest_ptr)
     {
-        QString err_msg = "cloud_manip::copy_cloud : Invalid parameter pointers.";
-
-        throw err_msg;
+        throw std::invalid_argument("Invalid source or destination pointer.");
     }
 
     for (unsigned int cloud_it = 0; cloud_it < src_ptr->points.size(); cloud_it++)
@@ -72,9 +64,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::cloud_to_rgb(pcl::PointCloud
 {
     if (white_cloud_ptr)
     {
-        QString err_msg = "cloud_manip::cloud_to_rgb : Invalid cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgb_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
@@ -94,19 +84,17 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::cloud_to_rgb(pcl::PointCloud
 }
 
 void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float x_scale, float y_scale,
-                                 float z_scale, float precision)
+                                 float z_scale)
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::scale_cloud : Invalid parameter pointers.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
-    if (aux::cmp_floats(x_scale, 0.00, precision)
-            || aux::cmp_floats(y_scale, 0.00, precision)
-            || aux::cmp_floats(z_scale, 0.00, precision))
-        throw std::logic_error("cloud_manip::scale_cloud : Multiplying by 0 will destroy the cloud.");
+    if (aux::cmp_floats(x_scale, 0.00, 0.005)
+            || aux::cmp_floats(y_scale, 0.00, 0.005)
+            || aux::cmp_floats(z_scale, 0.00, 0.005))
+        throw std::invalid_argument("Scaling cloud by 0 will destroy the cloud.");
 
     for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->points.begin();
          cloud_it < cloud_ptr->points.end(); cloud_it++)
@@ -118,20 +106,15 @@ void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, 
 }
 
 std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_manip::fragment_cloud(
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float max_scaled_fragment_depth, float precision)
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float max_scaled_fragment_depth)
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::fragment_cloud : Invalid cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
-    if (max_scaled_fragment_depth == 0)
-        throw std::logic_error("cloud_manip::fragmen_cloud : Invalid max_scaled_fragment_depth parameter.");
-
-    if (aux::cmp_floats(max_scaled_fragment_depth, 0.00, precision))
-        throw std::logic_error("cloud_manip::fragment_cloud : Invalid max depth.");
+    if ((aux::cmp_floats(max_scaled_fragment_depth, 0.00, 0.005)) || (max_scaled_fragment_depth < 0))
+        throw std::invalid_argument("Invalid max fragment depth.");
 
     float curr_depth = FLT_MAX;
     std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments;
@@ -156,13 +139,11 @@ std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_manip::fragment_cloud(
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr,
-                       float x_thresh, float y_thresh, float z_thresh, float precision)
+                       float x_thresh, float y_thresh, float z_thresh)
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::crop_cloud : Invalid cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cropped_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -172,15 +153,15 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(pcl::PointCloud<p
         bool remove_point = false;
 
         if ((std::abs(cloud_ptr->points[cloud_it].x) > std::abs(x_thresh))
-                && (!aux::cmp_floats(x_thresh, 0, precision)))
+                && (!aux::cmp_floats(x_thresh, 0, 0.005)))
             remove_point = true;
 
         if ((std::abs(cloud_ptr->points[cloud_it].y) > std::abs(y_thresh))
-                && (!aux::cmp_floats(y_thresh, 0, precision)))
+                && (!aux::cmp_floats(y_thresh, 0, 0.005)))
             remove_point = true;
 
         if (std::abs(cloud_ptr->points[cloud_it].z) > std::abs(z_thresh)
-                && (!aux::cmp_floats(z_thresh, 0, precision)))
+                && (!aux::cmp_floats(z_thresh, 0, 0.005)))
             remove_point = true;
 
         if (!remove_point)
@@ -211,9 +192,7 @@ std::vector<point_xy_greyscale> cloud_manip::cloud_to_2d_greyscale(
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::cloud_to_2d_greyscale : Invalid cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     std::vector<point_xy_greyscale> greyscale_points;
@@ -240,9 +219,7 @@ std::vector<point_xy_rgb> cloud_to_2d_rgb(pcl::PointCloud<pcl::PointXYZRGB>::Ptr
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::cloud_to_2d_rgb : Invalid cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     std::vector<point_xy_rgb> rgb_points;
@@ -266,9 +243,7 @@ std::vector<point_xy_mixed> cloud_manip::cloud_to_2d_mixed(pcl::PointCloud<pcl::
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::cloud_to_2d_mixed : Invalid cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
 
     std::vector<point_xy_mixed> mixed_points;
@@ -297,10 +272,11 @@ void cloud_manip::cloud_homogenization(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cl
 {
     if (!cloud_ptr)
     {
-        QString err_msg = "cloud_manip::cloud_homogenization : Invalid cloud pointer.";
-
-        throw err_msg;
+        throw invalid_cloud_pointer();
     }
+
+    if (epsilon == 0)
+        throw std::invalid_argument("Epsilon cannot be 0 for cloud homogenization.");
 
     for (pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it = cloud_ptr->begin();
      cloud_it < cloud_ptr->end(); cloud_it++)

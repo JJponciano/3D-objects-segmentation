@@ -10,20 +10,16 @@ image_greyscale::image_greyscale(unsigned long width, unsigned long height) : im
     }
 }
 
-unsigned short image_greyscale::get_grey_at(unsigned long y, unsigned long x) const
+unsigned short image_greyscale::get_grey_at(unsigned long y, unsigned long x) const    
 {
     try
     {
         return this->_pixels[y][x];
     }
 
-    catch (std::exception err)
+    catch (const std::out_of_range& oor)
     {
-        QString err_msg;
-        err_msg.append("image_greyscale::get_grey_at : ");
-        err_msg.append(err.what());
-
-        throw err_msg;
+        throw oor;
     }
 }
 
@@ -34,13 +30,9 @@ void image_greyscale::set_grey_at(unsigned long y, unsigned long x, unsigned sho
         this->_pixels[y][x] = grey;
     }
 
-    catch (std::exception err)
+    catch (const std::out_of_range& oor)
     {
-        QString err_msg;
-        err_msg.append("image_greyscale::set_grey_at : ");
-        err_msg.append(err.what());
-
-        throw err_msg;
+        throw oor;
     }
 }
 

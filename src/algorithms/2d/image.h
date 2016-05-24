@@ -16,7 +16,7 @@ public:
      */
     image(unsigned long width, unsigned long height);
 
-    /** @brief getters and setters */
+    // getters and setters
     unsigned long width() const { return _width; }
     unsigned long height() const { return _height; }
     unsigned long resolution() const { return _width * _height; }
