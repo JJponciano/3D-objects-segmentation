@@ -15,8 +15,6 @@
 #include <float.h>
 #include <stdexcept>
 
-#include <QString>
-
 namespace cloud_manip
 {
     /** @return all of the x coordinates found in the parameter cloud */
@@ -55,9 +53,8 @@ namespace cloud_manip
      * @param y_thresh is the threshold for the y coordinate
      * @param z_thresh is the threshold for the z coordinate
      * @throw invalid_cloud_pointer if cloud_ptr is equal to nullptr
-     * @return a cropped point cloud
      */
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr crop_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr,
+    void crop_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr,
                            float x_thresh, float y_thresh, float z_thresh);
 
     /**

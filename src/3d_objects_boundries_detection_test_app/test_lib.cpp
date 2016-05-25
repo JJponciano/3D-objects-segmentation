@@ -8,20 +8,30 @@ int test_normal_estimation(std::string import_path, std::string export_path, flo
 
     try
     {
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud;
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud;   // output cloud
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud_ptr;   // output cloud
+        std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments;
+        float max_scaled_fragment_depth = max_fragment_depth / y_scale;
 
-        base_cloud = cloud_io::import_cloud(import_path);
-        colored_cloud = fast_normal_estimation(base_cloud, max_neighbs, radius, x_scale, y_scale, z_scale,
-                                               max_fragment_depth);
+        base_cloud_ptr = cloud_io::import_cloud(import_path);
+        cloud_manip::scale_cloud(base_cloud_ptr, x_scale, y_scale, z_scale); // scaling cloud
+        cloud_fragments = cloud_manip::fragment_cloud(base_cloud_ptr, max_scaled_fragment_depth); // fragmenting cloud for less execution time
+
+        // estimating the normals for each cloud fragment in parallel
+        #pragma omp parallel for schedule(static)
+        for (auto fragm_it = cloud_fragments.begin(); fragm_it < cloud_fragments.end(); fragm_it++)
+            normal_segmentation::estimate_normals(*fragm_it, radius, max_neighbs);
+
+        colored_cloud_ptr = cloud_manip::merge_clouds(cloud_fragments); // merging fragments to build original cloud
+        cloud_manip::scale_cloud(colored_cloud_ptr, (1.0/x_scale), (1.0/y_scale), (1.0/z_scale));    // restoring widop scale
         cloud_io::export_cloud(export_path + "/normal_estimation_test_" + boost::lexical_cast<std::string>(radius) + "_"
                                 + boost::lexical_cast<std::string>(max_neighbs) + "_" + boost::lexical_cast<std::string>(x_scale) + "_"
                                 + boost::lexical_cast<std::string>(y_scale) + "_" + boost::lexical_cast<std::string>(z_scale) + "_"
-                                + boost::lexical_cast<std::string>(max_fragment_depth) + ".txt", colored_cloud);
+                                + boost::lexical_cast<std::string>(max_fragment_depth) + ".txt", colored_cloud_ptr);
 
     }
 
-    catch (const std::exception& e)
+    catch (...)
     {
         code = -1;
     }
@@ -35,14 +45,14 @@ int test_cloud_homogenization(std::string import_path, std::string export_path, 
 
     try
     {
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud = cloud_io::import_cloud(import_path);
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr = cloud_io::import_cloud(import_path);
 
-        cloud_manip::homogenize_cloud(base_cloud, epsilon);
+        cloud_manip::homogenize_cloud(cloud_ptr, epsilon);
         cloud_io::export_cloud(export_path + "/cloud_homogenization_test_" + boost::lexical_cast<std::string>(epsilon)
-                                + ".txt", base_cloud);
+                                + ".txt", cloud_ptr);
     }
 
-    catch (const std::exception& e)
+    catch (...)
     {
         code = -1;
     }
@@ -57,17 +67,16 @@ int test_crop_cloud(std::string import_path, std::string export_path,
 
     try
     {
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud;
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cropped_cloud;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr;
 
-        base_cloud = cloud_io::import_cloud(import_path);
-        cropped_cloud = cloud_manip::crop_cloud(base_cloud, x_thresh, y_thresh, z_thresh);
+        cloud_ptr = cloud_io::import_cloud(import_path);
+        cloud_manip::crop_cloud(cloud_ptr, x_thresh, y_thresh, z_thresh);
         cloud_io::export_cloud(export_path + "/cloud_crop_test_" + boost::lexical_cast<std::string>(x_thresh) + "_"
                                 + boost::lexical_cast<std::string>(y_thresh) + "_" + boost::lexical_cast<std::string>(z_thresh)
-                                + ".txt", cropped_cloud);
+                                + ".txt", cloud_ptr);
     }
 
-    catch (const std::exception& e)
+    catch (...)
     {
         code = -1;
     }
@@ -93,7 +102,7 @@ int test_greyscale_image_to_file(std::string import_path, std::string export_pat
                                 + ".pgm", 255, gs_img);
     }
 
-    catch (const std::exception& e)
+    catch (...)
     {
         code = -1;
     }
@@ -119,7 +128,7 @@ int test_rgb_image_to_file(std::string import_path, std::string export_path, flo
                                 + ".ppm", 255, rgb_img);
     }
 
-    catch (const std::exception& e)
+    catch (...)
     {
         code = -1;
     }
@@ -147,7 +156,7 @@ int test_mixed_image_to_cloud(std::string import_path, std::string export_path, 
                                 + "_.txt", reverse_cloud);
     }
 
-    catch (const std::exception& e)
+    catch (...)
     {
         code = -1;
     }
@@ -189,7 +198,7 @@ int test_rail_detection(std::string import_path, std::string export_path, float 
                                 + "_.txt", railway_cloud);
     }
 
-    catch (const std::exception& e)
+    catch (...)
     {
         code = -1;
     }

@@ -5,7 +5,7 @@
 #ifndef TEST_LIB_H
 #define TEST_LIB_H
 
-#include "../algorithms/normal_segmentation/fast_normal_estimation.h"
+#include "../algorithms/normal_segmentation/normal_estimation.h"
 #include "../algorithms/tools/image_processing.h"
 #include "../algorithms/tools/cloud_manip.h"
 #include "../algorithms/io/cloud_io.h"

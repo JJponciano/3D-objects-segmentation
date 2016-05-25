@@ -1,5 +1,5 @@
-#ifndef GREYSCALE_IMAGE_H
-#define GREYSCALE_IMAGE_H
+#ifndef IMAGE_GREYSCALE_H
+#define IMAGE_GREYSCALE_H
 
 #include "image.h"
 
@@ -16,14 +16,16 @@ public:
      * @param width is the width of the image in pixels
      * @param height is the height of the image in pixels
      */
-    image_greyscale(unsigned long width, unsigned long height);
+    image_greyscale(size_t width, size_t height);
 
-    // getters and setters
-    unsigned short get_grey_at(unsigned long y, unsigned long x) const;
-    void set_grey_at(unsigned long y, unsigned long x, unsigned short grey);
+    /** @brief get_grey_at gets grey value at coordinates [y, x] */
+    unsigned short get_grey_at(size_t y, size_t x) const;
 
-    /** @brief initializes image pixels */
+    /** @brief set_grey_at sets grey value at coordinates [y, x] */
+    void set_grey_at(size_t y, size_t x, unsigned short grey);
+
+    /** @brief init initializes image pixels */
     virtual void init();
 };
 
-#endif // GREYSCALE_IMAGE_H
+#endif // IMAGE_GREYSCALE_H

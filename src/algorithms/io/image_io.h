@@ -1,7 +1,6 @@
 #ifndef IMAGE_IO_H
 #define IMAGE_IO_H
 
-#include "../2d/image.h"
 #include "../2d/image_greyscale.h"
 #include "../2d/image_rgb.h"
 #include "../2d/point_xy_greyscale.h"

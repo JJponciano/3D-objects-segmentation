@@ -1,6 +1,7 @@
 #ifndef IMAGE_PROCESSING_H
 #define IMAGE_PROCESSING_H
 
+#include "cloud_manip.h"
 #include "../tools/aux.h"
 #include "../2d/image_greyscale.h"
 #include "../2d/image_rgb.h"
@@ -8,7 +9,6 @@
 #include "../2d/point_xy_greyscale.h"
 #include "../2d/point_xy_rgb.h"
 #include "../2d/point_xy_mixed.h"
-#include "cloud_manip.h"
 #include "../except/invalid_cloud_pointer.h"
 
 #include <vector>

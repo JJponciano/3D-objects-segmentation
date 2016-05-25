@@ -17,8 +17,10 @@ public:
      */
     point_xy_greyscale(unsigned short greyscale);
 
-    // getters and setters
+    /** @brief greyscale gets point grey scale value */
     unsigned short greyscale() const { return _greyscale; }
+
+    /** @brief greyscale sets point grey scale value */
     void greyscale(unsigned short greyscale) { this->_greyscale = greyscale; }
 };
 

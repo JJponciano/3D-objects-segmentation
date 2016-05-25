@@ -5,9 +5,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pa
     QFile file(QString(pathname.c_str()));
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
         throw invalid_path();
-    }
 
     QTextStream flux(&file);
     QString  line;  // each read line
@@ -24,9 +22,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pa
         QStringList result = line.split("\t"); // split the line with space as a separator character
 
         if(result.size() < 3)
-        {
             throw invalid_path();
-        }
 
         QString r;  // reads each coordinate
 
@@ -57,9 +53,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pa
 
         // unknown format
         else
-        {
             throw invalid_path();
-        }
     }
 
     file.close();
@@ -70,13 +64,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pa
     for (unsigned int i = 0; i < pt_x.size(); i++)
     {
        pcl::PointXYZRGB pt;
+
        pt.x = pt_x[i];
        pt.y = pt_y[i];
        pt.z = pt_z[i];
        pt.r = pt_r[i];
        pt.g = pt_g[i];
        pt.b = pt_b[i];
-
        cloud->push_back(pt);
     }
 
@@ -86,15 +80,11 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud_txt(std::string pa
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud(std::string path)
 {
     std::string ext;    // files extension
-
     size_t i = path.rfind('.', path.length());
-
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 
     if (i != std::string::npos)
-    {
       ext = path.substr(i+1, path.length() - i);
-    }
 
     if (ext.compare("pcd") == 0)
 
@@ -102,15 +92,11 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_io::import_cloud(std::string path)
         pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *cloud);
 
         if (!cloud)
-        {
             throw invalid_path();
-        }
     }
 
     else if (ext.compare("txt") == 0)
-    {
         cloud = cloud_io::import_cloud_txt(path);
-    }
 
     return cloud;
 }
@@ -119,25 +105,18 @@ void cloud_io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>:
 {
 
     if (!cloud_ptr)
-    {
         throw invalid_cloud_pointer();
-    }
 
     std::ofstream cloud_file;
     std::string line;
-
-    // cloud iterator
-    pcl::PointCloud<pcl::PointXYZRGB>::iterator cloud_it;
 
     // opening file
     cloud_file.open(path, std::ios::out);
 
     if (!cloud_file.is_open())
-    {
         throw invalid_path();
-    }
 
-    for (cloud_it = cloud_ptr->points.begin(); cloud_it < cloud_ptr->points.end(); cloud_it++)
+    for (auto cloud_it = cloud_ptr->points.begin(); cloud_it < cloud_ptr->points.end(); cloud_it++)
     {
         line = boost::lexical_cast<std::string>((float)(*cloud_it).x) + "\t"
                 + boost::lexical_cast<std::string>((float)(*cloud_it).y) + "\t"

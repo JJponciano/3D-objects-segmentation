@@ -9,27 +9,34 @@
 
 #include <cmath>
 
-class vector3
+namespace aux
 {
-private:
-    float x;
-    float y;
-    float z;
-public:
-    vector3();
-    vector3(float x, float y, float z);
+    class vector3
+    {
+    private:
+        float _x;
+        float _y;
+        float _z;
+    public:
+        vector3();
+        vector3(float x, float y, float z);
 
-    // getters
-    float get_x() const { return x; }
-    float get_y() const { return y; }
-    float get_z() const { return z; }
-    float get_magn() const { return std::sqrt(std::pow(this->get_x(), 2) + std::pow(this->get_y(), 2) + std::pow(this->get_z(), 2)); }
+        /// getters
+        float x() const { return _x; }
 
-    // setters
-    void set_x(float x) { this->x = x; }
-    void set_y(float y) { this->y = y; }
-    void set_z(float z) { this->z = z; }
+        float y() const { return _y; }
 
-};
+        float z() const { return _z; }
+
+        float magnitude() const { return std::sqrt(std::pow(this->x(), 2) + std::pow(this->y(), 2) + std::pow(this->z(), 2)); }
+
+        /// setters
+        void x(float x) { _x = x; }
+
+        void y(float y) { _y = y; }
+
+        void z(float z) { _z = z; }
+    };
+}
 
 #endif // VECTOR3_H

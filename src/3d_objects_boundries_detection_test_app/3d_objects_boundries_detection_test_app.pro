@@ -29,14 +29,12 @@ SOURCES += main.cpp\
     ../algorithms/io/cloud_io.cpp \
     ../algorithms/io/image_io.cpp \
     ../algorithms/normal_segmentation/normal_estimation.cpp \
-    ../algorithms/normal_segmentation/fast_normal_estimation.cpp \
     ../algorithms/objects/bounding_box.cpp \
     ../algorithms/objects/point_clstr.cpp \
     ../algorithms/tools/aux.cpp \
     ../algorithms/tools/cloud_manip.cpp \
     ../algorithms/tools/image_processing.cpp \
     ../algorithms/tools/vector3.cpp \
-    ../algorithms/tools/vector3_operations.cpp \
     normal_estimation_test_form.cpp \
     test_lib.cpp
 
@@ -52,14 +50,12 @@ HEADERS  += mainwindow.h \
     ../algorithms/io/cloud_io.h \
     ../algorithms/io/image_io.h \
     ../algorithms/normal_segmentation/normal_estimation.h \
-    ../algorithms/normal_segmentation/fast_normal_estimation.h \
     ../algorithms/objects/bounding_box.h \
     ../algorithms/objects/point_clstr.h \
     ../algorithms/tools/aux.h \
     ../algorithms/tools/cloud_manip.h \
     ../algorithms/tools/image_processing.h \
     ../algorithms/tools/vector3.h \
-    ../algorithms/tools/vector3_operations.h \
     normal_estimation_test_form.h \
     data.h \
     test_lib.h \

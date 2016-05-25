@@ -25,8 +25,10 @@ public:
      */
     point_xy_mixed(uint32_t rgb, unsigned short greyscale);
 
-    // getters and setters
+    /** @brief greyscale gets point grey scale value */
     unsigned short greyscale() const { return _greyscale; }
+
+    /** @brief greyscale sets point greyscale value */
     void greyscale(unsigned short greyscale) { this->_greyscale = greyscale; }
 };
 

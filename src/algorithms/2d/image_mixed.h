@@ -4,8 +4,8 @@
 #include "image.h"
 
 #include <stdint.h>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 class image_mixed : public image
 {
@@ -17,18 +17,30 @@ public:
      * @param width is the width of the image in pixels
      * @param height is the height of the image in pixels
      */
-    image_mixed(unsigned long width, unsigned long height);
+    image_mixed(size_t width, size_t height);
 
-    // getters and setters
-    unsigned short get_grey_at(unsigned long y, unsigned long x) const;
-    void set_grey_at(unsigned long y, unsigned long x, unsigned short grey);
-    uint32_t get_rgb_at(unsigned long y, unsigned long x) const;
-    void set_rgb_at(unsigned long y, unsigned long x, uint32_t rgb);
-    uint8_t get_red_at(unsigned long y, unsigned long x) const;
-    uint8_t get_green_at(unsigned long y, unsigned long x) const;
-    uint8_t get_blue_at(unsigned long y, unsigned long x) const;
+    /** @brief get_grey_at gets grey value at coordinates [y, x] */
+    unsigned short get_grey_at(size_t y, size_t x) const;
 
-    /** @brief initializes image pixels */
+    /** @brief get_rgb_at gets rgb value at coordinates [y, x] */
+    uint32_t get_rgb_at(size_t y, size_t x) const;
+
+    /** @brief get_red_at gets red value at coordinates [y, x] */
+    uint8_t get_red_at(size_t y, size_t x) const;
+
+    /** @brief get_green_at gets green value at coordinates [y, x] */
+    uint8_t get_green_at(size_t y, size_t x) const;
+
+    /** @brief get_blue_at gets blue value at coordinates [y, x] */
+    uint8_t get_blue_at(size_t y, size_t x) const;
+
+    /** @brief set_grey_at sets grey value at coordinates [y, x] */
+    void set_grey_at(size_t y, size_t x, unsigned short grey);
+
+    /** @brief set_rgb_at sets rgb value at coordinates [y, x] */
+    void set_rgb_at(size_t y, size_t x, uint32_t rgb);
+
+    /** @brief init initializes image pixels */
     virtual void init();
 };
 
