@@ -1,3 +1,7 @@
+/**
+  @author Vlad-Adrian Moglan
+  */
+
 #ifndef POINT_XY_MIXED_H
 #define POINT_XY_MIXED_H
 

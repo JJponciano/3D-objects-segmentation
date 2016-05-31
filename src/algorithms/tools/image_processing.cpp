@@ -305,6 +305,66 @@ cv::Mat image_processing::rgb_image_to_mat(image_rgb rgb_img)
     return rgb_mat;
 }
 
+image_greyscale image_processing::mat_to_greyscale_image(cv::Mat gs_mat)
+{
+    image_greyscale gs_img(gs_mat.cols, gs_mat.rows);
+
+    gs_img.init();
+
+    for (size_t y = 0; y < gs_img.height(); y++)
+    {
+        for (size_t x = 0; x < gs_img.width(); x++)
+            gs_img.set_grey_at(y, x, (unsigned short)gs_mat.at<uchar>(y, x));
+    }
+
+    return gs_img;
+}
+
+image_rgb image_processing::mat_to_rgb_image(cv::Mat rgb_mat)
+{
+    /// TO-DO
+    throw std::runtime_error("Not yet implemented.");
+}
+
+image_greyscale image_processing::detect_contours(image_greyscale gs_img, int hist_num_cls)
+{
+    cv::Mat gs_mat; // gs_img as a cv::Mat object
+    int channels[] = {0};
+    cv::Mat hist;   // histogram of gs_mat
+    cv::Mat eq_hist;
+    cv::Mat grad_x, grad_y;
+    cv::Mat abs_grad_x, abs_grad_y;
+    cv::Mat grad;
+    image_greyscale img_cont(gs_img.width(), gs_img.height());   // contours of the parameter image
+
+    gs_mat = image_processing::greyscale_image_to_mat(gs_img);
+    cv::calcHist(&gs_mat, 1, channels, cv::Mat(), hist, 1, &hist_num_cls, 0);
+    cv::equalizeHist(gs_mat, eq_hist);
+    cv::Sobel(gs_mat, grad_x, CV_64F, 1, 0, 3);
+    cv::convertScaleAbs(grad_x, abs_grad_x);
+    cv::Sobel(gs_mat, grad_y, CV_64F, 0, 1, 3);
+    cv::convertScaleAbs(grad_y, abs_grad_y);
+    cv::addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad);
+    img_cont = image_processing::mat_to_greyscale_image(grad);
+
+    return img_cont;
+}
+
+void image_processing::remove_colors(image_mixed &mixed_img, std::vector<uint32_t> colors)
+{
+    for (size_t y = 0; y < mixed_img.height(); y++)
+    {
+        for (size_t x = 0; x < mixed_img.width(); x++)
+        {
+            for (auto color_it = colors.begin(); color_it < colors.end(); color_it++)
+            {
+                if (mixed_img.get_rgb_at(y, x) == (*color_it))
+                    mixed_img.set_rgb_at(y, x, 0);
+            }
+        }
+    }
+}
+
 void image_processing::normalize(image_greyscale *gs_img_ptr)
 {
     if (!gs_img_ptr)

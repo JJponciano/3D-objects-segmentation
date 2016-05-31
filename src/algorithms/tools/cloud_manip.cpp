@@ -68,22 +68,34 @@ void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, 
     }
 }
 
-void cloud_manip::crop_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr,
-                       float x_thresh, float y_thresh, float z_thresh)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr, float x_thresh, float y_thresh,
+        float z_thresh)
 {
-    if (!cloud_ptr)
+    if (!base_cloud_ptr)
         throw invalid_cloud_pointer();
 
-    for (auto cloud_it = cloud_ptr->begin(); cloud_it != cloud_ptr->end();)
-    {
-        if (((std::abs(cloud_it->x) > std::abs(x_thresh)) && (!aux::float_cmp(x_thresh, 0, 0.005)))
-                || ((std::abs(cloud_it->y) > std::abs(y_thresh)) && (!aux::float_cmp(y_thresh, 0, 0.005)))
-                || (std::abs(cloud_it->z) > std::abs(z_thresh) && (!aux::float_cmp(z_thresh, 0, 0.005))))
-            cloud_it = cloud_ptr->erase(cloud_it);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cropped_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
+    bool crop_pt;
 
-        else
-            cloud_it++;
+    for (auto cloud_it = base_cloud_ptr->begin(); cloud_it != base_cloud_ptr->end(); cloud_it++)
+    {
+        crop_pt = false;
+
+        if ((std::abs(cloud_it->x) > std::abs(x_thresh)) && !aux::float_cmp(x_thresh, 0.00, 0.005))
+            crop_pt = true;
+
+        if ((std::abs(cloud_it->y) > std::abs(y_thresh)) && !aux::float_cmp(y_thresh, 0.00, 0.005))
+            crop_pt = true;
+
+        if ((std::abs(cloud_it->z) > std::abs(z_thresh)) && !aux::float_cmp(z_thresh, 0.00, 0.005))
+            crop_pt = true;
+
+        if (!crop_pt)
+            cropped_cloud_ptr->push_back(*cloud_it);
     }
+
+    return cropped_cloud_ptr;
 }
 
 void cloud_manip::homogenize_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, short epsilon)
@@ -167,7 +179,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud_ptr)
 {
-    if (white_cloud_ptr)
+    if (!white_cloud_ptr)
         throw invalid_cloud_pointer();
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgb_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());

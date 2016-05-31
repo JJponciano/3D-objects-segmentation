@@ -1,3 +1,8 @@
+/**
+  @author Vlad-Adrian Moglan
+  @brief contains image in and out functions
+  */
+
 #ifndef IMAGE_IO_H
 #define IMAGE_IO_H
 

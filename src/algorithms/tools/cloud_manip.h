@@ -1,3 +1,9 @@
+/**
+  @author Vlad-Adrian Moglan
+  @author Kevin Naudin
+  @brief contains varied point cloud operations
+  */
+
 #ifndef CLOUD_MANIP_H
 #define CLOUD_MANIP_H
 
@@ -48,13 +54,14 @@ namespace cloud_manip
 
     /**
      * @brief crop_cloud removes the points of which the coordinates are beyond a certain threshold
-     * @param cloud_ptr is a pointer to the point cloud to be treated
+     * @param base_cloud_ptr is a pointer to the point cloud to be treated
      * @param x_thresh is the threshold for the x coordinate
      * @param y_thresh is the threshold for the y coordinate
      * @param z_thresh is the threshold for the z coordinate
      * @throw invalid_cloud_pointer if cloud_ptr is equal to nullptr
+     * @return a pointer to the cropped cloud
      */
-    void crop_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr,
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr crop_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr,
                            float x_thresh, float y_thresh, float z_thresh);
 
     /**

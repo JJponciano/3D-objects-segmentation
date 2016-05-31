@@ -1,3 +1,9 @@
+/**
+  @author Vlad-Adrian Moglan
+  @author Kevin Naudin
+  @brief contains cloud in and out functions
+  */
+
 #ifndef CLOUD_IO_H
 #define CLOUD_IO_H
 

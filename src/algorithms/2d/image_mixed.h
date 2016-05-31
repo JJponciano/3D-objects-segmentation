@@ -1,3 +1,7 @@
+/**
+  @author Vlad-Adrian Moglan
+  */
+
 #ifndef IMAGE_MIXED_H
 #define IMAGE_MIXED_H
 

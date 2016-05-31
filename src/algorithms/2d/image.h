@@ -1,3 +1,8 @@
+/**
+  @author Vlad-Adrian Moglan
+  @brief contains an 'abstract' image class
+  */
+
 #ifndef IMAGE_H
 #define IMAGE_H
 

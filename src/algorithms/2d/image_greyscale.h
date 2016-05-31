@@ -1,3 +1,7 @@
+/**
+  @author Vlad-Adrian Moglan
+  */
+
 #ifndef IMAGE_GREYSCALE_H
 #define IMAGE_GREYSCALE_H
 

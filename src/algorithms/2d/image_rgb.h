@@ -1,3 +1,7 @@
+/**
+  @author Vlad-Adrian Moglan
+  */
+
 #ifndef IMAGE_RGB_H
 #define IMAGE_RGB_H
 

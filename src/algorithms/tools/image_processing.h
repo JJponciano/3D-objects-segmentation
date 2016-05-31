@@ -1,3 +1,9 @@
+/**
+  @author Vlad-Adrian Moglan
+  @brief contains image processing operations
+  @details uses opencv library
+  */
+
 #ifndef IMAGE_PROCESSING_H
 #define IMAGE_PROCESSING_H
 
@@ -18,6 +24,7 @@
 #include <pcl/point_types.h>
 
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 namespace image_processing
 {
@@ -107,6 +114,34 @@ namespace image_processing
      * @return the rgb image as a Mat object
      */
     cv::Mat rgb_image_to_mat(image_rgb rgb_img);
+
+    /**
+     * @brief mat_to_greyscale_image transforms a cv::Mat object into an image_greyscale object
+     * @param gs_mat is the Mat to be transformed
+     * @return an image_greyscale object
+     */
+    image_greyscale mat_to_greyscale_image(cv::Mat gs_mat);
+
+    /**
+     * @brief mat_to_rgb_image transforms a cv::Mat object into an image_rgb object
+     * @param rgb_mat is the Mat to be transformed
+     * @return an image_rgb object
+     */
+    image_rgb mat_to_rgb_image(cv::Mat rgb_mat);
+
+    /**
+     * @brief detect_contour is a function that detects contours in a depth image
+     * @param gs_img is the image to detect the contours of
+     * @return the contours in the depth image
+     */
+    image_greyscale detect_contours(image_greyscale gs_img, int hist_num_cls);
+
+    /**
+     * @brief remove_colors removes the parameter colors from the mixed image
+     * @param mixed_img is a reference the image to be modified
+     * @param colors is the array of colors to be removed
+     */
+    void remove_colors(image_mixed &mixed_img, std::vector<uint32_t> colors);
 
     /**
      * @brief normalize augments the greyscale differences between the pixels of an image
