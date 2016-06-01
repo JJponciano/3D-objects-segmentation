@@ -1,6 +1,6 @@
 #include "image_rgb.h"
 
-image_rgb::image_rgb(size_t width, size_t height) : image(width, height)
+cloud_object_segmentation::image_rgb::image_rgb(size_t width, size_t height) : image(width, height)
 {
     this->_pixels.resize(height);
 
@@ -8,32 +8,32 @@ image_rgb::image_rgb(size_t width, size_t height) : image(width, height)
         this->_pixels[i].resize(width);
 }
 
-uint32_t image_rgb::get_rgb_at(size_t y, size_t x) const
+uint32_t cloud_object_segmentation::image_rgb::get_rgb_at(size_t y, size_t x) const
 {
     return this->_pixels[y][x];
 }
 
-void image_rgb::set_rgb_at(size_t y, size_t x, uint32_t rgb)
+void cloud_object_segmentation::image_rgb::set_rgb_at(size_t y, size_t x, uint32_t rgb)
 {
     this->_pixels[y][x] = rgb;
 }
 
-uint8_t image_rgb::get_red_at(size_t y, size_t x) const
+uint8_t cloud_object_segmentation::image_rgb::get_red_at(size_t y, size_t x) const
 {
     return (this->_pixels[y][x] >> 16) & 0x0000ff;
 }
 
-uint8_t image_rgb::get_green_at(size_t y, size_t x) const
+uint8_t cloud_object_segmentation::image_rgb::get_green_at(size_t y, size_t x) const
 {
     return (this->_pixels[y][x] >> 8) & 0x0000ff;
 }
 
-uint8_t image_rgb::get_blue_at(size_t y, size_t x) const
+uint8_t cloud_object_segmentation::image_rgb::get_blue_at(size_t y, size_t x) const
 {
     return (this->_pixels[y][x]) & 0x0000ff;
 }
 
-void image_rgb::init()
+void cloud_object_segmentation::image_rgb::init()
 {
     for (size_t y = 0; y < this->height(); y++)
     {

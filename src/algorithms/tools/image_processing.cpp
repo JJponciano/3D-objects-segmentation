@@ -1,6 +1,7 @@
 #include "image_processing.h"
 
-std::vector<float> image_processing::greyscale_vector_x_coords(std::vector<point_xy_greyscale> greyscale_vector)
+std::vector<float> cloud_object_segmentation::image_processing::greyscale_vector_x_coords(
+        std::vector<cloud_object_segmentation::point_xy_greyscale> greyscale_vector)
 {
     std::vector<float> x_coords;
 
@@ -10,7 +11,8 @@ std::vector<float> image_processing::greyscale_vector_x_coords(std::vector<point
     return x_coords;
 }
 
-std::vector<float> image_processing::greyscale_vector_y_coords(std::vector<point_xy_greyscale> greyscale_vector)
+std::vector<float> cloud_object_segmentation::image_processing::greyscale_vector_y_coords(
+        std::vector<cloud_object_segmentation::point_xy_greyscale> greyscale_vector)
 {
     std::vector<float> y_coords;
 
@@ -20,7 +22,8 @@ std::vector<float> image_processing::greyscale_vector_y_coords(std::vector<point
     return y_coords;
 }
 
-std::vector<float> image_processing::rgb_vector_x_coords(std::vector<point_xy_rgb> rgb_vector)
+std::vector<float> cloud_object_segmentation::image_processing::rgb_vector_x_coords(
+        std::vector<cloud_object_segmentation::point_xy_rgb> rgb_vector)
 {
     std::vector<float> x_coords;
 
@@ -30,7 +33,8 @@ std::vector<float> image_processing::rgb_vector_x_coords(std::vector<point_xy_rg
     return x_coords;
 }
 
-std::vector<float> image_processing::rgb_vector_y_coords(std::vector<point_xy_rgb> rgb_vector)
+std::vector<float> cloud_object_segmentation::image_processing::rgb_vector_y_coords(
+        std::vector<cloud_object_segmentation::point_xy_rgb> rgb_vector)
 {
     std::vector<float> y_coords;
 
@@ -40,7 +44,8 @@ std::vector<float> image_processing::rgb_vector_y_coords(std::vector<point_xy_rg
     return y_coords;
 }
 
-std::vector<float> image_processing::mixed_vector_x_coords(std::vector<point_xy_mixed> mixed_vector)
+std::vector<float> cloud_object_segmentation::image_processing::mixed_vector_x_coords(
+        std::vector<cloud_object_segmentation::point_xy_mixed> mixed_vector)
 {
     std::vector<float> x_coords;
 
@@ -50,7 +55,8 @@ std::vector<float> image_processing::mixed_vector_x_coords(std::vector<point_xy_
     return x_coords;
 }
 
-std::vector<float> image_processing::mixed_vector_y_coords(std::vector<point_xy_mixed> mixed_vector)
+std::vector<float> cloud_object_segmentation::image_processing::mixed_vector_y_coords(
+        std::vector<cloud_object_segmentation::point_xy_mixed> mixed_vector)
 {
     std::vector<float> y_coords;
 
@@ -60,7 +66,8 @@ std::vector<float> image_processing::mixed_vector_y_coords(std::vector<point_xy_
     return y_coords;
 }
 
-std::vector<unsigned short> image_processing::greyscale_image_values(image_greyscale gs_img)
+std::vector<unsigned short> cloud_object_segmentation::image_processing::greyscale_image_values(
+        cloud_object_segmentation::image_greyscale gs_img)
 {
     std::vector<unsigned short> greyscale_values;
 
@@ -73,13 +80,14 @@ std::vector<unsigned short> image_processing::greyscale_image_values(image_greys
     return greyscale_values;
 }
 
-image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy_greyscale> greyscale_vector, float x_epsilon)
+cloud_object_segmentation::image_greyscale cloud_object_segmentation::image_processing::greyscale_vector_to_image(
+        std::vector<cloud_object_segmentation::point_xy_greyscale> greyscale_vector, float x_epsilon)
 {
-    if (aux::float_cmp(x_epsilon, 0.000, 0.0050) || x_epsilon < 0)
+    if (cloud_object_segmentation::aux::float_cmp(x_epsilon, 0.000, 0.0050) || x_epsilon < 0)
         throw std::logic_error("x_epsilon must be bigger than 0.");
 
-    std::vector<float> x_coords = image_processing::greyscale_vector_x_coords(greyscale_vector);
-    std::vector<float> y_coords = image_processing::greyscale_vector_y_coords(greyscale_vector);
+    std::vector<float> x_coords = cloud_object_segmentation::image_processing::greyscale_vector_x_coords(greyscale_vector);
+    std::vector<float> y_coords = cloud_object_segmentation::image_processing::greyscale_vector_y_coords(greyscale_vector);
     float x_min = *(std::min_element(x_coords.begin(), x_coords.end()));
     float y_min = *(std::min_element(y_coords.begin(), y_coords.end()));
     float y_max = *(std::max_element(y_coords.begin(), y_coords.end()));
@@ -95,7 +103,7 @@ image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy
             width = point_x_cell + 1;
     }
 
-    image_greyscale gs_img(width, height);
+    cloud_object_segmentation::image_greyscale gs_img(width, height);
 
     gs_img.init();
 
@@ -117,15 +125,16 @@ image_greyscale image_processing::greyscale_vector_to_image(std::vector<point_xy
     return gs_img;
 }
 
-image_mixed image_processing::mixed_vector_to_image(std::vector<point_xy_mixed> mixed_vector, float x_epsilon)
+cloud_object_segmentation::image_mixed cloud_object_segmentation::image_processing::mixed_vector_to_image(
+        std::vector<cloud_object_segmentation::point_xy_mixed> mixed_vector, float x_epsilon)
 {
-    if (aux::float_cmp(x_epsilon, 0.000, 0.005) || x_epsilon < 0)
+    if (cloud_object_segmentation::aux::float_cmp(x_epsilon, 0.000, 0.005) || x_epsilon < 0)
     {
         throw std::logic_error("x_epsilon must be bigger than 0.");
     }
 
-    std::vector<float> x_coords = image_processing::mixed_vector_x_coords(mixed_vector);
-    std::vector<float> y_coords = image_processing::mixed_vector_y_coords(mixed_vector);
+    std::vector<float> x_coords = cloud_object_segmentation::image_processing::mixed_vector_x_coords(mixed_vector);
+    std::vector<float> y_coords = cloud_object_segmentation::image_processing::mixed_vector_y_coords(mixed_vector);
     float x_min = *(std::min_element(x_coords.begin(), x_coords.end()));
     float y_min = *(std::min_element(y_coords.begin(), y_coords.end()));
     float y_max = *(std::max_element(y_coords.begin(), y_coords.end()));
@@ -143,7 +152,7 @@ image_mixed image_processing::mixed_vector_to_image(std::vector<point_xy_mixed> 
             width = point_x_cell + 1;
     }
 
-    image_mixed mixed_img(width, height);
+    cloud_object_segmentation::image_mixed mixed_img(width, height);
 
     mixed_img.init();
 
@@ -169,9 +178,10 @@ image_mixed image_processing::mixed_vector_to_image(std::vector<point_xy_mixed> 
     return mixed_img;
 }
 
-image_rgb image_processing::mixed_image_to_rgb(image_mixed mixed_img)
+cloud_object_segmentation::image_rgb cloud_object_segmentation::image_processing::mixed_image_to_rgb(
+        cloud_object_segmentation::image_mixed mixed_img)
 {
-    image_rgb rgb_img(mixed_img.width(), mixed_img.height());
+    cloud_object_segmentation::image_rgb rgb_img(mixed_img.width(), mixed_img.height());
 
     for (size_t y = 0; y < mixed_img.height(); y++)
     {
@@ -182,9 +192,10 @@ image_rgb image_processing::mixed_image_to_rgb(image_mixed mixed_img)
     return rgb_img;
 }
 
-image_greyscale image_processing::mixed_image_to_greyscale(image_mixed mixed_img)
+cloud_object_segmentation::image_greyscale cloud_object_segmentation::image_processing::mixed_image_to_greyscale(
+        cloud_object_segmentation::image_mixed mixed_img)
 {
-    image_greyscale gs_img(mixed_img.width(), mixed_img.height());
+    cloud_object_segmentation::image_greyscale gs_img(mixed_img.width(), mixed_img.height());
 
     for (size_t y = 0; y < mixed_img.height(); y++)
     {
@@ -195,16 +206,17 @@ image_greyscale image_processing::mixed_image_to_greyscale(image_mixed mixed_img
     return gs_img;
 }
 
-pcl::PointCloud<pcl::PointXYZ>::Ptr image_processing::greyscale_image_to_cloud(image_greyscale gs_img,
-                                                 pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr)
+pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_object_segmentation::image_processing::greyscale_image_to_cloud(
+        cloud_object_segmentation::image_greyscale gs_img,
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr)
 {
     if (!base_cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr res_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
-    std::vector<float> x_coords = cloud_manip::cloud_x_coords(base_cloud_ptr);
-    std::vector<float> y_coords = cloud_manip::cloud_y_coords(base_cloud_ptr);
-    std::vector<float> z_coords = cloud_manip::cloud_z_coords(base_cloud_ptr);
+    std::vector<float> x_coords = cloud_object_segmentation::cloud_manip::cloud_x_coords(base_cloud_ptr);
+    std::vector<float> y_coords = cloud_object_segmentation::cloud_manip::cloud_y_coords(base_cloud_ptr);
+    std::vector<float> z_coords = cloud_object_segmentation::cloud_manip::cloud_z_coords(base_cloud_ptr);
     float x_min = *(std::min_element(x_coords.begin(), x_coords.end()));
     float x_max = *(std::max_element(x_coords.begin(), x_coords.end()));
     float y_min = *(std::min_element(y_coords.begin(), y_coords.end()));
@@ -215,12 +227,13 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr image_processing::greyscale_image_to_cloud(i
     for (size_t y = 0; y < gs_img.height(); y++)
     {
         pcl::PointXYZ current_point;
-        float cloud_y = aux::map(y, 0, gs_img.height() - 1, y_min, y_max);
+        float cloud_y = cloud_object_segmentation::aux::map(y, 0, gs_img.height() - 1, y_min, y_max);
 
         for (size_t x = 0; x < gs_img.width(); x++)
         {
-            float cloud_x = aux::map(x, 0, gs_img.width() - 1, x_min, x_max);
-            float cloud_z = aux::map(gs_img.get_grey_at(y, x), 0, 255, z_min, z_max);
+            float cloud_x = cloud_object_segmentation::aux::map(x, 0, gs_img.width() - 1, x_min, x_max);
+            float cloud_z = cloud_object_segmentation::aux::map(gs_img.get_grey_at(y, x), 0, 255,
+                                                                z_min, z_max);
 
             current_point.x = cloud_x;
             current_point.y = cloud_y;
@@ -232,17 +245,18 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr image_processing::greyscale_image_to_cloud(i
     return res_cloud_ptr;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr image_processing::mixed_image_to_cloud(image_mixed mixed_img,
-                                                            pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::image_processing::mixed_image_to_cloud(
+        cloud_object_segmentation::image_mixed mixed_img,
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr)
 {
     if (!base_cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr res_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    std::vector<float> x_coords = cloud_manip::cloud_x_coords(base_cloud_ptr);
-    std::vector<float> y_coords = cloud_manip::cloud_y_coords(base_cloud_ptr);
-    std::vector<float> z_coords = cloud_manip::cloud_z_coords(base_cloud_ptr);
+    std::vector<float> x_coords = cloud_object_segmentation::cloud_manip::cloud_x_coords(base_cloud_ptr);
+    std::vector<float> y_coords = cloud_object_segmentation::cloud_manip::cloud_y_coords(base_cloud_ptr);
+    std::vector<float> z_coords = cloud_object_segmentation::cloud_manip::cloud_z_coords(base_cloud_ptr);
 
     // min and max coordinates for the map function
     float x_min = *(std::min_element(x_coords.begin(), x_coords.end()));
@@ -255,12 +269,12 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr image_processing::mixed_image_to_cloud(im
     for (size_t y = 0; y < mixed_img.height(); y++)
     {
         pcl::PointXYZRGB current_point;
-        float cloud_y = aux::map(y, 0, mixed_img.height() - 1, y_min, y_max);
+        float cloud_y = cloud_object_segmentation::aux::map(y, 0, mixed_img.height() - 1, y_min, y_max);
 
         for (size_t x = 0; x < mixed_img.width(); x++)
         {
-            float cloud_x = aux::map(x, 0, mixed_img.width() - 1, x_min, x_max);
-            float cloud_z = aux::map(mixed_img.get_grey_at(y, x), 0, 255, z_min, z_max);
+            float cloud_x = cloud_object_segmentation::aux::map(x, 0, mixed_img.width() - 1, x_min, x_max);
+            float cloud_z = cloud_object_segmentation::aux::map(mixed_img.get_grey_at(y, x), 0, 255, z_min, z_max);
 
             current_point.x = cloud_x;
             current_point.y = cloud_y;
@@ -275,7 +289,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr image_processing::mixed_image_to_cloud(im
     return res_cloud_ptr;
 }
 
-cv::Mat image_processing::greyscale_image_to_mat(image_greyscale gs_img)
+cv::Mat cloud_object_segmentation::image_processing::greyscale_image_to_mat(cloud_object_segmentation::image_greyscale gs_img)
 {
     cv::Mat greyscale_mat(gs_img.height(), gs_img.width(), CV_8UC1);
 
@@ -288,7 +302,7 @@ cv::Mat image_processing::greyscale_image_to_mat(image_greyscale gs_img)
     return greyscale_mat;
 }
 
-cv::Mat image_processing::rgb_image_to_mat(image_rgb rgb_img)
+cv::Mat cloud_object_segmentation::image_processing::rgb_image_to_mat(cloud_object_segmentation::image_rgb rgb_img)
 {
     cv::Mat rgb_mat(rgb_img.height(), rgb_img.width(), CV_8UC3);
 
@@ -305,9 +319,9 @@ cv::Mat image_processing::rgb_image_to_mat(image_rgb rgb_img)
     return rgb_mat;
 }
 
-image_greyscale image_processing::mat_to_greyscale_image(cv::Mat gs_mat)
+cloud_object_segmentation::image_greyscale cloud_object_segmentation::image_processing::mat_to_greyscale_image(cv::Mat gs_mat)
 {
-    image_greyscale gs_img(gs_mat.cols, gs_mat.rows);
+    cloud_object_segmentation::image_greyscale gs_img(gs_mat.cols, gs_mat.rows);
 
     gs_img.init();
 
@@ -320,13 +334,14 @@ image_greyscale image_processing::mat_to_greyscale_image(cv::Mat gs_mat)
     return gs_img;
 }
 
-image_rgb image_processing::mat_to_rgb_image(cv::Mat rgb_mat)
+cloud_object_segmentation::image_rgb cloud_object_segmentation::image_processing::mat_to_rgb_image(cv::Mat rgb_mat)
 {
     /// TO-DO
     throw std::runtime_error("Not yet implemented.");
 }
 
-image_greyscale image_processing::detect_contours(image_greyscale gs_img, int hist_num_cls)
+cloud_object_segmentation::image_greyscale cloud_object_segmentation::image_processing::detect_contours(
+        cloud_object_segmentation::image_greyscale gs_img, int hist_num_cls)
 {
     cv::Mat gs_mat; // gs_img as a cv::Mat object
     int channels[] = {0};
@@ -335,9 +350,9 @@ image_greyscale image_processing::detect_contours(image_greyscale gs_img, int hi
     cv::Mat grad_x, grad_y;
     cv::Mat abs_grad_x, abs_grad_y;
     cv::Mat grad;
-    image_greyscale img_cont(gs_img.width(), gs_img.height());   // contours of the parameter image
+    cloud_object_segmentation::image_greyscale img_cont(gs_img.width(), gs_img.height());   // contours of the parameter image
 
-    gs_mat = image_processing::greyscale_image_to_mat(gs_img);
+    gs_mat = cloud_object_segmentation::image_processing::greyscale_image_to_mat(gs_img);
     cv::calcHist(&gs_mat, 1, channels, cv::Mat(), hist, 1, &hist_num_cls, 0);
     cv::equalizeHist(gs_mat, eq_hist);
     cv::Sobel(gs_mat, grad_x, CV_64F, 1, 0, 3);
@@ -345,12 +360,13 @@ image_greyscale image_processing::detect_contours(image_greyscale gs_img, int hi
     cv::Sobel(gs_mat, grad_y, CV_64F, 0, 1, 3);
     cv::convertScaleAbs(grad_y, abs_grad_y);
     cv::addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad);
-    img_cont = image_processing::mat_to_greyscale_image(grad);
+    img_cont = cloud_object_segmentation::image_processing::mat_to_greyscale_image(grad);
 
     return img_cont;
 }
 
-void image_processing::remove_colors(image_mixed &mixed_img, std::vector<uint32_t> colors)
+void cloud_object_segmentation::image_processing::remove_colors(cloud_object_segmentation::image_mixed &mixed_img,
+                                     std::vector<uint32_t> colors)
 {
     for (size_t y = 0; y < mixed_img.height(); y++)
     {
@@ -365,12 +381,12 @@ void image_processing::remove_colors(image_mixed &mixed_img, std::vector<uint32_
     }
 }
 
-void image_processing::normalize(image_greyscale *gs_img_ptr)
+void cloud_object_segmentation::image_processing::normalize(cloud_object_segmentation::image_greyscale *gs_img_ptr)
 {
     if (!gs_img_ptr)
         throw std::invalid_argument("Invalid grey scale image pointer parameter.");
 
-    std::vector<unsigned short> greyscale_values = image_processing::greyscale_image_values(*gs_img_ptr);
+    std::vector<unsigned short> greyscale_values = cloud_object_segmentation::image_processing::greyscale_image_values(*gs_img_ptr);
     unsigned short min_gs_val = *(std::min_element(greyscale_values.begin(), greyscale_values.end()));
     unsigned short max_gs_val = *(std::max_element(greyscale_values.begin(), greyscale_values.end()));
 

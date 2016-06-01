@@ -1,6 +1,6 @@
 #include "image_greyscale.h"
 
-image_greyscale::image_greyscale(size_t width, size_t height) : image(width, height)
+cloud_object_segmentation::image_greyscale::image_greyscale(size_t width, size_t height) : image(width, height)
 {
     _pixels.resize(height);
 
@@ -8,17 +8,17 @@ image_greyscale::image_greyscale(size_t width, size_t height) : image(width, hei
         _pixels[i].resize(width);
 }
 
-unsigned short image_greyscale::get_grey_at(size_t y, size_t x) const
+unsigned short cloud_object_segmentation::image_greyscale::get_grey_at(size_t y, size_t x) const
 {
     return this->_pixels[y][x];
 }
 
-void image_greyscale::set_grey_at(size_t y, size_t x, unsigned short grey)
+void cloud_object_segmentation::image_greyscale::set_grey_at(size_t y, size_t x, unsigned short grey)
 {
     this->_pixels[y][x] = grey;
 }
 
-void image_greyscale::init()
+void cloud_object_segmentation::image_greyscale::init()
 {
     for (size_t y = 0; y < this->height(); y++)
     {

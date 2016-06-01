@@ -1,9 +1,9 @@
 #include "image_io.h"
 
-image_greyscale image_io::import_greyscale_image(std::string path)
+cloud_object_segmentation::image_greyscale cloud_object_segmentation::io::import_greyscale_image(std::string path)
 {
     // result
-    image_greyscale *gs_img;
+    cloud_object_segmentation::image_greyscale *gs_img;
     unsigned long height;
     unsigned long width;
     unsigned long y = 0;
@@ -16,7 +16,7 @@ image_greyscale image_io::import_greyscale_image(std::string path)
     image_file.open(path, std::ios::in);
 
     if (!image_file.is_open())
-        throw invalid_path();
+        throw cloud_object_segmentation::except::invalid_path();
 
     while (std::getline(image_file, line))
     {
@@ -31,7 +31,7 @@ image_greyscale image_io::import_greyscale_image(std::string path)
             if (line_count == 2)
             {
                 iss >> width >> height;
-                gs_img = new image_greyscale(width, height);
+                gs_img = new cloud_object_segmentation::image_greyscale(width, height);
             }
 
             // line 3 is the maximum value of grey in the file and it is followed by the points
@@ -54,7 +54,8 @@ image_greyscale image_io::import_greyscale_image(std::string path)
     return *gs_img;
 }
 
-void image_io::export_greyscale_image(std::string path, unsigned short max_grey_value, image_greyscale gs_img)
+void cloud_object_segmentation::io::export_greyscale_image(std::string path, unsigned short max_grey_value,
+                                                           cloud_object_segmentation::image_greyscale gs_img)
 {
     if (gs_img.width() == 0 || gs_img.height() == 0)
         throw std::logic_error("Invalid grey scale image.");
@@ -70,7 +71,7 @@ void image_io::export_greyscale_image(std::string path, unsigned short max_grey_
     image_file.open(path, std::ios::out);
 
     if (!image_file.is_open())
-        throw invalid_path();
+        throw cloud_object_segmentation::except::invalid_path();
 
     // writing data to file
     line = magic_number;
@@ -96,10 +97,10 @@ void image_io::export_greyscale_image(std::string path, unsigned short max_grey_
     }
 }
 
-image_rgb image_io::import_rgb_image(std::string path)
+cloud_object_segmentation::image_rgb cloud_object_segmentation::io::import_rgb_image(std::string path)
 {
     // result
-    image_rgb *rgb_img;
+    cloud_object_segmentation::image_rgb *rgb_img;
     unsigned long height;
     unsigned long width;
     unsigned long y = 0;
@@ -112,7 +113,7 @@ image_rgb image_io::import_rgb_image(std::string path)
     image_file.open(path, std::ios::in);
 
     if (!image_file.is_open())
-        throw invalid_path();
+        throw cloud_object_segmentation::except::invalid_path();
 
     // writing data to file
     while (std::getline(image_file, line))
@@ -128,7 +129,7 @@ image_rgb image_io::import_rgb_image(std::string path)
             if (line_count == 2)
             {
                 iss >> width >> height;
-                rgb_img = new image_rgb(width, height);
+                rgb_img = new cloud_object_segmentation::image_rgb(width, height);
             }
 
             // line 3 is the maximum value of grey in the file and it is followed by the points
@@ -155,7 +156,7 @@ image_rgb image_io::import_rgb_image(std::string path)
     return *rgb_img;
 }
 
-void image_io::export_rgb_image(std::string path, unsigned int max_rgb_value, image_rgb rgb_img)
+void cloud_object_segmentation::io::export_rgb_image(std::string path, unsigned int max_rgb_value, cloud_object_segmentation::image_rgb rgb_img)
 {
     // empty image
     if (rgb_img.width() == 0 || rgb_img.height() == 0)
@@ -172,7 +173,7 @@ void image_io::export_rgb_image(std::string path, unsigned int max_rgb_value, im
     image_file.open(path, std::ios::out);
 
     if (!image_file.is_open())
-        throw invalid_path();
+        throw cloud_object_segmentation::except::invalid_path();
 
     // writing data to file
     line = magic_number;

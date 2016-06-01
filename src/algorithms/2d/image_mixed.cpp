@@ -1,6 +1,8 @@
 #include "image_mixed.h"
 
-image_mixed::image_mixed(size_t width, size_t height) : image(width, height)
+using namespace cloud_object_segmentation;
+
+cloud_object_segmentation::image_mixed::image_mixed(size_t width, size_t height) : image(width, height)
 {
     _pixels.resize(height);
 
@@ -14,42 +16,42 @@ image_mixed::image_mixed(size_t width, size_t height) : image(width, height)
     }
 }
 
-unsigned short image_mixed::get_grey_at(size_t y, size_t x) const
+unsigned short cloud_object_segmentation::image_mixed::get_grey_at(size_t y, size_t x) const
 {
     return this->_pixels[y][x]->first;
 }
 
-uint32_t image_mixed::get_rgb_at(size_t y, size_t x) const
+uint32_t cloud_object_segmentation::image_mixed::get_rgb_at(size_t y, size_t x) const
 {
     return this->_pixels[y][x]->second;
 }
 
-uint8_t image_mixed::get_red_at(size_t y, size_t x) const
+uint8_t cloud_object_segmentation::image_mixed::get_red_at(size_t y, size_t x) const
 {
    return (this->_pixels[y][x]->second >> 16) & 0x0000ff;
 }
 
-uint8_t image_mixed::get_green_at(size_t y, size_t x) const
+uint8_t cloud_object_segmentation::image_mixed::get_green_at(size_t y, size_t x) const
 {
     return (this->_pixels[y][x]->second >> 8) & 0x0000ff;
 }
 
-uint8_t image_mixed::get_blue_at(size_t y, size_t x) const
+uint8_t cloud_object_segmentation::image_mixed::get_blue_at(size_t y, size_t x) const
 {
     return (this->_pixels[y][x]->second) & 0x0000ff;
 }
 
-void image_mixed::set_grey_at(size_t y, size_t x, unsigned short grey)
+void cloud_object_segmentation::image_mixed::set_grey_at(size_t y, size_t x, unsigned short grey)
 {
     this->_pixels[y][x]->first = grey;
 }
 
-void image_mixed::set_rgb_at(size_t y, size_t x, uint32_t rgb)
+void cloud_object_segmentation::image_mixed::set_rgb_at(size_t y, size_t x, uint32_t rgb)
 {
     this->_pixels[y][x]->second = rgb;
 }
 
-void image_mixed::init()
+void cloud_object_segmentation::image_mixed::init()
 {
     for (size_t y = 0; y < this->height(); y++)
     {

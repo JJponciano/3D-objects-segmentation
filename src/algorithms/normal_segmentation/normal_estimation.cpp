@@ -1,15 +1,15 @@
 #include "normal_estimation.h"
 
-void normal_segmentation::estimate_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr,
-                                            float radius, int max_neighbs)
+void cloud_object_segmentation::normal_segmentation::estimate_normals(
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float radius, int max_neighbs)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
-    if (aux::float_cmp(radius, 0.00, 0.005))
+    if (cloud_object_segmentation::aux::float_cmp(radius, 0.00, 0.005))
         throw std::logic_error("Invalid radius value.");
 
-    if (aux::float_cmp(max_neighbs, 0.00, 0.005))
+    if (cloud_object_segmentation::aux::float_cmp(max_neighbs, 0.00, 0.005))
         throw std::logic_error("Invalid max neighbours value.");
 
     pcl::KdTreeFLANN<pcl::PointXYZRGB> kdt; // kd-tree used for finding neighbours
@@ -24,27 +24,27 @@ void normal_segmentation::estimate_normals(pcl::PointCloud<pcl::PointXYZRGB>::Pt
         // if there are neighbours left
         if (kdt.radiusSearch(*cloud_it, radius, pt_ids, pt_sq_dist, max_neighbs) > 0)
         {
-            std::vector<aux::vector3> vects_to_avg; // vect_or average used for estimating normal;
+            std::vector<cloud_object_segmentation::aux::vector3> vects_to_avg; // vect_or average used for estimating normal;
 
             for (size_t pt_index = 0; pt_index < (pt_ids.size() - 1); pt_index++)
             {
-                aux::vector3 vect_1 = aux::vect_2pts(*cloud_it,
+                cloud_object_segmentation::aux::vector3 vect_1 = cloud_object_segmentation::aux::vect_2pts(*cloud_it,
                                                      cloud_ptr->points[pt_ids[pt_index + 1]]);
-                aux::vector3 vect_2;
+                cloud_object_segmentation::aux::vector3 vect_2;
 
                 // defining the second vect_or; making sure there is no 'out of bounds' error
                 if (pt_index == pt_ids.size() - 2)
-                    vect_2 = aux::vect_2pts(*cloud_it, cloud_ptr->points[pt_ids[1]]);
+                    vect_2 = cloud_object_segmentation::aux::vect_2pts(*cloud_it, cloud_ptr->points[pt_ids[1]]);
 
                 else
-                    vect_2 = aux::vect_2pts(*cloud_it, cloud_ptr->points[pt_ids[pt_index + 2]]);
+                    vect_2 = cloud_object_segmentation::aux::vect_2pts(*cloud_it, cloud_ptr->points[pt_ids[pt_index + 2]]);
 
-                vects_to_avg.push_back(aux::vector_abs(aux::cross_product(vect_1, vect_2)));
+                vects_to_avg.push_back(cloud_object_segmentation::aux::vector_abs(cloud_object_segmentation::aux::cross_product(vect_1, vect_2)));
             }
 
             // calculating the normal and coloring the point based on its coordinates
-            aux::vector3 normal = aux::normalize_normal(aux::vector_avg(vects_to_avg));
-            aux::normal_to_rgb(&(*cloud_it), normal);
+            cloud_object_segmentation::aux::vector3 normal = cloud_object_segmentation::aux::normalize_normal(cloud_object_segmentation::aux::vector_avg(vects_to_avg));
+            cloud_object_segmentation::aux::normal_to_rgb(&(*cloud_it), normal);
 
             vects_to_avg.clear();
             vects_to_avg.shrink_to_fit();
@@ -57,10 +57,11 @@ void normal_segmentation::estimate_normals(pcl::PointCloud<pcl::PointXYZRGB>::Pt
     }
 }
 
-void normal_segmentation::estimate_normals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
+void cloud_object_segmentation::normal_segmentation::estimate_normals(
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
       if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
       // Create the normal estimation class, and pass the input dataset to it
       pcl::NormalEstimation<pcl::PointXYZRGB, pcl::Normal> ne;

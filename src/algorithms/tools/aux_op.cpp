@@ -1,19 +1,19 @@
-#include "aux.h"
+#include "aux_op.h"
 
-float aux::set_precision(float float_num, float precision)
+float cloud_object_segmentation::aux::set_precision(float float_num, float precision)
 {
-    if (aux::float_cmp(precision, 0.0, 0.005) || precision < 0 || ((int)precision % 10 != 0))
+    if (cloud_object_segmentation::aux::float_cmp(precision, 0.0, 0.005) || precision < 0 || ((int)precision % 10 != 0))
         throw std::logic_error("Precision cannot be 0, negative and has to be a multiple of 10.");
 
     return ((float)(int)(float_num * precision)) / precision;
 }
 
-float aux::map(float x, float in_min, float in_max, float out_min, float out_max)
+float cloud_object_segmentation::aux::map(float x, float in_min, float in_max, float out_min, float out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-float aux::float_avg(std::vector<float> floats)
+float cloud_object_segmentation::aux::float_avg(std::vector<float> floats)
 {
     float sum = 0;
     float float_avg = 0;
@@ -27,7 +27,7 @@ float aux::float_avg(std::vector<float> floats)
     return float_avg;
 }
 
-bool aux::float_cmp(float float_1, float float_2, float precision)
+bool cloud_object_segmentation::aux::float_cmp(float float_1, float float_2, float precision)
 {
     if (precision == 0)
         throw std::logic_error("Float comparison precision cannot be 0.");
@@ -39,7 +39,7 @@ bool aux::float_cmp(float float_1, float float_2, float precision)
         return false;
 }
 
-std::vector<float> aux::spherical_coords(aux::vector3 vect)
+std::vector<float> cloud_object_segmentation::aux::spherical_coords(cloud_object_segmentation::aux::vector3 vect)
 {
     // cartesian coordinates
     float x, y, z;
@@ -65,7 +65,7 @@ std::vector<float> aux::spherical_coords(aux::vector3 vect)
     return spherical_coords;
 }
 
-bool aux::coord_cmp(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
+bool cloud_object_segmentation::aux::coord_cmp(std::vector<float> coords_1, std::vector<float> coords_2, float precision)
 {
     if (precision == 0)
         throw std::logic_error("Angle comparison precision cannot be 0.");
@@ -82,9 +82,9 @@ bool aux::coord_cmp(std::vector<float> coords_1, std::vector<float> coords_2, fl
     return true;
 }
 
-aux::vector3 aux::vect_2pts(pcl::PointXYZRGB pt_1, pcl::PointXYZRGB pt_2)
+cloud_object_segmentation::aux::vector3 cloud_object_segmentation::aux::vect_2pts(pcl::PointXYZRGB pt_1, pcl::PointXYZRGB pt_2)
 {
-    aux::vector3 res_vect;
+    cloud_object_segmentation::aux::vector3 res_vect;
 
     res_vect.x(pt_1.x - pt_2.x);
     res_vect.y(pt_1.y - pt_2.y);
@@ -93,9 +93,9 @@ aux::vector3 aux::vect_2pts(pcl::PointXYZRGB pt_1, pcl::PointXYZRGB pt_2)
     return res_vect;
 }
 
-aux::vector3 aux::cross_product(aux::vector3 vect_1, aux::vector3 vect_2)
+cloud_object_segmentation::aux::vector3 cloud_object_segmentation::aux::cross_product(cloud_object_segmentation::aux::vector3 vect_1, cloud_object_segmentation::aux::vector3 vect_2)
 {
-    aux::vector3 cross_product;
+    cloud_object_segmentation::aux::vector3 cross_product;
 
     cross_product.x((vect_1.y() * vect_2.z()) - (vect_1.z() * vect_2.y()));
     cross_product.y((vect_1.z() * vect_2.x()) - (vect_1.x() * vect_2.z()));
@@ -104,9 +104,9 @@ aux::vector3 aux::cross_product(aux::vector3 vect_1, aux::vector3 vect_2)
     return cross_product;
 }
 
-aux::vector3 aux::inverse(aux::vector3 vect1)
+cloud_object_segmentation::aux::vector3 cloud_object_segmentation::aux::inverse(cloud_object_segmentation::aux::vector3 vect1)
 {
-    aux::vector3 inversed_vect;
+    cloud_object_segmentation::aux::vector3 inversed_vect;
 
     inversed_vect.x(-vect1.x());
     inversed_vect.y(-vect1.y());
@@ -115,9 +115,9 @@ aux::vector3 aux::inverse(aux::vector3 vect1)
     return inversed_vect;
 }
 
-aux::vector3 aux::translate_origin(float x_1, float y_1, float z_1, float x_2, float y_2, float z_2)
+cloud_object_segmentation::aux::vector3 cloud_object_segmentation::aux::translate_origin(float x_1, float y_1, float z_1, float x_2, float y_2, float z_2)
 {
-    aux::vector3 translated_vect;
+    cloud_object_segmentation::aux::vector3 translated_vect;
 
     translated_vect.x(x_2 - x_1);
     translated_vect.y(y_2 - y_1);
@@ -126,9 +126,9 @@ aux::vector3 aux::translate_origin(float x_1, float y_1, float z_1, float x_2, f
     return translated_vect;
 }
 
-aux::vector3 aux::vector_avg(std::vector<aux::vector3> vectors)
+cloud_object_segmentation::aux::vector3 cloud_object_segmentation::aux::vector_avg(std::vector<cloud_object_segmentation::aux::vector3> vectors)
 {
-    aux::vector3 vect_avg;
+    cloud_object_segmentation::aux::vector3 vect_avg;
     float avg_x, avg_y, avg_z;
 
     avg_x = avg_y = avg_z = 0;
@@ -154,9 +154,9 @@ aux::vector3 aux::vector_avg(std::vector<aux::vector3> vectors)
     return vect_avg;
 }
 
-aux::vector3 aux::vector_abs(aux::vector3 vect)
+cloud_object_segmentation::aux::vector3 cloud_object_segmentation::aux::vector_abs(cloud_object_segmentation::aux::vector3 vect)
 {
-    aux::vector3 abs_vector;
+    cloud_object_segmentation::aux::vector3 abs_vector;
 
     abs_vector.x(std::abs(vect.x()));
     abs_vector.y(std::abs(vect.y()));
@@ -165,9 +165,9 @@ aux::vector3 aux::vector_abs(aux::vector3 vect)
     return abs_vector;
 }
 
-aux::vector3 aux::normalize_normal(aux::vector3 normal)
+cloud_object_segmentation::aux::vector3 cloud_object_segmentation::aux::normalize_normal(cloud_object_segmentation::aux::vector3 normal)
 {
-    aux::vector3 normalized_normal;
+    cloud_object_segmentation::aux::vector3 normalized_normal;
     float length;
 
     if (normal.magnitude() == 0.0f)
@@ -183,7 +183,7 @@ aux::vector3 aux::normalize_normal(aux::vector3 normal)
     return normalized_normal;
 }
 
-void aux::normal_to_rgb(pcl::PointXYZRGB *pt_ptr, aux::vector3 normal)
+void cloud_object_segmentation::aux::normal_to_rgb(pcl::PointXYZRGB *pt_ptr, cloud_object_segmentation::aux::vector3 normal)
 {
     pt_ptr->r = normal.x() * 255;
     pt_ptr->g = normal.y() * 255;

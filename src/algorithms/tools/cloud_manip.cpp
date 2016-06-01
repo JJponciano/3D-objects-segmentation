@@ -1,9 +1,9 @@
 #include "cloud_manip.h"
 
-std::vector<float> cloud_manip::cloud_x_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
+std::vector<float> cloud_object_segmentation::cloud_manip::cloud_x_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
     std::vector<float> x_coords;
 
@@ -13,10 +13,10 @@ std::vector<float> cloud_manip::cloud_x_coords(pcl::PointCloud<pcl::PointXYZRGB>
     return x_coords;
 }
 
-std::vector<float> cloud_manip::cloud_y_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
+std::vector<float> cloud_object_segmentation::cloud_manip::cloud_y_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
     std::vector<float> y_coords;
 
@@ -26,10 +26,10 @@ std::vector<float> cloud_manip::cloud_y_coords(pcl::PointCloud<pcl::PointXYZRGB>
     return y_coords;
 }
 
-std::vector<float> cloud_manip::cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
+std::vector<float> cloud_object_segmentation::cloud_manip::cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
     std::vector<float> z_coords;
 
@@ -39,7 +39,7 @@ std::vector<float> cloud_manip::cloud_z_coords(pcl::PointCloud<pcl::PointXYZRGB>
     return z_coords;
 }
 
-void cloud_manip::copy_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr src_ptr,
+void cloud_object_segmentation::cloud_manip::copy_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr src_ptr,
                              pcl::PointCloud<pcl::PointXYZRGB>::Ptr dest_ptr)
 {
     if (!src_ptr || !dest_ptr)
@@ -49,15 +49,15 @@ void cloud_manip::copy_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr src_ptr,
         dest_ptr->points.push_back(*cloud_it);
 }
 
-void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float x_scale, float y_scale,
+void cloud_object_segmentation::cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float x_scale, float y_scale,
                                  float z_scale)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
-    if (aux::float_cmp(x_scale, 0.00, 0.005)
-            || aux::float_cmp(y_scale, 0.00, 0.005)
-            || aux::float_cmp(z_scale, 0.00, 0.005))
+    if (cloud_object_segmentation::aux::float_cmp(x_scale, 0.00, 0.005)
+            || cloud_object_segmentation::aux::float_cmp(y_scale, 0.00, 0.005)
+            || cloud_object_segmentation::aux::float_cmp(z_scale, 0.00, 0.005))
         throw std::invalid_argument("Scaling cloud by 0 will destroy the cloud.");
 
     for (auto cloud_it = cloud_ptr->points.begin(); cloud_it < cloud_ptr->points.end(); cloud_it++)
@@ -68,12 +68,12 @@ void cloud_manip::scale_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, 
     }
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::cloud_manip::crop_cloud(
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr, float x_thresh, float y_thresh,
         float z_thresh)
 {
     if (!base_cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cropped_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
     bool crop_pt;
@@ -82,13 +82,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(
     {
         crop_pt = false;
 
-        if ((std::abs(cloud_it->x) > std::abs(x_thresh)) && !aux::float_cmp(x_thresh, 0.00, 0.005))
+        if ((std::abs(cloud_it->x) > std::abs(x_thresh)) && !cloud_object_segmentation::aux::float_cmp(x_thresh, 0.00, 0.005))
             crop_pt = true;
 
-        if ((std::abs(cloud_it->y) > std::abs(y_thresh)) && !aux::float_cmp(y_thresh, 0.00, 0.005))
+        if ((std::abs(cloud_it->y) > std::abs(y_thresh)) && !cloud_object_segmentation::aux::float_cmp(y_thresh, 0.00, 0.005))
             crop_pt = true;
 
-        if ((std::abs(cloud_it->z) > std::abs(z_thresh)) && !aux::float_cmp(z_thresh, 0.00, 0.005))
+        if ((std::abs(cloud_it->z) > std::abs(z_thresh)) && !cloud_object_segmentation::aux::float_cmp(z_thresh, 0.00, 0.005))
             crop_pt = true;
 
         if (!crop_pt)
@@ -98,10 +98,10 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::crop_cloud(
     return cropped_cloud_ptr;
 }
 
-void cloud_manip::homogenize_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, short epsilon)
+void cloud_object_segmentation::cloud_manip::homogenize_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, short epsilon)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
     if (epsilon == 0)
         throw std::invalid_argument("Epsilon cannot be 0 for cloud homogenization.");
@@ -132,13 +132,13 @@ void cloud_manip::homogenize_cloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_
     }
 }
 
-std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_manip::fragment_cloud(
+std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_object_segmentation::cloud_manip::fragment_cloud(
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float max_scaled_fragment_depth)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
-    if ((aux::float_cmp(max_scaled_fragment_depth, 0.00, 0.005)) || (max_scaled_fragment_depth < 0))
+    if ((cloud_object_segmentation::aux::float_cmp(max_scaled_fragment_depth, 0.00, 0.005)) || (max_scaled_fragment_depth < 0))
         throw std::invalid_argument("Invalid max fragment depth.");
 
     float curr_depth = FLT_MAX;
@@ -163,7 +163,7 @@ std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_manip::fragment_cloud(
     return cloud_fragments;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::cloud_manip::merge_clouds(
         std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> cloud_fragments)
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr merge_result(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -177,10 +177,10 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::merge_clouds(
     return merge_result;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud_ptr)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::cloud_manip::cloud_to_rgb(pcl::PointCloud<pcl::PointXYZ>::Ptr white_cloud_ptr)
 {
     if (!white_cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgb_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
     uint8_t r = 255;
@@ -200,21 +200,21 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_manip::cloud_to_rgb(pcl::PointCloud
     return rgb_cloud;
 }
 
-std::vector<point_xy_greyscale> cloud_manip::cloud_to_2d_greyscale(
+std::vector<cloud_object_segmentation::point_xy_greyscale> cloud_object_segmentation::cloud_manip::cloud_to_2d_greyscale(
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
-    std::vector<point_xy_greyscale> greyscale_points;
-    std::vector<float> z_coords = cloud_manip::cloud_z_coords(cloud_ptr);
+    std::vector<cloud_object_segmentation::point_xy_greyscale> greyscale_points;
+    std::vector<float> z_coords = cloud_object_segmentation::cloud_manip::cloud_z_coords(cloud_ptr);
     float z_min = *(std::min_element(z_coords.begin(), z_coords.end()));
     float z_max = *(std::max_element(z_coords.begin(), z_coords.end()));
 
     for (auto cloud_it = cloud_ptr->begin(); cloud_it < cloud_ptr->end(); cloud_it++)
     {
-        point_xy_greyscale pt_xy_gs;
-        float greyscale = aux::map(cloud_it->z, z_min, z_max, 0.0, 255.0);
+        cloud_object_segmentation::point_xy_greyscale pt_xy_gs;
+        float greyscale = cloud_object_segmentation::aux::map(cloud_it->z, z_min, z_max, 0.0, 255.0);
 
         pt_xy_gs.x = cloud_it->x;
         pt_xy_gs.y = cloud_it->y;
@@ -225,16 +225,16 @@ std::vector<point_xy_greyscale> cloud_manip::cloud_to_2d_greyscale(
     return greyscale_points;
 }
 
-std::vector<point_xy_rgb> cloud_to_2d_rgb(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
+std::vector<cloud_object_segmentation::point_xy_rgb> cloud_to_2d_rgb(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
-    std::vector<point_xy_rgb> rgb_points;
+    std::vector<cloud_object_segmentation::point_xy_rgb> rgb_points;
 
     for (auto cloud_it = cloud_ptr->begin(); cloud_it < cloud_ptr->end(); cloud_it++)
     {
-        point_xy_rgb pt_xy_rgb;
+        cloud_object_segmentation::point_xy_rgb pt_xy_rgb;
 
         pt_xy_rgb.x = cloud_it->x;
         pt_xy_rgb.y = cloud_it->y;
@@ -247,20 +247,20 @@ std::vector<point_xy_rgb> cloud_to_2d_rgb(pcl::PointCloud<pcl::PointXYZRGB>::Ptr
     return rgb_points;
 }
 
-std::vector<point_xy_mixed> cloud_manip::cloud_to_2d_mixed(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
+std::vector<cloud_object_segmentation::point_xy_mixed> cloud_object_segmentation::cloud_manip::cloud_to_2d_mixed(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
     if (!cloud_ptr)
-        throw invalid_cloud_pointer();
+        throw cloud_object_segmentation::except::invalid_cloud_pointer();
 
-    std::vector<point_xy_mixed> mixed_points;
-    std::vector<float> z_coords = cloud_manip::cloud_z_coords(cloud_ptr);
+    std::vector<cloud_object_segmentation::point_xy_mixed> mixed_points;
+    std::vector<float> z_coords = cloud_object_segmentation::cloud_manip::cloud_z_coords(cloud_ptr);
     float z_min = *(std::min_element(z_coords.begin(), z_coords.end()));
     float z_max = *(std::max_element(z_coords.begin(), z_coords.end()));
 
     for (auto cloud_it = cloud_ptr->begin(); cloud_it < cloud_ptr->end(); cloud_it++)
     {
-        point_xy_mixed pt_xy_mixed;
-        float greyscale = aux::map(cloud_it->z, z_min, z_max, 0.0, 255.0);
+        cloud_object_segmentation::point_xy_mixed pt_xy_mixed;
+        float greyscale = cloud_object_segmentation::aux::map(cloud_it->z, z_min, z_max, 0.0, 255.0);
         pt_xy_mixed.x = cloud_it->x;
         pt_xy_mixed.y = cloud_it->y;
         pt_xy_mixed.r(cloud_it->r);
@@ -273,7 +273,7 @@ std::vector<point_xy_mixed> cloud_manip::cloud_to_2d_mixed(pcl::PointCloud<pcl::
     return mixed_points;
 }
 
-void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool,
+void cloud_object_segmentation::cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool,
                                       pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB)
 {
     cloud_RGB->width = cloud_bool->width;
@@ -291,7 +291,7 @@ void cloud_manip::convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr c
     }
 }
 
-void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB,
+void cloud_object_segmentation::cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB,
                                       pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool)
 {
     cloud_bool->width = cloud_RGB->width;
@@ -309,7 +309,7 @@ void cloud_manip::convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr clo
     }
 }
 
-void cloud_manip::giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
+void cloud_object_segmentation::cloud_manip::giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
 {
     uint8_t r=rand()%255,g=rand()%255,b=rand()%255;
 
