@@ -129,14 +129,14 @@ namespace cloud_object_segmentation
          * @param cloud_bool the CLSTR point_clstr from where the data are taken
          * @param cloud_RGB the PCL RGB cloud cloud where the data will be converted
          */
-        void convertBoolToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
+        void convertClstrToXYZRGB(pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB);
 
         /**
          * @brief convertBoolToXYZRGB converts a PCL RGB cloud into a CLSTR point_clstr cloud, used for the clustering and bounding algorithm
          * @param cloud_bool the CLSTR point_clstr cloud where the data will be converted
          * @param cloud_RGB the PCL RGB cloud from where the data are taken
          */
-        void convertXYZRGBToBool(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool);
+        void convertXYZRGBToClstr(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_RGB, pcl::PointCloud<clstr::point_clstr>::Ptr cloud_bool);
 
         void giveRandomColorToCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
     }

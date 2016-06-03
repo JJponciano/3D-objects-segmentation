@@ -5,34 +5,51 @@ bounding::bounding()
 
 }
 
-pcl::PointCloud<clstr::point_clstr>::Ptr bounding::getCloudBoundings(pcl::PointCloud<clstr::point_clstr>::Ptr cloud, int iteration)
+void bounding::getCloudBoundings(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, int cluster_number, int iteration)
 {
+    pcl::PointCloud<clstr::point_clstr>::Ptr mother_cloud (new pcl::PointCloud<clstr::point_clstr>);
+    cloud_object_segmentation::cloud_manip::convertXYZRGBToClstr(cloud, mother_cloud);
+
     std::vector<bounding_box*> old_boxes;
     std::vector<bounding_box*> new_boxes;
+    std::vector<bounding_box*>::iterator boxes_iterator;
+    int counter_iter = 0;
+    pcl::PointCloud<clstr::point_clstr>::Ptr bounding_cloud (new pcl::PointCloud<clstr::point_clstr>);
 
-    bounding_box* mother_box = new bounding_box(cloud);
+    bounding_box* mother_box = new bounding_box(mother_cloud);
+
     old_boxes.push_back(mother_box);
-
-    for(int i = 1; i <= iteration; i++)
+    while(counter_iter!=iteration && old_boxes.size()<200000)
     {
-        for(bounding_box* primary_box : old_boxes)
+        for(boxes_iterator=old_boxes.begin(); boxes_iterator!=old_boxes.end(); boxes_iterator++)
         {
-            for(bounding_box* secondary_box : primary_box->divideBox())
+            for(bounding_box* box : (*boxes_iterator)->divideBox())
             {
-                new_boxes.push_back(secondary_box);
+                new_boxes.push_back(box);
             }
         }
+        old_boxes.clear();
+        old_boxes.shrink_to_fit();
         old_boxes = new_boxes;
         new_boxes.clear();
         new_boxes.shrink_to_fit();
+        counter_iter++;
     }
 
-    pcl::PointCloud<clstr::point_clstr>::Ptr bounding_cloud (new pcl::PointCloud<clstr::point_clstr>);
+    std::string _filename = "bounding"+std::to_string(cluster_number)+".txt";
+    std::remove(_filename.c_str());
+    std::ofstream file(_filename, std::ios::app);
 
-    for(bounding_box* box : old_boxes)
+    for(boxes_iterator=old_boxes.begin(); boxes_iterator!=old_boxes.end(); boxes_iterator++)
     {
-        // If a vertex is the vertex of less than 4 cubes we add it to the cloud
+        for(clstr::point_clstr* point : (*boxes_iterator)->getVertices())
+        {
+            file << point->x << " " << point->y << " " << point->z << std::endl;
+        }
     }
 
-    return bounding_cloud;
+    file.close();
+
+    old_boxes.clear();
+    old_boxes.shrink_to_fit();
 }
