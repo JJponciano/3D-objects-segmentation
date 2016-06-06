@@ -1,0 +1,53 @@
+\hypertarget{aux__op_8h}{}\section{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/aux\+\_\+op.h File Reference}
+\label{aux__op_8h}\index{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.\+04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/aux\+\_\+op.\+h@{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.\+04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/aux\+\_\+op.\+h}}
+{\ttfamily \#include \char`\"{}vector3.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../except/invalid\+\_\+cloud\+\_\+pointer.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$pcl/kdtree/impl/kdtree\+\_\+flann.\+hpp$>$}\\*
+{\ttfamily \#include $<$pcl/point\+\_\+cloud.\+h$>$}\\*
+{\ttfamily \#include $<$pcl/point\+\_\+types.\+h$>$}\\*
+{\ttfamily \#include $<$pcl/features/normal\+\_\+3d.\+h$>$}\\*
+{\ttfamily \#include $<$vector$>$}\\*
+Include dependency graph for aux\+\_\+op.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacecloud__object__segmentation}{cloud\+\_\+object\+\_\+segmentation}
+\item 
+ \hyperlink{namespacecloud__object__segmentation_1_1aux}{cloud\+\_\+object\+\_\+segmentation\+::aux}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+float \hyperlink{namespacecloud__object__segmentation_1_1aux_a4b661185614d1037447a89a148a204eb}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::set\+\_\+precision} (float float\+\_\+num, float precision)
+\begin{DoxyCompactList}\small\item\em set\+\_\+precision sets the number of digits after the decimal \end{DoxyCompactList}\item 
+float \hyperlink{namespacecloud__object__segmentation_1_1aux_afdc9858a2a1aa966c6b9cf71a4549718}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::map} (float x, float in\+\_\+min, float in\+\_\+max, float out\+\_\+min, float out\+\_\+max)
+\begin{DoxyCompactList}\small\item\em map maps a number found within a range to another range \end{DoxyCompactList}\item 
+float \hyperlink{namespacecloud__object__segmentation_1_1aux_a16d1866d46bb2c56c66f9d703fa7189e}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::float\+\_\+avg} (std\+::vector$<$ float $>$ floats)
+\begin{DoxyCompactList}\small\item\em float\+\_\+avg calculates the average of float numbers \end{DoxyCompactList}\item 
+bool \hyperlink{namespacecloud__object__segmentation_1_1aux_a6dbc39e59b20bcc59affd0aad8496dc3}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::float\+\_\+cmp} (float float\+\_\+1, float float\+\_\+2, float precision)
+\begin{DoxyCompactList}\small\item\em float\+\_\+cmp compares two floats with a certain precision \end{DoxyCompactList}\item 
+std\+::vector$<$ float $>$ \hyperlink{namespacecloud__object__segmentation_1_1aux_ae659a392c3508e64e4a82bb61ee4cc86}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::spherical\+\_\+coords} (aux\+::vector3 vect)
+\begin{DoxyCompactList}\small\item\em spherical\+\_\+coordinates calculates the spherical coordinates of the point at the arrow of an origin translated vector \end{DoxyCompactList}\item 
+bool \hyperlink{namespacecloud__object__segmentation_1_1aux_ae9f3fcf2ebe5ed733eceb4dc5845d418}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::coord\+\_\+cmp} (std\+::vector$<$ float $>$ coords\+\_\+1, std\+::vector$<$ float $>$ coords\+\_\+2, float precision)
+\begin{DoxyCompactList}\small\item\em coords\+\_\+cmp compares the inclination and azimuth angles (spherical coordinate system) of two points \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\float \hyperlink{namespacecloud__object__segmentation_1_1aux_aa39c38ffc1379874ede49b1079c21a34}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::euclidian\+\_\+dist} (T a\+\_\+1, T b\+\_\+1, T c\+\_\+1, T a\+\_\+2, T b\+\_\+2, T c\+\_\+2)
+\begin{DoxyCompactList}\small\item\em performs the euclidian distance calculation between two 3D points \end{DoxyCompactList}\item 
+vector3 \hyperlink{namespacecloud__object__segmentation_1_1aux_a0a4c9ef4676b55cbb72ef7212d112d00}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::vect\+\_\+2pts} (pcl\+::\+Point\+X\+Y\+Z\+R\+GB pt\+\_\+1, pcl\+::\+Point\+X\+Y\+Z\+R\+GB pt\+\_\+2)
+\begin{DoxyCompactList}\small\item\em vect\+\_\+2pts creates a vector using two points \end{DoxyCompactList}\item 
+vector3 \hyperlink{namespacecloud__object__segmentation_1_1aux_a6039339e8cdf62a949421f73033d2de9}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::cross\+\_\+product} (vector3 vect\+\_\+1, vector3 vect\+\_\+2)
+\begin{DoxyCompactList}\small\item\em cross\+\_\+product calculates the cross product of two vectors \end{DoxyCompactList}\item 
+vector3 \hyperlink{namespacecloud__object__segmentation_1_1aux_adc7f08f362cb4005bfd39fb9e61b17e6}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::inverse} (vector3 vect)
+\begin{DoxyCompactList}\small\item\em inverse inverses the coordinates of a vector \end{DoxyCompactList}\item 
+vector3 \hyperlink{namespacecloud__object__segmentation_1_1aux_a6064004fbb1cb4057191d67804ff4df4}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::translate\+\_\+origin} (float x\+\_\+1, float y\+\_\+1, float z\+\_\+1, float x\+\_\+2, float y\+\_\+2, float z\+\_\+2)
+\begin{DoxyCompactList}\small\item\em translate\+\_\+origin translates a vector into the origin \end{DoxyCompactList}\item 
+vector3 \hyperlink{namespacecloud__object__segmentation_1_1aux_a8a8fe6b426ed28820fbd1102eaf204c8}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::vector\+\_\+avg} (std\+::vector$<$ vector3 $>$ vectors)
+\begin{DoxyCompactList}\small\item\em vect\+\_\+avg calculates the average of the vectors within an array of vectors \end{DoxyCompactList}\item 
+vector3 \hyperlink{namespacecloud__object__segmentation_1_1aux_a6d8f8292c05ff01191a1b0f62e48c173}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::vector\+\_\+abs} (vector3 vect)
+\begin{DoxyCompactList}\small\item\em vector\+\_\+abs calculates the absolute values of the coordinates of a vector \end{DoxyCompactList}\item 
+vector3 \hyperlink{namespacecloud__object__segmentation_1_1aux_a88a6c55fd9d9769fea1898f101102c94}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::normalize\+\_\+normal} (vector3 normal)
+\begin{DoxyCompactList}\small\item\em normalize\+\_\+normal maps the values of the coordinates of a normal between 0 and 1 \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1aux_ad2dd6bc1e223cf47809b8b86454466ba}{cloud\+\_\+object\+\_\+segmentation\+::aux\+::normal\+\_\+to\+\_\+rgb} (pcl\+::\+Point\+X\+Y\+Z\+R\+GB $\ast$pt\+\_\+ptr, aux\+::vector3 normal)
+\begin{DoxyCompactList}\small\item\em norm\+\_\+to\+\_\+rgb calculates the r, g and b values of a point in function of the coordinates of a given normal \end{DoxyCompactList}\end{DoxyCompactItemize}

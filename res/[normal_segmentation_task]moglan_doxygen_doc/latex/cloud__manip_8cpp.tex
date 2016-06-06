@@ -1,0 +1,37 @@
+\hypertarget{cloud__manip_8cpp}{}\section{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/cloud\+\_\+manip.cpp File Reference}
+\label{cloud__manip_8cpp}\index{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.\+04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/cloud\+\_\+manip.\+cpp@{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.\+04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/cloud\+\_\+manip.\+cpp}}
+{\ttfamily \#include \char`\"{}cloud\+\_\+manip.\+h\char`\"{}}\\*
+Include dependency graph for cloud\+\_\+manip.\+cpp\+:
+% FIG 0
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ \hyperlink{classcloud__object__segmentation_1_1point__xy__rgb}{cloud\+\_\+object\+\_\+segmentation\+::point\+\_\+xy\+\_\+rgb} $>$ \hyperlink{cloud__manip_8cpp_a483366071ad88cebe5538dbe3b44f2d7}{cloud\+\_\+to\+\_\+2d\+\_\+rgb} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em cloud\+\_\+to\+\_\+2d\+\_\+rgb turns a 3D rgb point cloud into a 2D rgb points vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{cloud\+\_\+manip.\+cpp@{cloud\+\_\+manip.\+cpp}!cloud\+\_\+to\+\_\+2d\+\_\+rgb@{cloud\+\_\+to\+\_\+2d\+\_\+rgb}}
+\index{cloud\+\_\+to\+\_\+2d\+\_\+rgb@{cloud\+\_\+to\+\_\+2d\+\_\+rgb}!cloud\+\_\+manip.\+cpp@{cloud\+\_\+manip.\+cpp}}
+\subsubsection[{\texorpdfstring{cloud\+\_\+to\+\_\+2d\+\_\+rgb(pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+G\+B $>$\+::\+Ptr cloud\+\_\+ptr)}{cloud_to_2d_rgb(pcl::PointCloud< pcl::PointXYZRGB >::Ptr cloud_ptr)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<${\bf cloud\+\_\+object\+\_\+segmentation\+::point\+\_\+xy\+\_\+rgb}$>$ cloud\+\_\+to\+\_\+2d\+\_\+rgb (
+\begin{DoxyParamCaption}
+\item[{pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr}]{cloud\+\_\+ptr}
+\end{DoxyParamCaption}
+)}\hypertarget{cloud__manip_8cpp_a483366071ad88cebe5538dbe3b44f2d7}{}\label{cloud__manip_8cpp_a483366071ad88cebe5538dbe3b44f2d7}
+
+
+cloud\+\_\+to\+\_\+2d\+\_\+rgb turns a 3D rgb point cloud into a 2D rgb points vector 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cloud\+\_\+ptr} & is a pointer to the point cloud to be transformed \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if cloud\+\_\+ptr is equal to nullptr \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+an array of 2D rgb points 
+\end{DoxyReturn}

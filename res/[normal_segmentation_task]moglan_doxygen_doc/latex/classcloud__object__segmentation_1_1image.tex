@@ -1,0 +1,110 @@
+\hypertarget{classcloud__object__segmentation_1_1image}{}\section{cloud\+\_\+object\+\_\+segmentation\+:\+:image Class Reference}
+\label{classcloud__object__segmentation_1_1image}\index{cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}}
+
+
+The image class is an abstract class representing a basic image.  
+
+
+
+
+{\ttfamily \#include $<$image.\+h$>$}
+
+
+
+Inheritance diagram for cloud\+\_\+object\+\_\+segmentation\+:\+:image\+:
+% FIG 0
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcloud__object__segmentation_1_1image_aafd31509f88f78ce8cc51688462411ff}{image} (size\+\_\+t \hyperlink{classcloud__object__segmentation_1_1image_ac46913c2b63ca4d8e60f267a374429be}{width}, size\+\_\+t \hyperlink{classcloud__object__segmentation_1_1image_ad0e1ec069c7c5f8cde4cc1cd3f86ad1c}{height})
+\begin{DoxyCompactList}\small\item\em image is the constructor \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{classcloud__object__segmentation_1_1image_ac46913c2b63ca4d8e60f267a374429be}{width} () const 
+\begin{DoxyCompactList}\small\item\em width gets width \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{classcloud__object__segmentation_1_1image_ad0e1ec069c7c5f8cde4cc1cd3f86ad1c}{height} () const 
+\begin{DoxyCompactList}\small\item\em height gets height \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{classcloud__object__segmentation_1_1image_a8236a45adb9f9801030e40e562af8a16}{resolution} () const 
+\begin{DoxyCompactList}\small\item\em resolution return \+\_\+width $\ast$ \+\_\+height \end{DoxyCompactList}\item 
+virtual void \hyperlink{classcloud__object__segmentation_1_1image_ac38c90d18a309eb8f497e904952220c6}{init} ()=0
+\begin{DoxyCompactList}\small\item\em init initializes the image pixels \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The image class is an abstract class representing a basic image. 
+
+\subsection{Constructor \& Destructor Documentation}
+\index{cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}!image@{image}}
+\index{image@{image}!cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}}
+\subsubsection[{\texorpdfstring{image(size\+\_\+t width, size\+\_\+t height)}{image(size_t width, size_t height)}}]{\setlength{\rightskip}{0pt plus 5cm}cloud\+\_\+object\+\_\+segmentation\+::image\+::image (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{width, }
+\item[{size\+\_\+t}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{classcloud__object__segmentation_1_1image_aafd31509f88f78ce8cc51688462411ff}{}\label{classcloud__object__segmentation_1_1image_aafd31509f88f78ce8cc51688462411ff}
+
+
+image is the constructor 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width} & is the width of the image in pixels \\
+\hline
+{\em height} & is the height of the image in pixels \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\index{cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}!height@{height}}
+\index{height@{height}!cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}}
+\subsubsection[{\texorpdfstring{height() const }{height() const }}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t cloud\+\_\+object\+\_\+segmentation\+::image\+::height (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcloud__object__segmentation_1_1image_ad0e1ec069c7c5f8cde4cc1cd3f86ad1c}{}\label{classcloud__object__segmentation_1_1image_ad0e1ec069c7c5f8cde4cc1cd3f86ad1c}
+
+
+height gets height 
+
+\index{cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}!init@{init}}
+\index{init@{init}!cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}}
+\subsubsection[{\texorpdfstring{init()=0}{init()=0}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void cloud\+\_\+object\+\_\+segmentation\+::image\+::init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\hypertarget{classcloud__object__segmentation_1_1image_ac38c90d18a309eb8f497e904952220c6}{}\label{classcloud__object__segmentation_1_1image_ac38c90d18a309eb8f497e904952220c6}
+
+
+init initializes the image pixels 
+
+
+
+Implemented in \hyperlink{classcloud__object__segmentation_1_1image__mixed_acaf4b4f327e2f4cbc2c92011b00f3270}{cloud\+\_\+object\+\_\+segmentation\+::image\+\_\+mixed}, \hyperlink{classcloud__object__segmentation_1_1image__rgb_a723227aa1189e65e61d6a30302b0ed51}{cloud\+\_\+object\+\_\+segmentation\+::image\+\_\+rgb}, and \hyperlink{classcloud__object__segmentation_1_1image__greyscale_a1c539ba8a0d1fb71c415cc07a701ca2b}{cloud\+\_\+object\+\_\+segmentation\+::image\+\_\+greyscale}.
+
+\index{cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}!resolution@{resolution}}
+\index{resolution@{resolution}!cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}}
+\subsubsection[{\texorpdfstring{resolution() const }{resolution() const }}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t cloud\+\_\+object\+\_\+segmentation\+::image\+::resolution (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcloud__object__segmentation_1_1image_a8236a45adb9f9801030e40e562af8a16}{}\label{classcloud__object__segmentation_1_1image_a8236a45adb9f9801030e40e562af8a16}
+
+
+resolution return \+\_\+width $\ast$ \+\_\+height 
+
+\index{cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}!width@{width}}
+\index{width@{width}!cloud\+\_\+object\+\_\+segmentation\+::image@{cloud\+\_\+object\+\_\+segmentation\+::image}}
+\subsubsection[{\texorpdfstring{width() const }{width() const }}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t cloud\+\_\+object\+\_\+segmentation\+::image\+::width (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classcloud__object__segmentation_1_1image_ac46913c2b63ca4d8e60f267a374429be}{}\label{classcloud__object__segmentation_1_1image_ac46913c2b63ca4d8e60f267a374429be}
+
+
+width gets width 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.\+04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/2d/\hyperlink{image_8h}{image.\+h}\item 
+C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.\+04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/2d/\hyperlink{image_8cpp}{image.\+cpp}\end{DoxyCompactItemize}

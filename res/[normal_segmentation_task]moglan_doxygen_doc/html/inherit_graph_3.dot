@@ -1,0 +1,13 @@
+digraph "Graphical Class Hierarchy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="PointXY",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="cloud_object_segmentation\l::point_xy_greyscale",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcloud__object__segmentation_1_1point__xy__greyscale.html"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="cloud_object_segmentation\l::point_xy_rgb",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcloud__object__segmentation_1_1point__xy__rgb.html"];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="cloud_object_segmentation\l::point_xy_mixed",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcloud__object__segmentation_1_1point__xy__mixed.html"];
+}

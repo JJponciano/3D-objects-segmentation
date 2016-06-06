@@ -1,0 +1,58 @@
+\hypertarget{cloud__manip_8h}{}\section{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/cloud\+\_\+manip.h File Reference}
+\label{cloud__manip_8h}\index{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.\+04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/cloud\+\_\+manip.\+h@{C\+:/\+Users/vladm/\+Documents/virtual\+\_\+box\+\_\+shared\+\_\+folders/ubuntu14.\+04\+\_\+lts/3d\+\_\+obj\+\_\+segm/src/algorithms/tools/cloud\+\_\+manip.\+h}}
+{\ttfamily \#include \char`\"{}aux\+\_\+op.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../2d/point\+\_\+xy\+\_\+greyscale.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../2d/point\+\_\+xy\+\_\+mixed.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../objects/point\+\_\+clstr.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}../except/invalid\+\_\+cloud\+\_\+pointer.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$pcl/point\+\_\+cloud.\+h$>$}\\*
+{\ttfamily \#include $<$pcl/point\+\_\+types.\+h$>$}\\*
+{\ttfamily \#include $<$boost/lexical\+\_\+cast.\+hpp$>$}\\*
+{\ttfamily \#include $<$float.\+h$>$}\\*
+{\ttfamily \#include $<$stdexcept$>$}\\*
+Include dependency graph for cloud\+\_\+manip.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacecloud__object__segmentation}{cloud\+\_\+object\+\_\+segmentation}
+\item 
+ \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ float $>$ \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a18a97c1fa06e54fe01bd351e36efb92c}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::cloud\+\_\+x\+\_\+coords} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr)
+\item 
+std\+::vector$<$ float $>$ \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a9adbd0e82fa85d54475815211e215018}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::cloud\+\_\+y\+\_\+coords} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr)
+\item 
+std\+::vector$<$ float $>$ \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_ad950565d49f0ee458f479f76c854dfe2}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::cloud\+\_\+z\+\_\+coords} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr)
+\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a7923ab0797d8685324b17084089a5161}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::copy\+\_\+cloud} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr src\+\_\+ptr, pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr dest\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em copy\+\_\+cloud copies a cloud into another cloud \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_ab703c921b31ce44f8b3f629c5940aab0}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::scale\+\_\+cloud} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr, float x\+\_\+scale, float y\+\_\+scale, float z\+\_\+scale)
+\begin{DoxyCompactList}\small\item\em scale\+\_\+cloud rescales a cloud by rescaling the coordinates of all of its points \end{DoxyCompactList}\item 
+pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_ad478d5ab331172d7cee927b4512c41e3}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::crop\+\_\+cloud} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr base\+\_\+cloud\+\_\+ptr, float x\+\_\+thresh, float y\+\_\+thresh, float z\+\_\+thresh)
+\begin{DoxyCompactList}\small\item\em crop\+\_\+cloud removes the points of which the coordinates are beyond a certain threshold \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a27a363b92fc0623771f616e63355f53e}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::homogenize\+\_\+cloud} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr, short epsilon)
+\begin{DoxyCompactList}\small\item\em homogenize\+\_\+cloud homogenizes the similar colors within a cloud \end{DoxyCompactList}\item 
+std\+::vector$<$ pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr $>$ \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_ad66f43b7fb1e5512f948ad68fa1a62aa}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::fragment\+\_\+cloud} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr, float max\+\_\+scaled\+\_\+fragment\+\_\+depth)
+\begin{DoxyCompactList}\small\item\em fragment\+\_\+cloud breaks a cloud down into smaller pieces along the y axis \end{DoxyCompactList}\item 
+pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a511ee636ce50f2dc7a171fd02177034d}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::merge\+\_\+clouds} (std\+::vector$<$ pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr $>$ cloud\+\_\+fragments)
+\begin{DoxyCompactList}\small\item\em merge\+\_\+clouds merges cloud fragments into one cloud \end{DoxyCompactList}\item 
+pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a60479bf28af2ec5244f6652973cde988}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::cloud\+\_\+to\+\_\+rgb} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr white\+\_\+cloud)
+\item 
+std\+::vector$<$ point\+\_\+xy\+\_\+greyscale $>$ \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a2ee6a68a81f4c6bc497e4d7990e38283}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::cloud\+\_\+to\+\_\+2d\+\_\+greyscale} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em cloud\+\_\+to\+\_\+greyscale turns a 3D rgb point cloud into a 2D grey scale points vector \end{DoxyCompactList}\item 
+std\+::vector$<$ point\+\_\+xy\+\_\+rgb $>$ \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a84dd5c3918c97a7839d063fd61ae2141}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::cloud\+\_\+to\+\_\+2d\+\_\+rgb} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em cloud\+\_\+to\+\_\+2d\+\_\+rgb turns a 3D rgb point cloud into a 2D rgb points vector \end{DoxyCompactList}\item 
+std\+::vector$<$ point\+\_\+xy\+\_\+mixed $>$ \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a0c4604ff071a727fc9c80b6b51c95c40}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::cloud\+\_\+to\+\_\+2d\+\_\+mixed} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em cloud\+\_\+to\+\_\+2d\+\_\+rgb turns a 3D rgb point cloud into a 2D mixed points vector \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_a3cb183f8366ffa244a7ce929f3335c49}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::convert\+Clstr\+To\+X\+Y\+Z\+R\+GB} (pcl\+::\+Point\+Cloud$<$ clstr\+::point\+\_\+clstr $>$\+::Ptr cloud\+\_\+bool, pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+\+R\+GB)
+\begin{DoxyCompactList}\small\item\em convert\+Bool\+To\+X\+Y\+Z\+R\+GB converts a C\+L\+S\+TR point\+\_\+clstr cloud into a P\+CL R\+GB cloud, so its point can be written in a file \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_aa58a7bc75873d98475edb4425e62cd99}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::convert\+X\+Y\+Z\+R\+G\+B\+To\+Clstr} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+\+R\+GB, pcl\+::\+Point\+Cloud$<$ clstr\+::point\+\_\+clstr $>$\+::Ptr cloud\+\_\+bool)
+\begin{DoxyCompactList}\small\item\em convert\+Bool\+To\+X\+Y\+Z\+R\+GB converts a P\+CL R\+GB cloud into a C\+L\+S\+TR point\+\_\+clstr cloud, used for the clustering and bounding algorithm \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1cloud__manip_ae28bc7b5ef360bf16bff9c5dfe91f826}{cloud\+\_\+object\+\_\+segmentation\+::cloud\+\_\+manip\+::give\+Random\+Color\+To\+Cloud} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud)
+\end{DoxyCompactItemize}

@@ -1,0 +1,19 @@
+digraph "C:/Users/vladm/Documents/virtual_box_shared_folders/ubuntu14.04_lts/3d_obj_segm/src/algorithms" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_15ef073f80070754cc87f8cbf1adf626 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="src" fontname="Helvetica", fontsize="10", URL="dir_15ef073f80070754cc87f8cbf1adf626.html"]
+  subgraph clusterdir_f92382008a82ef68a652e56674f32135 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_f92382008a82ef68a652e56674f32135.html"];
+    dir_f92382008a82ef68a652e56674f32135 [shape=plaintext label="algorithms"];
+    dir_34e709d12de242dc6db4deeed6f928ff [shape=box label="2d" color="black" fillcolor="white" style="filled" URL="dir_34e709d12de242dc6db4deeed6f928ff.html"];
+    dir_838948d3af138bad4800e4fd213a5a7f [shape=box label="io" color="black" fillcolor="white" style="filled" URL="dir_838948d3af138bad4800e4fd213a5a7f.html"];
+    dir_82df1d3ece70e68ffff645682a8464c6 [shape=box label="normal_segmentation" color="black" fillcolor="white" style="filled" URL="dir_82df1d3ece70e68ffff645682a8464c6.html"];
+    dir_745ec8e30f4d681fe0ab49393c003a2b [shape=box label="tools" color="black" fillcolor="white" style="filled" URL="dir_745ec8e30f4d681fe0ab49393c003a2b.html"];
+  }
+  }
+  dir_82df1d3ece70e68ffff645682a8464c6->dir_745ec8e30f4d681fe0ab49393c003a2b [headlabel="1", labeldistance=1.5 headhref="dir_000010_000011.html"];
+  dir_745ec8e30f4d681fe0ab49393c003a2b->dir_34e709d12de242dc6db4deeed6f928ff [headlabel="8", labeldistance=1.5 headhref="dir_000011_000008.html"];
+  dir_838948d3af138bad4800e4fd213a5a7f->dir_34e709d12de242dc6db4deeed6f928ff [headlabel="3", labeldistance=1.5 headhref="dir_000009_000008.html"];
+}

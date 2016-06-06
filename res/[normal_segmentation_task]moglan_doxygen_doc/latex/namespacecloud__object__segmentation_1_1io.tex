@@ -1,0 +1,205 @@
+\hypertarget{namespacecloud__object__segmentation_1_1io}{}\section{cloud\+\_\+object\+\_\+segmentation\+:\+:io Namespace Reference}
+\label{namespacecloud__object__segmentation_1_1io}\index{cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr \hyperlink{namespacecloud__object__segmentation_1_1io_ac8f0980f5045c87e877ab60f0795f9cf}{import\+\_\+cloud\+\_\+txt} (std\+::string path)
+\begin{DoxyCompactList}\small\item\em import\+\_\+cloud\+\_\+txt generates a cloud from a .txt file \end{DoxyCompactList}\item 
+pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr \hyperlink{namespacecloud__object__segmentation_1_1io_aaf87f524c221a2222f755d49bb4d5b1b}{import\+\_\+cloud} (std\+::string path)
+\begin{DoxyCompactList}\small\item\em import\+\_\+cloud generates a cloud from a .txt or .pcd file \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1io_aa0ffa6a4280c9454f62cb96566358f1b}{export\+\_\+cloud} (std\+::string path, pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em export\+\_\+cloud writes a point cloud to a text file. \end{DoxyCompactList}\item 
+\hyperlink{classcloud__object__segmentation_1_1image__greyscale}{image\+\_\+greyscale} \hyperlink{namespacecloud__object__segmentation_1_1io_af166fac778d63a5b2142d140a96092f8}{import\+\_\+greyscale\+\_\+image} (std\+::string path)
+\begin{DoxyCompactList}\small\item\em import\+\_\+greyscale\+\_\+image creates an \hyperlink{classcloud__object__segmentation_1_1image__greyscale}{image\+\_\+greyscale} object from a pgm file \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1io_a333cc83a40d3579624d21a1d9260b5f1}{export\+\_\+greyscale\+\_\+image} (std\+::string path, unsigned short max\+\_\+grey\+\_\+value, \hyperlink{classcloud__object__segmentation_1_1image__greyscale}{image\+\_\+greyscale} gs\+\_\+img)
+\begin{DoxyCompactList}\small\item\em export\+\_\+image exports a greyscale image to a .pgm file \end{DoxyCompactList}\item 
+\hyperlink{classcloud__object__segmentation_1_1image__rgb}{image\+\_\+rgb} \hyperlink{namespacecloud__object__segmentation_1_1io_a11b6a99f1237fb1bb9c7961837e3af7d}{import\+\_\+rgb\+\_\+image} (std\+::string path)
+\begin{DoxyCompactList}\small\item\em import\+\_\+rgb\+\_\+image creates an \hyperlink{classcloud__object__segmentation_1_1image__rgb}{image\+\_\+rgb} object from a ppm file \end{DoxyCompactList}\item 
+void \hyperlink{namespacecloud__object__segmentation_1_1io_ab280fd1be31f18b45b0c7ff20e40762d}{export\+\_\+rgb\+\_\+image} (std\+::string path, unsigned int max\+\_\+rgb\+\_\+value, \hyperlink{classcloud__object__segmentation_1_1image__rgb}{image\+\_\+rgb} rgb\+\_\+img)
+\begin{DoxyCompactList}\small\item\em export\+\_\+image exports a color image to a .ppm file \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}!export\+\_\+cloud@{export\+\_\+cloud}}
+\index{export\+\_\+cloud@{export\+\_\+cloud}!cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}}
+\subsubsection[{\texorpdfstring{export\+\_\+cloud(std\+::string path, pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+G\+B $>$\+::\+Ptr cloud\+\_\+ptr)}{export_cloud(std::string path, pcl::PointCloud< pcl::PointXYZRGB >::Ptr cloud_ptr)}}]{\setlength{\rightskip}{0pt plus 5cm}void cloud\+\_\+object\+\_\+segmentation\+::io\+::export\+\_\+cloud (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{path, }
+\item[{pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr}]{cloud\+\_\+ptr}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecloud__object__segmentation_1_1io_aa0ffa6a4280c9454f62cb96566358f1b}{}\label{namespacecloud__object__segmentation_1_1io_aa0ffa6a4280c9454f62cb96566358f1b}
+
+
+export\+\_\+cloud writes a point cloud to a text file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & is a string representing a unique location in the file system \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalid\+\_\+path} & if failed to open file \\
+\hline
+{\em invalid\+\_\+cloud\+\_\+pointer} & if cloud\+\_\+ptr is nullptr \\
+\hline
+\end{DoxyExceptions}
+
+\begin{DoxyParams}{Parameters}
+{\em cloud\+\_\+ptr} & is a pointer to the cloud to be exported \\
+\hline
+\end{DoxyParams}
+\index{cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}!export\+\_\+greyscale\+\_\+image@{export\+\_\+greyscale\+\_\+image}}
+\index{export\+\_\+greyscale\+\_\+image@{export\+\_\+greyscale\+\_\+image}!cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}}
+\subsubsection[{\texorpdfstring{export\+\_\+greyscale\+\_\+image(std\+::string path, unsigned short max\+\_\+grey\+\_\+value, image\+\_\+greyscale gs\+\_\+img)}{export_greyscale_image(std::string path, unsigned short max_grey_value, image_greyscale gs_img)}}]{\setlength{\rightskip}{0pt plus 5cm}void cloud\+\_\+object\+\_\+segmentation\+::io\+::export\+\_\+greyscale\+\_\+image (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{path, }
+\item[{unsigned short}]{max\+\_\+grey\+\_\+value, }
+\item[{{\bf cloud\+\_\+object\+\_\+segmentation\+::image\+\_\+greyscale}}]{gs\+\_\+img}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecloud__object__segmentation_1_1io_a333cc83a40d3579624d21a1d9260b5f1}{}\label{namespacecloud__object__segmentation_1_1io_a333cc83a40d3579624d21a1d9260b5f1}
+
+
+export\+\_\+image exports a greyscale image to a .pgm file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & is a string representing a unique location in the file system \\
+\hline
+{\em max\+\_\+grey\+\_\+value} & is the maximum value of grey in the image \\
+\hline
+{\em gs\+\_\+img} & is the image to be exported \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalid\+\_\+path} & if failed to open file \\
+\hline
+{\em std\+::logic\+\_\+error} & if max\+\_\+grey\+\_\+value is bigger than 255 or if rgb\+\_\+img has size 0 \\
+\hline
+\end{DoxyExceptions}
+\index{cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}!export\+\_\+rgb\+\_\+image@{export\+\_\+rgb\+\_\+image}}
+\index{export\+\_\+rgb\+\_\+image@{export\+\_\+rgb\+\_\+image}!cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}}
+\subsubsection[{\texorpdfstring{export\+\_\+rgb\+\_\+image(std\+::string path, unsigned int max\+\_\+rgb\+\_\+value, image\+\_\+rgb rgb\+\_\+img)}{export_rgb_image(std::string path, unsigned int max_rgb_value, image_rgb rgb_img)}}]{\setlength{\rightskip}{0pt plus 5cm}void cloud\+\_\+object\+\_\+segmentation\+::io\+::export\+\_\+rgb\+\_\+image (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{path, }
+\item[{unsigned int}]{max\+\_\+rgb\+\_\+value, }
+\item[{{\bf cloud\+\_\+object\+\_\+segmentation\+::image\+\_\+rgb}}]{rgb\+\_\+img}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecloud__object__segmentation_1_1io_ab280fd1be31f18b45b0c7ff20e40762d}{}\label{namespacecloud__object__segmentation_1_1io_ab280fd1be31f18b45b0c7ff20e40762d}
+
+
+export\+\_\+image exports a color image to a .ppm file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & is a string representing a unique location in the file system \\
+\hline
+{\em max\+\_\+rgb\+\_\+value} & is the maximum value of red, green and blue in the image \\
+\hline
+{\em rgb\+\_\+img} & is the image to be exported \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalid\+\_\+path} & if failed to open file \\
+\hline
+{\em std\+::logic\+\_\+error} & if max\+\_\+rgb\+\_\+value is bigger than 255 or if rgb\+\_\+img has size 0 \\
+\hline
+\end{DoxyExceptions}
+\index{cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}!import\+\_\+cloud@{import\+\_\+cloud}}
+\index{import\+\_\+cloud@{import\+\_\+cloud}!cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}}
+\subsubsection[{\texorpdfstring{import\+\_\+cloud(std\+::string path)}{import_cloud(std::string path)}}]{\setlength{\rightskip}{0pt plus 5cm}pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+object\+\_\+segmentation\+::io\+::import\+\_\+cloud (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecloud__object__segmentation_1_1io_aaf87f524c221a2222f755d49bb4d5b1b}{}\label{namespacecloud__object__segmentation_1_1io_aaf87f524c221a2222f755d49bb4d5b1b}
+
+
+import\+\_\+cloud generates a cloud from a .txt or .pcd file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & is a string representing a unique location in the file system \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalid\+\_\+path} & if failed to open file \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+the a pointer to the cloud that has been read 
+\end{DoxyReturn}
+\index{cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}!import\+\_\+cloud\+\_\+txt@{import\+\_\+cloud\+\_\+txt}}
+\index{import\+\_\+cloud\+\_\+txt@{import\+\_\+cloud\+\_\+txt}!cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}}
+\subsubsection[{\texorpdfstring{import\+\_\+cloud\+\_\+txt(std\+::string path)}{import_cloud_txt(std::string path)}}]{\setlength{\rightskip}{0pt plus 5cm}pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud\+\_\+object\+\_\+segmentation\+::io\+::import\+\_\+cloud\+\_\+txt (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecloud__object__segmentation_1_1io_ac8f0980f5045c87e877ab60f0795f9cf}{}\label{namespacecloud__object__segmentation_1_1io_ac8f0980f5045c87e877ab60f0795f9cf}
+
+
+import\+\_\+cloud\+\_\+txt generates a cloud from a .txt file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & is a string representing a unique location in the file system \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalid\+\_\+path} & if failed to open file \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+a pointer to the cloud that has been read 
+\end{DoxyReturn}
+\index{cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}!import\+\_\+greyscale\+\_\+image@{import\+\_\+greyscale\+\_\+image}}
+\index{import\+\_\+greyscale\+\_\+image@{import\+\_\+greyscale\+\_\+image}!cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}}
+\subsubsection[{\texorpdfstring{import\+\_\+greyscale\+\_\+image(std\+::string path)}{import_greyscale_image(std::string path)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf cloud\+\_\+object\+\_\+segmentation\+::image\+\_\+greyscale} cloud\+\_\+object\+\_\+segmentation\+::io\+::import\+\_\+greyscale\+\_\+image (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecloud__object__segmentation_1_1io_af166fac778d63a5b2142d140a96092f8}{}\label{namespacecloud__object__segmentation_1_1io_af166fac778d63a5b2142d140a96092f8}
+
+
+import\+\_\+greyscale\+\_\+image creates an \hyperlink{classcloud__object__segmentation_1_1image__greyscale}{image\+\_\+greyscale} object from a pgm file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & is a string representing a unique location in the file system \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalid\+\_\+path} & if failed to open file \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+the imported grey scale image 
+\end{DoxyReturn}
+\index{cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}!import\+\_\+rgb\+\_\+image@{import\+\_\+rgb\+\_\+image}}
+\index{import\+\_\+rgb\+\_\+image@{import\+\_\+rgb\+\_\+image}!cloud\+\_\+object\+\_\+segmentation\+::io@{cloud\+\_\+object\+\_\+segmentation\+::io}}
+\subsubsection[{\texorpdfstring{import\+\_\+rgb\+\_\+image(std\+::string path)}{import_rgb_image(std::string path)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf cloud\+\_\+object\+\_\+segmentation\+::image\+\_\+rgb} cloud\+\_\+object\+\_\+segmentation\+::io\+::import\+\_\+rgb\+\_\+image (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{path}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecloud__object__segmentation_1_1io_a11b6a99f1237fb1bb9c7961837e3af7d}{}\label{namespacecloud__object__segmentation_1_1io_a11b6a99f1237fb1bb9c7961837e3af7d}
+
+
+import\+\_\+rgb\+\_\+image creates an \hyperlink{classcloud__object__segmentation_1_1image__rgb}{image\+\_\+rgb} object from a ppm file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & is a string representing a unique location in the file system \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalid\+\_\+path} & if failed to open file \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+the imported rgb image 
+\end{DoxyReturn}

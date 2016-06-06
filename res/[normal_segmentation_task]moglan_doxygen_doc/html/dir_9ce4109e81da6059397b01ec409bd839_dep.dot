@@ -1,0 +1,13 @@
+digraph "C:/Users/vladm/Documents/virtual_box_shared_folders/ubuntu14.04_lts" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_9358baad31ee956f2cf4bf1ff4aae500 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="virtual_box_shared_folders" fontname="Helvetica", fontsize="10", URL="dir_9358baad31ee956f2cf4bf1ff4aae500.html"]
+  subgraph clusterdir_9ce4109e81da6059397b01ec409bd839 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_9ce4109e81da6059397b01ec409bd839.html"];
+    dir_9ce4109e81da6059397b01ec409bd839 [shape=plaintext label="ubuntu14.04_lts"];
+    dir_e49efefec9feb0e20477f5e332cae0f8 [shape=box label="3d_obj_segm" color="red" fillcolor="white" style="filled" URL="dir_e49efefec9feb0e20477f5e332cae0f8.html"];
+  }
+  }
+}
