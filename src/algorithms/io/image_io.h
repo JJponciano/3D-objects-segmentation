@@ -1,6 +1,5 @@
 /**
   @author Vlad-Adrian Moglan
-  @brief contains image in and out functions
   */
 
 #ifndef IMAGE_IO_H

@@ -1,5 +1,4 @@
 /**
-  * @brief this file contains the algorithm for estimating the normals of a point cloud
   * @author Jean-Jacques Ponciano (algorithm), Vlad-Adrian Moglan (code)
   */
 

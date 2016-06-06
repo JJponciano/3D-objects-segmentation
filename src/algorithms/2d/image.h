@@ -1,6 +1,5 @@
 /**
-  @author Vlad-Adrian Moglan
-  @brief contains an 'abstract' image class
+  * @author Vlad-Adrian Moglan
   */
 
 #ifndef IMAGE_H
@@ -10,6 +9,9 @@
 
 namespace cloud_object_segmentation
 {
+    /**
+     * @brief The image class is an abstract class representing a basic image
+     */
     class image
     {
     private:

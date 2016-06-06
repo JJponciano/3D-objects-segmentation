@@ -1,7 +1,5 @@
 /**
   @author Vlad-Adrian Moglan
-  @brief contains image processing operations
-  @details uses opencv library
   */
 
 #ifndef IMAGE_PROCESSING_H

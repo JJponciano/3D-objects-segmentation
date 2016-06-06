@@ -1,7 +1,6 @@
 /**
   @author Vlad-Adrian Moglan
   @author Kevin Naudin
-  @brief contains varied point cloud operations
   */
 
 #ifndef CLOUD_MANIP_H

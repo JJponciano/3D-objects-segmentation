@@ -1,6 +1,5 @@
 /**
   @author Vlad-Adrian Moglan
-  @brief contains algebraic and vector operations
   */
 
 #ifndef AUX_H
