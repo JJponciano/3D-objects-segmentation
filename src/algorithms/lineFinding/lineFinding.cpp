@@ -5,11 +5,8 @@
 #include <pcl/common/common_headers.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/sample_consensus/ransac.h>
-#include <pcl/sample_consensus/model_types.h>
 #include <pcl/sample_consensus/sac_model_line.h>
 #include <pcl/sample_consensus/sac_model_plane.h>
-#include <pcl/PointIndices.h>
-#include <pcl/common/centroid.h>
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/common/transforms.h>
 #include <Eigen/StdVector>
@@ -18,12 +15,8 @@
 #include <pcl/filters/extract_indices.h>
 #include <stdlib.h>
 #include <time.h>
-#include <pcl/filters/morphological_filter.h>
-#include <cstddef>
 #include <pcl/sample_consensus/rransac.h>
 
-#include "plane.h"
-#include "line.h"
 
 boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::lineColoring(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
 
@@ -35,7 +28,7 @@ boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::lineColoring(
     colored->clear();
 
     int i = 0;
-    while( i<10 && temp->size()>1000){
+    while( i<1 && temp->size()>1000){
         std::vector<int> inliers;
         Eigen::VectorXf coef;
         Plane* p = findBestPlane(temp, inliers, coef);
@@ -63,57 +56,6 @@ boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::lineColoring(
     return colored;
 }
 
-std::vector<float> lineFinding::minMaxCloud(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
-    float minX, maxX, minY, maxY, minZ, maxZ;
-    pcl::PointCloud<pcl::PointXYZRGB>::iterator it;
-    it=cloud->begin();
-    minX = (*it).x;
-    maxX = (*it).x;
-    minY = (*it).y;
-    maxY = (*it).y;
-    minZ = (*it).z;
-    maxZ = (*it).z;
-
-    for(it=cloud->begin(); it<cloud->end(); it++){
-        if((*it).x < minX){
-            minX = (*it).x;
-        }else{
-            if((*it).x > maxX){
-                maxX = (*it).x;
-            }
-        }
-
-        if((*it).y < minY){
-            minY = (*it).y;
-        }else{
-            if((*it).y > maxY){
-                maxY = (*it).y;
-            }
-        }
-
-        if((*it).z < minZ){
-            minZ = (*it).z;
-        }else{
-            if((*it).z > maxZ){
-                maxZ = (*it).z;
-            }
-        }
-    }
-
-    std::cout << "minx:" << minX << " maxx:" << maxX << std::endl;
-    std::cout << "miny:" << minY << " maxy:" << maxY << std::endl;
-    std::cout << "minz:" << minZ << " maxz:" << maxZ << std::endl;
-
-    std::vector<float> res;
-    res.push_back(minX);
-    res.push_back(maxX);
-    res.push_back(minY);
-    res.push_back(maxY);
-    res.push_back(minZ);
-    res.push_back(maxZ);
-    return res;
-}
-
 Plane*  lineFinding::findBestPlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> inliers, Eigen::VectorXf coef){
 
     pcl::SampleConsensusModelPlane<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> (cloud));
@@ -130,43 +72,6 @@ Plane*  lineFinding::findBestPlane(boost::shared_ptr<pcl::PointCloud<pcl::PointX
 
     return p;
 }
-
-float lineFinding::avgDistanceBetweenPoints(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
-    pcl::PointCloud<pcl::PointXYZRGB>::iterator it;
-    std::vector<float> avgs;
-    float avgDistance;
-    int K = 5;
-
-    for(int j =0; j<10; j++){
-        avgDistance = 0;
-        int alea = (int) rand()%cloud->size()+1;
-        it = cloud->begin();
-        for(int i=0; i<alea; i++) it++;
-
-        pcl::KdTreeFLANN<pcl::PointXYZRGB> kdtree;
-        kdtree.setInputCloud(cloud);
-        std::vector<int> pointIdxNKNSearch(K);
-        std::vector<float> pointNKNSquaredDistance(K);
-
-        if ( kdtree.nearestKSearch ((*it), K, pointIdxNKNSearch, pointNKNSquaredDistance) > 0 )
-        {
-            for (size_t i = 0; i < pointIdxNKNSearch.size (); ++i){
-                avgDistance+= sqrt(pointNKNSquaredDistance[i]);
-            }
-            avgDistance = avgDistance/K;
-        }
-        avgs.push_back(avgDistance);
-    }
-
-    float temp=0;
-    for(int i =0; i<avgs.size(); i++){
-        temp += avgs[i];
-    }
-    return (temp/avgs.size());
-
-}
-
-
 
 boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::removeSetOfIndices(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices){
 
@@ -240,7 +145,8 @@ void lineFinding::findLinesInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::P
         Line* l = findALineInYDirection(temp);
         if(l!=NULL){
             inliers = l->getInliers();
-            coef = l->getCoefficients();
+            coef = (*l->getCoefficients());
+            l->getAnglesToOrigin();
             std::vector<int> color = colorRandomizer();
             boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > tempLine (new pcl::PointCloud<pcl::PointXYZRGB>);
 
@@ -266,15 +172,15 @@ void lineFinding::findLinesInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::P
 Line* lineFinding::findALineInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
 
     pcl::SampleConsensusModelLine<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelLine<pcl::PointXYZRGB> (cloud));
-    //pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
-    pcl::RandomizedRandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
+    pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
+    //pcl::RandomizedRandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
     std::vector<int> inliers;
     Eigen::VectorXf coefficients;
     ransac.setDistanceThreshold(0.01);
     Line* l = NULL;
     bool exit = false;
     int i = 0;
-    while(l == NULL & !exit){
+    while(!exit){
         ransac.computeModel();
         ransac.getInliers(inliers);
         ransac.getModelCoefficients(coefficients);
@@ -284,7 +190,7 @@ Line* lineFinding::findALineInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::
         float z = fabs(coefficients[5]);
         i++;
         if((y-x)>0 && (y-z)>0){
-            l = new Line(inliers, coefficients);
+            l = new Line(inliers, &coefficients);
             exit = true;
         }else{
             if(i >= 8){
@@ -293,8 +199,134 @@ Line* lineFinding::findALineInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::
         }
     }
 
+    return l;
+}
 
 
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::findLinesInClusters(std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> clusters){
+    std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr>::iterator it = clusters.begin();
+    std::vector<Line*> lines;
+    std::vector<Line*> temp;
+
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr res (new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp2 (new pcl::PointCloud<pcl::PointXYZRGB>);
+
+    for(it = clusters.begin(); it != clusters.end(); it++){
+
+        temp2 = findLines(*it);
+        *res += *temp2;
+//        temp = findLines(*it);
+
+//        lines.insert(lines.end(), temp.begin(), temp.end());
+    }
+
+    return res;
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::findLines(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud){
+
+    srand(time(NULL));
+
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp (new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored (new pcl::PointCloud<pcl::PointXYZRGB>);
+    std::vector<Line*> lines;
+    *temp = *cloud;
+
+    int i = 0;
+    while( i<25 && temp->size()>1000){
+        std::vector<int> inliers;
+        Eigen::VectorXf* coef;
+        Line* l = findBestLine(temp);
+        if(l!=NULL){
+            inliers = l->getInliers();
+            coef = l->getCoefficients();
+            Line* ltemp = new Line(l->getInliers(),l->getCoefficients());
+
+
+            lines.push_back(ltemp);
+
+            std::vector<int> color = colorRandomizer();
+            boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > tempPlane (new pcl::PointCloud<pcl::PointXYZRGB>);
+
+            tempPlane = findOnePlane(temp, inliers);
+
+            colorEntirePlane(tempPlane, color);
+            *colored += *tempPlane;
+
+            temp = removeSetOfIndices(temp, inliers);
+
+        }
+        i++;
+    }
+
+    cloud->clear();
+//    return lines;
+    return colored;
+}
+
+/*
+bool lineFinding::keepLine(std::vector<Line*> lines, Line* line){
+
+    std::vector<Line*>::iterator it;
+    bool keep = true;
+    Eigen::VectorXf* coefficients1 = line->getCoefficients();
+
+    for(it=lines.begin(); it!=lines.end(); it++){
+        Eigen::VectorXf* coefficients2 = (*it)->getCoefficients();
+        double x,y,z;
+        x = fabs((*coefficients1)[0]-(*coefficients2)[0]);
+        y = fabs((*coefficients1)[1]-(*coefficients2)[1]);
+        z = fabs((*coefficients1)[2]-(*coefficients2)[2]);
+        double dirX,dirY,dirZ;
+        dirX = fabs((*coefficients1)[3]-(*coefficients2)[3]);
+        dirY = fabs((*coefficients1)[4]-(*coefficients2)[4]);
+        dirZ = fabs((*coefficients1)[5]-(*coefficients2)[5]);
+
+        double test, test2;
+        test = (*coefficients1)[0]; //dirX+dirY+dirZ
+        test2 = x+y+z; //x+y+z
+        std::cout << "  test:" << test << " | test2:" << test2 << std::endl;
+
+        if(test<0.2 && test2<0.2){
+            keep = false;
+        }
+    }
+
+    return keep;
+}
+*/
+
+
+Line* lineFinding::findBestLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
+
+    pcl::SampleConsensusModelLine<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelLine<pcl::PointXYZRGB> (cloud));
+    pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
+    std::vector<int> inliers;
+    Eigen::VectorXf coefficients;
+    ransac.setDistanceThreshold(0.01);
+    Line* l = NULL;
+    ransac.computeModel();
+    ransac.getInliers(inliers);
+    ransac.getModelCoefficients(coefficients);
+    l = new Line(inliers, &coefficients);
 
     return l;
+}
+
+std::vector<float> lineFinding::findIntersections(std::vector<Line*> lines){
+
+    int length = lines.size();
+    int i, j;
+    std::vector<float> angles;
+    Line* l = new Line();
+    float angle;
+
+    for(i = 0; i<length-1; i++){
+        for(j = i; j<length; j++){
+            angle = l->angleBetweenLines(lines.at(i), lines.at(j));
+            if(angle != 0) angles.push_back(angle);
+        }
+    }
+
+    return angles;
 }
