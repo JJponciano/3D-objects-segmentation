@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>normal_estimation_test_form</class>
+ <widget class="QDialog" name="normal_estimation_test_form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>482</width>
+    <height>364</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Normal Estimation Test Form</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>160</y>
+     <width>295</width>
+     <height>147</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="varset_2">
+    <item row="1" column="0">
+     <widget class="QLabel" name="max_neighbs_label">
+      <property name="text">
+       <string>max neighbours</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QSpinBox" name="max_neighbs_sb"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="max_fragm_depth_label">
+      <property name="text">
+       <string>max fragm. depth</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" colspan="2">
+     <widget class="QDoubleSpinBox" name="radius_dsb"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="radius_label">
+      <property name="text">
+       <string>radius</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="QSpinBox" name="max_fragm_depth_sb"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>160</y>
+     <width>141</width>
+     <height>109</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="varset_3">
+    <item row="0" column="0">
+     <widget class="QLabel" name="x_scale_label">
+      <property name="text">
+       <string>x scale</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QDoubleSpinBox" name="x_scale_dsb"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="y_scale_label">
+      <property name="text">
+       <string>y scale</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QDoubleSpinBox" name="y_scale_dsb"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="z_scale_label">
+      <property name="text">
+       <string>z scale</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QDoubleSpinBox" name="z_scale_dsb"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>441</width>
+     <height>137</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="varset_1">
+    <item row="0" column="0">
+     <widget class="QLabel" name="cloud_in_path_label">
+      <property name="text">
+       <string>cloud in path</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="cloud_in_ledit"/>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="cloud_in_browse_btn">
+      <property name="text">
+       <string>browse...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="cloud_out_path_label">
+      <property name="text">
+       <string>cloud out path</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="cloud_out_ledit"/>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="cloud_out_browse_btn">
+      <property name="text">
+       <string>browse...</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>171</x>
+     <y>322</y>
+     <width>299</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="help_btn">
+      <property name="text">
+       <string>Help</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="cancel_btn">
+      <property name="text">
+       <string>Back</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="launch_test_btn">
+      <property name="text">
+       <string>Launch test</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
