@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     cc_form->setModal(true);
     ch_form = new cloud_homog_form(this);
     ch_form->setModal(true);
+    cd_form = new cont_det_form(this);
+    cd_form->setModal(true);
 }
 
 MainWindow::~MainWindow()
@@ -32,8 +34,6 @@ void MainWindow::on_next_btn_1_clicked()
 
     else
     {
-        info_box.setText("Not yet implemented.");
-
         int current_index = ui->test_fct_cb_1->currentIndex();
 
         switch (current_index)
@@ -47,8 +47,13 @@ void MainWindow::on_next_btn_1_clicked()
         case 2:
             ch_form->exec();
             break;
+        case 3:
+            cd_form->exec();
+            break;
         default:
+            info_box.setText("Not yet implemented.");
             info_box.exec();
+            break;
         }
     }
 }
@@ -64,8 +69,22 @@ void MainWindow::on_next_btn_2_clicked()
 
     else
     {
-        cti_form = new cloud_to_image_form(this, ui->test_fct_cb_2->currentIndex());
-        cti_form->exec();
+        switch (ui->test_fct_cb_2->currentIndex())
+        {
+        case 0: case 1:
+            cti_form = new cloud_to_image_form(this, ui->test_fct_cb_2->currentIndex());
+            cti_form->exec();
+            break;
+        case 2:
+            cd_form->exec();
+            break;
+        default:
+            info_box.setText("Not yet implemented.");
+            info_box.exec();
+            break;
+        }
+
+
     }
 }
 
@@ -101,7 +120,8 @@ void MainWindow::how_to()
 
     about_msg = std::string("To use this app, just select a function and click next.\n\n") +
                 std::string("> Primary Cloud Operations are strictly linked with Cloud Object Segmentation.\n") +
-                std::string("> Secondary Cloud Operations are auxilliary functions that may be needed in future projects.\n");
+                std::string("> Secondary Cloud Operations are auxilliary functions that may be needed in future projects.\n\n") +
+                std::string("For more information on each function, check our wiki at: https://github.com/JJponciano/3D-objects-segmentation/wiki .");
     about_box.setText(QString::fromUtf8(&about_msg[0], about_msg.size()));
     about_box.exec();
 }

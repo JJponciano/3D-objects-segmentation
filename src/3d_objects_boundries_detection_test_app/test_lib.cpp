@@ -119,3 +119,23 @@ int test::cloud_to_image(int img_type, std::string cloud_import_path, std::strin
 
     return code;
 }
+
+int test::detect_contours(std::string img_import_path, std::string img_export_path)
+{
+    int code = 0;
+
+    try
+    {
+        image_greyscale gs_img = io::import_greyscale_image(img_import_path);
+        image_greyscale res_img = image_processing::detect_contours(gs_img, 255);
+
+        io::export_greyscale_image(img_export_path + "/contour_detection_test.pgm", 255, res_img);
+    }
+
+    catch (...)
+    {
+        code = -1;
+    }
+
+    return code;
+}

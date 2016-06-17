@@ -20,7 +20,7 @@
    <string>3D Objects Boundries Detection Test App</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -82,6 +82,11 @@
          <string>Cloud to RGB Image</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Contour Detection (Depth Image)</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item row="3" column="1">
@@ -93,7 +98,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>230</x>

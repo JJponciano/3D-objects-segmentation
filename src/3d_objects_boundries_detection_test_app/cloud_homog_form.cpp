@@ -12,7 +12,6 @@ cloud_homog_form::cloud_homog_form(QWidget *parent) :
     ui->epsilon_sb->setMinimum(1);
     ui->epsilon_sb->setMaximum(255);
     ui->epsilon_sb->setSingleStep(25);
-    _ed = new test::epsilon_data;
 }
 
 cloud_homog_form::~cloud_homog_form()
@@ -27,13 +26,12 @@ void cloud_homog_form::on_cloud_in_browse_btn_clicked()
                                                   tr("text files (*.txt)"));
 
     ui->launch_test_btn->setEnabled(false);
-
-    _ed->file_in_path = file_in_path.toStdString();
     ui->cloud_in_ledit->setEnabled(true);
     ui->cloud_in_ledit->setText(file_in_path);
     ui->cloud_in_ledit->setEnabled(false);
 
-    if (_ed->file_in_path.compare("") && _ed->file_out_path.compare(""))
+    if (file_in_path.toStdString().compare("")
+            && ui->cloud_out_ledit->text().toStdString().compare(""))
         ui->launch_test_btn->setEnabled(true);
 }
 
@@ -44,26 +42,26 @@ void cloud_homog_form::on_cloud_out_browse_btn_clicked()
                                                                       | QFileDialog::DontResolveSymlinks);
 
     ui->launch_test_btn->setEnabled(false);
-
-    _ed->file_out_path = file_out_path.toStdString();
     ui->cloud_out_ledit->setEnabled(true);
     ui->cloud_out_ledit->setText(file_out_path);
     ui->cloud_out_ledit->setEnabled(false);
 
-    if (_ed->file_in_path.compare("") && _ed->file_out_path.compare(""))
+    if (ui->cloud_in_ledit->text().toStdString().compare("")
+            && file_out_path.toStdString().compare(""))
         ui->launch_test_btn->setEnabled(true);
 }
 
 void cloud_homog_form::on_launch_test_btn_clicked()
 {
+    this->setEnabled(false);
+
     // for when the test is done
     int test_function_return_code;
     QMessageBox info_box;
 
-    this->setEnabled(false);
-    _ed->epsilon = (float)(ui->epsilon_sb->value());
-    test_function_return_code = test::homogenize_cloud(_ed->file_in_path, _ed->file_out_path,
-                                                           (int)_ed->epsilon);
+    test_function_return_code = test::homogenize_cloud(ui->cloud_in_ledit->text().toStdString(),
+                                                       ui->cloud_out_ledit->text().toStdString(),
+                                                       ui->epsilon_sb->value());
 
     if (test_function_return_code)
         info_box.setText("Invalid input.");

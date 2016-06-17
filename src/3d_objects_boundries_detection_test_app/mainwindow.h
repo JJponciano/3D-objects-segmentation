@@ -5,6 +5,7 @@
 #include "cloud_crop_form.h"
 #include "cloud_homog_form.h"
 #include "cloud_to_image_form.h"
+#include "cont_det_form.h"
 
 #include <QMainWindow>
 #include <QMessageBox>
@@ -26,11 +27,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_test_btn_clicked();
-
     void on_actionQuit_triggered();
-
-    void on_test_fct_cb_currentIndexChanged(int index);
 
     void on_actionAbout_triggered();
 
@@ -52,6 +49,7 @@ private:
     cloud_crop_form *cc_form;
     cloud_homog_form *ch_form;
     cloud_to_image_form *cti_form;
+    cont_det_form *cd_form;
 };
 
 #endif // MAINWINDOW_H

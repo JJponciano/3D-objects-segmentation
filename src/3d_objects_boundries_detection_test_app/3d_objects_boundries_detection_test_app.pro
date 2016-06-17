@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     cloud_crop_form.cpp \
     cloud_homog_form.cpp \
     normal_estimation_form.cpp \
-    cloud_to_image_form.cpp
+    cloud_to_image_form.cpp \
+    cont_det_form.cpp
 
 HEADERS  += mainwindow.h \
     ../algorithms/2d/image.h \
@@ -64,14 +65,16 @@ HEADERS  += mainwindow.h \
     normal_estimation_form.h \
     cloud_homog_form.h \
     cloud_crop_form.h \
-    cloud_to_image_form.h
+    cloud_to_image_form.h \
+    cont_det_form.h
 
 
 FORMS    += mainwindow.ui \
     normal_estimation_form.ui \
     cloud_homog_form.ui \
     cloud_crop_form.ui \
-    cloud_to_image_form.ui
+    cloud_to_image_form.ui \
+    cont_det_form.ui
 
 
 HEADERS +=

@@ -57,16 +57,6 @@ namespace cloud_object_segmentation
                 cloud_object_segmentation::image_greyscale gs_img);
 
         /**
-         * @brief greyscale_vector_to_image converts a 2D greyscale points array into a depth image
-         * @param greyscale_vector is the the array to be converted
-         * @param x_epsilon is used for delimiting the x cases of the image
-         * @throw std::logic_error if x_epsilon is smaller or equal to 0
-         * @return the resulted depth image
-         */
-        cloud_object_segmentation::image_greyscale greyscale_vector_to_image(
-                std::vector<cloud_object_segmentation::point_xy_greyscale> greyscale_vector, float x_epsilon);
-
-        /**
          * @brief mixed_vector_to_image converts a 2D mixed points array into a mixed image
          * @param mixed_vector is the array to be converted
          * @param x_epsilon is used for delimiting the x cases of the image
@@ -91,17 +81,6 @@ namespace cloud_object_segmentation
          */
         cloud_object_segmentation::image_greyscale mixed_image_to_greyscale(
                 cloud_object_segmentation::image_mixed mixed_img);
-
-        /**
-         * @brief greyscale_image_to_cloud creates a pointer to a point cloud based on a greyscale image
-         * @param gs_img is the image that serves as the base for the creation of the point cloud
-         * @param base_cloud_ptr is a pointer to the cloud used to create the image
-         * @throw invalid_cloud_pointer if base_cloud_ptr is equal to nullptr
-         * @return a pointer to the resulted cloud
-         */
-        pcl::PointCloud<pcl::PointXYZ>::Ptr greyscale_image_to_cloud(
-                cloud_object_segmentation::image_greyscale gs_img,
-                pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr);
 
         /**
          * @brief mixed_image_to_cloud creates a pointer to a point cloud based on a mixed image

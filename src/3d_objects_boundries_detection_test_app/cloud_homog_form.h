@@ -32,7 +32,6 @@ private slots:
 
 private:
     Ui::cloud_homogenization_test_form *ui;
-    test::epsilon_data *_ed;
 };
 
 #endif // CLOUD_HOMOGENIZATION_TEST_FORM_H

@@ -13,35 +13,6 @@
 
 namespace test
 {
-    /// structured test input
-    struct io_data
-    {
-        std::string file_in_path;
-        std::string file_out_path;
-    };
-
-    struct epsilon_data : io_data
-    {
-        float epsilon;
-    };
-
-    struct thresh_data : io_data
-    {
-        float x_thresh;
-        float y_thresh;
-        float z_thresh;
-    };
-
-    struct normal_estimation_data : io_data
-    {
-        float radius;
-        float max_neighbs;
-        float x_scale;
-        float y_scale;
-        float z_scale;
-        float max_fragment_depth;
-    };
-
     /// test functions
     int crop_cloud(std::string cloud_import_path, std::string cloud_export_path,
                     float x_thresh, float y_thresh, float z_thresh);
@@ -52,6 +23,8 @@ namespace test
     int homogenize_cloud(std::string cloud_import_path, std::string cloud_export_path, short color_epsilon);
 
     int cloud_to_image(int img_type, std::string cloud_import_path, std::string img_export_path, float x_epsilon);
+
+    int detect_contours(std::string img_import_path, std::string img_export_path);
 }
 
 #endif // TEST_LIB_H

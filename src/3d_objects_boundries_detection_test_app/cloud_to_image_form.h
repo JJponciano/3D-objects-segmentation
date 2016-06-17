@@ -22,8 +22,6 @@ public:
 private slots:
     void on_cloud_in_browse_btn_clicked();
 
-    void on_cloud_out_browse_btn_clicked();
-
     void on_launch_test_btn_clicked();
 
     void on_cancel_btn_clicked();
@@ -34,7 +32,6 @@ private slots:
 
 private:
     Ui::cloud_to_image_form *ui;
-    test::io_data *_iod;
     int _img_type;
 };
 

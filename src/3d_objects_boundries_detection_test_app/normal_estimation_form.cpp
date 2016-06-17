@@ -8,7 +8,6 @@ normal_estimation_form::normal_estimation_form(QWidget *parent) :
     this->setWindowTitle("Cloud normal estimation test form");
     this->setFixedSize(508, 393);
     ui->setupUi(this);
-    _ned = new test::normal_estimation_data;
 
     // xyz coords input
     ui->x_scale_dsb->setSingleStep(0.01);
@@ -54,14 +53,12 @@ void normal_estimation_form::on_cloud_in_browse_btn_clicked()
                                                   tr("text files (*.txt)"));
 
     ui->launch_test_btn->setEnabled(false);
-
-    _ned->file_in_path = file_in_path.toStdString();
     ui->cloud_in_ledit->setEnabled(true);
     ui->cloud_in_ledit->setText(file_in_path);
     ui->cloud_in_ledit->setEnabled(false);
-    ui->x_scale_dsb->setValue(0.001);ui->x_scale_dsb->setValue(0.001);
 
-    if (_ned->file_in_path.compare("") && _ned->file_out_path.compare(""))
+    if (file_in_path.toStdString().compare("")
+            && ui->cloud_out_ledit->text().toStdString().compare(""))
         ui->launch_test_btn->setEnabled(true);
 }
 
@@ -72,33 +69,27 @@ void normal_estimation_form::on_cloud_out_browse_btn_clicked()
                                                                       | QFileDialog::DontResolveSymlinks);
 
     ui->launch_test_btn->setEnabled(false);
-
-    _ned->file_out_path = file_out_path.toStdString();
     ui->cloud_out_ledit->setEnabled(true);
     ui->cloud_out_ledit->setText(file_out_path);
     ui->cloud_out_ledit->setEnabled(false);
 
-    if (_ned->file_in_path.compare("") && _ned->file_out_path.compare(""))
+    if (ui->cloud_in_ledit->text().toStdString().compare("")
+            && file_out_path.toStdString().compare(""))
         ui->launch_test_btn->setEnabled(true);
 }
 
 void normal_estimation_form::on_launch_test_btn_clicked()
 {
+    this->setEnabled(false);
+
     // for when the test is done
     int test_function_return_code;
     QMessageBox info_box;
 
-    this->setEnabled(false);
-    _ned->radius = ui->radius_dsb->value();
-    _ned->max_neighbs = ui->max_neighbs_sb->value();
-    _ned->x_scale = ui->x_scale_dsb->value();
-    _ned->y_scale = ui->y_scale_dsb->value();
-    _ned->z_scale = ui->z_scale_dsb->value();
-    _ned->max_fragment_depth = ui->max_fragm_depth_sb->value();
-    test_function_return_code = test::estimate_normals(_ned->file_in_path, _ned->file_out_path,
-                                                        _ned->radius, _ned->max_neighbs, _ned->x_scale,
-                                                        _ned->y_scale,_ned->z_scale,
-                                                        _ned->max_fragment_depth);
+    test_function_return_code = test::estimate_normals(ui->cloud_in_ledit->text().toStdString(), ui->cloud_out_ledit->text().toStdString(),
+                                                        ui->radius_dsb->value(), ui->max_neighbs_sb->value(), ui->x_scale_dsb->value(),
+                                                        ui->y_scale_dsb->value(),ui->z_scale_dsb->value(),
+                                                        ui->max_fragm_depth_sb->value());
 
     if (test_function_return_code)
         info_box.setText("Invalid input.");

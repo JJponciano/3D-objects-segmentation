@@ -9,11 +9,11 @@ cloud_to_image_form::cloud_to_image_form(QWidget *parent, int img_type) :
     ui->setupUi(this);
     ui->cloud_in_ledit->setEnabled(false);
     ui->image_out_ledit->setEnabled(false);
+    ui->launch_test_btn->setEnabled(false);
     ui->epsilon_dsb->setMinimum(0);
     ui->epsilon_dsb->setMaximum(100.0);
     ui->epsilon_dsb->setSingleStep(0.5);
     ui->epsilon_dsb->setDecimals(1);
-    _iod = new test::io_data;
     _img_type = img_type;
 }
 
@@ -29,13 +29,12 @@ void cloud_to_image_form::on_cloud_in_browse_btn_clicked()
                                                   tr("text files (*.txt)"));
 
     ui->launch_test_btn->setEnabled(false);
-
-    _iod->file_in_path = file_in_path.toStdString();
     ui->cloud_in_ledit->setEnabled(true);
     ui->cloud_in_ledit->setText(file_in_path);
     ui->cloud_in_ledit->setEnabled(false);
 
-    if (_iod->file_in_path.compare("") && _iod->file_out_path.compare(""))
+    if (file_in_path.toStdString().compare("")
+            && ui->image_out_ledit->text().toStdString().compare(""))
         ui->launch_test_btn->setEnabled(true);
 }
 
@@ -46,23 +45,24 @@ void cloud_to_image_form::on_image_out_browse_btn_clicked()
                                                                       | QFileDialog::DontResolveSymlinks);
 
     ui->launch_test_btn->setEnabled(false);
-
-    _iod->file_out_path = file_out_path.toStdString();
     ui->image_out_ledit->setEnabled(true);
     ui->image_out_ledit->setText(file_out_path);
     ui->image_out_ledit->setEnabled(false);
 
-    if (_iod->file_in_path.compare("") && _iod->file_out_path.compare(""))
+    if (ui->cloud_in_ledit->text().toStdString().compare("")
+            && file_out_path.toStdString().compare(""))
         ui->launch_test_btn->setEnabled(true);
 }
 
 void cloud_to_image_form::on_launch_test_btn_clicked()
 {
+    this->setEnabled(false);
+
     int test_function_return_code;
     QMessageBox info_box;
 
-    this->setEnabled(false);
-    test_function_return_code = test::cloud_to_image(_img_type, _iod->file_in_path, _iod->file_out_path,
+    test_function_return_code = test::cloud_to_image(_img_type, ui->cloud_in_ledit->text().toStdString(),
+                                                     ui->image_out_ledit->text().toStdString(),
                                                            ui->epsilon_dsb->value());
 
     if (test_function_return_code)

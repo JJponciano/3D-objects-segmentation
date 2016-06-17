@@ -36,7 +36,6 @@ private slots:
 
 private:
     Ui::normal_estimation_test_form *ui;
-    test::normal_estimation_data *_ned;
 };
 
 #endif // NORMAL_ESTIMATION_TEST_FORM_H

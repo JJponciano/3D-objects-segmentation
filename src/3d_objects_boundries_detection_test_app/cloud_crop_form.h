@@ -35,7 +35,6 @@ private slots:
 
 private:
     Ui::cloud_crop_test_form *ui;
-    test::thresh_data *_td;
 };
 
 #endif // CLOUD_CROP_TEST_FORM_H
