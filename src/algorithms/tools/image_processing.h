@@ -83,6 +83,7 @@ namespace cloud_object_segmentation
         /**
          * @brief cloud_to_depth creates a depth image based on a point cloud
          * @param cloud_ptr is a pointer to our point cloud
+         * @param x_epsilon is used for delimiting the x cases of the image
          * @return the depth image
          */
         image_greyscale cloud_to_depth_image(
