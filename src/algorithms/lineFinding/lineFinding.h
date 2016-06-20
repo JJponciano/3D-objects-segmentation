@@ -14,7 +14,7 @@ namespace lineFinding{
      * @param cloud IN the initial point cloud with RGB points
      * @return a point cloud with lines colored
      */
-    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineColoring(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineColoring(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
 
     /**
      * @brief coloringOneLine Colors a set of points based on their indices (works with planes, too)
@@ -22,7 +22,7 @@ namespace lineFinding{
      * @param inliers IN the indices of the points to color
      * @param color IN the ints representing an RGB color
      */
-    void coloringOneLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> inliers, std::vector<int> color);
+    void coloringOneLine(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> inliers, std::vector<int> color);
 
     /**
      * @brief findBestPlane finds the best plane in a cloud with RANSAC
@@ -31,7 +31,7 @@ namespace lineFinding{
      * @param coef OUT the coefficients of the plane found
      * @return a Plane Object
      */
-    Plane* findBestPlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> inliers, Eigen::VectorXf coef);
+    Plane* findBestPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> inliers, Eigen::VectorXf coef);
 
     /**
      * @brief removeSetOfIndices removes a set of indices from a point cloud
@@ -39,7 +39,7 @@ namespace lineFinding{
      * @param indices IN the indices of the points to remove
      * @return the point cloud without the points
      */
-    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > removeSetOfIndices(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr removeSetOfIndices(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> indices);
 
     /**
      * @brief findOnePlane extract a sub cloud from the cloud
@@ -47,14 +47,14 @@ namespace lineFinding{
      * @param indices IN indices of the points to extract
      * @return a point cloud
      */
-    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > findOnePlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr findOnePlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> indices);
 
     /**
      * @brief colorEntirePlane colors an entire point cloud
      * @param cloud IN the cloud to color
      * @param color IN the color to use
      */
-    void colorEntirePlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> color);
+    void colorEntirePlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> color);
 
     /**
      * @brief colorRandomizer returns a vector of <R,G,B> ints between 0 & 255
@@ -67,13 +67,13 @@ namespace lineFinding{
      * @param cloud IN the cloud to look for the line in
      * @return the Line object found
      */
-    Line* findALineInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud);
+    Line* findALineInYDirection(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
 
     /**
      * @brief findLinesInYDirection finds multiple lines in Y direction
      * @param cloud IN the base point cloud
      */
-    void findLinesInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud);
+    void findLinesInYDirection(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
 
     /**
      * @brief findLinesInClusters looks for lines in clusters of points created by the color segmentation part of the project
@@ -88,14 +88,6 @@ namespace lineFinding{
      * @return return a new cloud containing the lines
      */
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr findLines(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
-
-    /**
-     * @brief keepLine !!WIP!! decides wether or not to keep a line based on the other lines found
-     * @param lines IN the lines already found
-     * @param line IN the tested line
-     * @return true if we're keeping the line, false otherwise
-     */
-    bool keepLine(std::vector<Line*> lines, Line* line);
 
     /**
      * @brief findBestLine finds the best line in one point cloud
