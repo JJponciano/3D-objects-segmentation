@@ -63,7 +63,7 @@ namespace cloud_object_segmentation
          * @throw std::logic_error if x_epsilon is smaller or equal to 0
          * @return the resulted mixed image
          */
-        cloud_object_segmentation::image_mixed mixed_vector_to_image(
+        image_mixed mixed_vector_to_image(
                 std::vector<cloud_object_segmentation::point_xy_mixed> mixed_vector, float x_epsilon);
 
         /**
@@ -71,16 +71,22 @@ namespace cloud_object_segmentation
          * @param mixed_img the mixed image to be turned into rgb
          * @return the rgb image
          */
-        cloud_object_segmentation::image_rgb mixed_image_to_rgb(
-                cloud_object_segmentation::image_mixed mixed_img);
+        image_rgb mixed_image_to_rgb(image_mixed mixed_img);
 
         /**
          * @brief mixed_image_to_greyscale turns a mixed image into a grey scale image
          * @param mixed_img the mixed image to be turned into grey scale
          * @return the grey scale image
          */
-        cloud_object_segmentation::image_greyscale mixed_image_to_greyscale(
-                cloud_object_segmentation::image_mixed mixed_img);
+        image_greyscale mixed_image_to_greyscale(image_mixed mixed_img);
+
+        /**
+         * @brief cloud_to_depth creates a depth image based on a point cloud
+         * @param cloud_ptr is a pointer to our point cloud
+         * @return the depth image
+         */
+        image_greyscale cloud_to_depth_image(
+                pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float x_epsilon);
 
         /**
          * @brief mixed_image_to_cloud creates a pointer to a point cloud based on a mixed image
@@ -90,7 +96,7 @@ namespace cloud_object_segmentation
          * @return a pointer to the resulted cloud
          */
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr mixed_image_to_cloud(
-                cloud_object_segmentation::image_mixed mixed_img,
+                image_mixed mixed_img,
                 pcl::PointCloud<pcl::PointXYZRGB>::Ptr base_cloud_ptr);
 
         /**
@@ -98,51 +104,49 @@ namespace cloud_object_segmentation
          * @param gs_img is the cloud_object_segmentation::image_greyscale to be transformed into a Mat
          * @return the grey scale image as a Mat object
          */
-        cv::Mat greyscale_image_to_mat(cloud_object_segmentation::image_greyscale gs_img);
+        cv::Mat greyscale_image_to_mat(image_greyscale gs_img);
 
         /**
          * @brief rgb_image_to_mat transforms an cloud_object_segmentation::image_rgb object into a cv::Mat object
          * @param rgb_img is the cloud_object_segmentation::image_rgb to be transformed into a Mat
          * @return the rgb image as a Mat object
          */
-        cv::Mat rgb_image_to_mat(cloud_object_segmentation::image_rgb rgb_img);
+        cv::Mat rgb_image_to_mat(image_rgb rgb_img);
 
         /**
          * @brief mat_to_greyscale_image transforms a cv::Mat object into an cloud_object_segmentation::image_greyscale object
          * @param gs_mat is the Mat to be transformed
          * @return an cloud_object_segmentation::image_greyscale object
          */
-        cloud_object_segmentation::image_greyscale mat_to_greyscale_image(cv::Mat gs_mat);
+        image_greyscale mat_to_greyscale_image(cv::Mat gs_mat);
 
         /**
          * @brief mat_to_rgb_image transforms a cv::Mat object into an cloud_object_segmentation::image_rgb object
          * @param rgb_mat is the Mat to be transformed
          * @return an cloud_object_segmentation::image_rgb object
          */
-        cloud_object_segmentation::image_rgb mat_to_rgb_image(cv::Mat rgb_mat);
+        image_rgb mat_to_rgb_image(cv::Mat rgb_mat);
 
         /**
          * @brief detect_contour is a function that detects contours in a depth image
          * @param gs_img is the image to detect the contours of
          * @return the contours in the depth image
          */
-        cloud_object_segmentation::image_greyscale detect_contours(
-                cloud_object_segmentation::image_greyscale gs_img, int hist_num_cls);
+        image_greyscale detect_contours(image_greyscale gs_img, int hist_num_cls);
 
         /**
          * @brief remove_colors removes the parameter colors from the mixed image
          * @param mixed_img is a reference the image to be modified
          * @param colors is the array of colors to be removed
          */
-        void remove_colors(cloud_object_segmentation::image_mixed &mixed_img,
-                           std::vector<uint32_t> colors);
+        void remove_colors(image_mixed &mixed_img, std::vector<uint32_t> colors);
 
         /**
          * @brief normalize augments the greyscale differences between the pixels of an image
          * @param gs_img_ptr is a pointer to the greyscale image to be normalized
          * @throw std::invalid_argument if gs_img_ptr is equal to nullptr
          */
-        void normalize(cloud_object_segmentation::image_greyscale *gs_img_ptr);
+        void normalize(image_greyscale *gs_img_ptr);
     }
 }
 

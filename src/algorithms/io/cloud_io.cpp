@@ -1,11 +1,13 @@
 #include "cloud_io.h"
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::io::import_cloud_txt(std::string pathname)
+namespace ns_cos = cloud_object_segmentation;
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr ns_cos::io::import_cloud_txt(std::string pathname)
 {
     QFile file(QString(pathname.c_str()));
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        throw cloud_object_segmentation::except::invalid_path();
+        throw ns_cos::except::invalid_path();
 
     QTextStream flux(&file);
     QString  line;  // each read line
@@ -22,7 +24,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::io::import_clo
         QStringList result = line.split("\t"); // split the line with space as a separator character
 
         if(result.size() < 3)
-            throw cloud_object_segmentation::except::invalid_path();
+            throw ns_cos::except::invalid_path();
 
         QString r;  // reads each coordinate
 
@@ -53,7 +55,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::io::import_clo
 
         // unknown format
         else
-            throw cloud_object_segmentation::except::invalid_path();
+            throw ns_cos::except::invalid_path();
     }
 
     file.close();
@@ -77,7 +79,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::io::import_clo
     return cloud;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::io::import_cloud(std::string path)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr ns_cos::io::import_cloud(std::string path)
 {
     std::string ext;    // files extension
     size_t i = path.rfind('.', path.length());
@@ -92,20 +94,20 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_object_segmentation::io::import_clo
         pcl::io::loadPCDFile<pcl::PointXYZRGB> (path, *cloud);
 
         if (!cloud)
-            throw cloud_object_segmentation::except::invalid_path();
+            throw ns_cos::except::invalid_path();
     }
 
     else if (ext.compare("txt") == 0)
-        cloud = cloud_object_segmentation::io::import_cloud_txt(path);
+        cloud = ns_cos::io::import_cloud_txt(path);
 
     return cloud;
 }
 
-void cloud_object_segmentation::io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
+void ns_cos::io::export_cloud(std::string path, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr)
 {
 
     if (!cloud_ptr)
-        throw cloud_object_segmentation::except::invalid_cloud_pointer();
+        throw ns_cos::except::invalid_cloud_pointer();
 
     std::ofstream cloud_file;
     std::string line;
@@ -114,7 +116,7 @@ void cloud_object_segmentation::io::export_cloud(std::string path, pcl::PointClo
     cloud_file.open(path, std::ios::out);
 
     if (!cloud_file.is_open())
-        throw cloud_object_segmentation::except::invalid_path();
+        throw ns_cos::except::invalid_path();
 
     for (auto cloud_it = cloud_ptr->points.begin(); cloud_it < cloud_ptr->points.end(); cloud_it++)
     {
