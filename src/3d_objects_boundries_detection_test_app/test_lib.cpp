@@ -99,7 +99,7 @@ int test::cloud_to_image(int img_type, std::string cloud_import_path, std::strin
 
         if (img_type == 0)
         {
-            image_greyscale gs_img = image_processing::mixed_image_to_greyscale(mixed_img);
+            image_greyscale gs_img = image_processing::cloud_to_depth_image(cloud_ptr, x_epsilon);
             io::export_greyscale_image(img_export_path + "/cloud_to_greyscale_image.pgm", 255, gs_img);
         }
 

@@ -5,8 +5,11 @@
 #include <pcl/common/common_headers.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/sample_consensus/ransac.h>
+#include <pcl/sample_consensus/model_types.h>
 #include <pcl/sample_consensus/sac_model_line.h>
 #include <pcl/sample_consensus/sac_model_plane.h>
+#include <pcl/PointIndices.h>
+#include <pcl/common/centroid.h>
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/common/transforms.h>
 #include <Eigen/StdVector>
@@ -15,27 +18,31 @@
 #include <pcl/filters/extract_indices.h>
 #include <stdlib.h>
 #include <time.h>
+#include <pcl/filters/morphological_filter.h>
+#include <cstddef>
 #include <pcl/sample_consensus/rransac.h>
 
+#include "plane.h"
+#include "line.h"
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::lineColoring(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud){
+boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::lineColoring(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
 
     srand(time(NULL));
 
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp (new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored (new pcl::PointCloud<pcl::PointXYZRGB>);
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > temp (new pcl::PointCloud<pcl::PointXYZRGB>);
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > colored (new pcl::PointCloud<pcl::PointXYZRGB>);
     *temp = *cloud;
     colored->clear();
 
     int i = 0;
-    while( i<1 && temp->size()>1000){
+    while( i<10 && temp->size()>1000){
         std::vector<int> inliers;
         Eigen::VectorXf coef;
         Plane* p = findBestPlane(temp, inliers, coef);
         inliers = p->getInliers();
         coef = p->getCoefficients();
         std::vector<int> color = colorRandomizer();
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr tempPlane (new pcl::PointCloud<pcl::PointXYZRGB>);
+        boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > tempPlane (new pcl::PointCloud<pcl::PointXYZRGB>);
 
         tempPlane = findOnePlane(temp, inliers);
         temp = removeSetOfIndices(temp, inliers);
@@ -56,7 +63,58 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::lineColoring(pcl::PointCloud
     return colored;
 }
 
-Plane*  lineFinding::findBestPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> inliers, Eigen::VectorXf coef){
+std::vector<float> lineFinding::minMaxCloud(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
+    float minX, maxX, minY, maxY, minZ, maxZ;
+    pcl::PointCloud<pcl::PointXYZRGB>::iterator it;
+    it=cloud->begin();
+    minX = (*it).x;
+    maxX = (*it).x;
+    minY = (*it).y;
+    maxY = (*it).y;
+    minZ = (*it).z;
+    maxZ = (*it).z;
+
+    for(it=cloud->begin(); it<cloud->end(); it++){
+        if((*it).x < minX){
+            minX = (*it).x;
+        }else{
+            if((*it).x > maxX){
+                maxX = (*it).x;
+            }
+        }
+
+        if((*it).y < minY){
+            minY = (*it).y;
+        }else{
+            if((*it).y > maxY){
+                maxY = (*it).y;
+            }
+        }
+
+        if((*it).z < minZ){
+            minZ = (*it).z;
+        }else{
+            if((*it).z > maxZ){
+                maxZ = (*it).z;
+            }
+        }
+    }
+
+    std::cout << "minx:" << minX << " maxx:" << maxX << std::endl;
+    std::cout << "miny:" << minY << " maxy:" << maxY << std::endl;
+    std::cout << "minz:" << minZ << " maxz:" << maxZ << std::endl;
+
+    std::vector<float> res;
+    res.push_back(minX);
+    res.push_back(maxX);
+    res.push_back(minY);
+    res.push_back(maxY);
+    res.push_back(minZ);
+    res.push_back(maxZ);
+    return res;
+}
+
+Plane*  lineFinding::findBestPlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> inliers, Eigen::VectorXf coef){
 
     pcl::SampleConsensusModelPlane<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> (cloud));
     pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
@@ -73,9 +131,46 @@ Plane*  lineFinding::findBestPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
     return p;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::removeSetOfIndices(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> indices){
+float lineFinding::avgDistanceBetweenPoints(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
+    pcl::PointCloud<pcl::PointXYZRGB>::iterator it;
+    std::vector<float> avgs;
+    float avgDistance;
+    int K = 5;
 
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp (new pcl::PointCloud<pcl::PointXYZRGB>);
+    for(int j =0; j<10; j++){
+        avgDistance = 0;
+        int alea = (int) rand()%cloud->size()+1;
+        it = cloud->begin();
+        for(int i=0; i<alea; i++) it++;
+
+        pcl::KdTreeFLANN<pcl::PointXYZRGB> kdtree;
+        kdtree.setInputCloud(cloud);
+        std::vector<int> pointIdxNKNSearch(K);
+        std::vector<float> pointNKNSquaredDistance(K);
+
+        if ( kdtree.nearestKSearch ((*it), K, pointIdxNKNSearch, pointNKNSquaredDistance) > 0 )
+        {
+            for (size_t i = 0; i < pointIdxNKNSearch.size (); ++i){
+                avgDistance+= sqrt(pointNKNSquaredDistance[i]);
+            }
+            avgDistance = avgDistance/K;
+        }
+        avgs.push_back(avgDistance);
+    }
+
+    float temp=0;
+    for(int i =0; i<avgs.size(); i++){
+        temp += avgs[i];
+    }
+    return (temp/avgs.size());
+
+}
+
+
+
+boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::removeSetOfIndices(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices){
+
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > temp (new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::IndicesPtr indicesPtr (new std::vector<int>(indices));
     pcl::ExtractIndices<pcl::PointXYZRGB> filter;
     filter.setNegative(true);
@@ -86,16 +181,16 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::removeSetOfIndices(pcl::Poin
     return temp;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::findOnePlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> indices){
+boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > lineFinding::findOnePlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> indices){
 
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr res (new pcl::PointCloud<pcl::PointXYZRGB>);
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > res (new pcl::PointCloud<pcl::PointXYZRGB>);
     for(uint i=0; i<indices.size(); i++){
         res->points.push_back(cloud->at(indices[i]));
     }
     return res;
 }
 
-void lineFinding::colorEntirePlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> color){
+void lineFinding::colorEntirePlane(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> color){
     pcl::PointCloud<pcl::PointXYZRGB>::iterator it;
 
     for(it=cloud->begin(); it<cloud->end(); it++){
@@ -121,7 +216,7 @@ std::vector<int> lineFinding::colorRandomizer(){
 
 }
 
-void lineFinding::coloringOneLine(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::vector<int> inliers, std::vector<int> color){
+void lineFinding::coloringOneLine(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud, std::vector<int> inliers, std::vector<int> color){
 
     for(uint i=0; i<inliers.size(); i++){
         cloud->points[inliers[i]].r=color[0];
@@ -130,11 +225,11 @@ void lineFinding::coloringOneLine(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, 
     }
 }
 
-void lineFinding::findLinesInYDirection(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud){
+void lineFinding::findLinesInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
     srand(time(NULL));
 
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp (new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored (new pcl::PointCloud<pcl::PointXYZRGB>);
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > temp (new pcl::PointCloud<pcl::PointXYZRGB>);
+    boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > colored (new pcl::PointCloud<pcl::PointXYZRGB>);
     *temp = *cloud;
     colored->clear();
 
@@ -145,10 +240,9 @@ void lineFinding::findLinesInYDirection(pcl::PointCloud<pcl::PointXYZRGB>::Ptr c
         Line* l = findALineInYDirection(temp);
         if(l!=NULL){
             inliers = l->getInliers();
-            coef = (*l->getCoefficients());
-            l->getAnglesToOrigin();
+            coef = l->getCoefficients();
             std::vector<int> color = colorRandomizer();
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr tempLine (new pcl::PointCloud<pcl::PointXYZRGB>);
+            boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > tempLine (new pcl::PointCloud<pcl::PointXYZRGB>);
 
             tempLine = findOnePlane(temp, inliers);
             temp = removeSetOfIndices(temp, inliers);
@@ -169,18 +263,18 @@ void lineFinding::findLinesInYDirection(pcl::PointCloud<pcl::PointXYZRGB>::Ptr c
     *cloud = *colored;
 }
 
-Line* lineFinding::findALineInYDirection(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud){
+Line* lineFinding::findALineInYDirection(boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > cloud){
 
     pcl::SampleConsensusModelLine<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelLine<pcl::PointXYZRGB> (cloud));
-    pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
-    //pcl::RandomizedRandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
+    //pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
+    pcl::RandomizedRandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
     std::vector<int> inliers;
     Eigen::VectorXf coefficients;
     ransac.setDistanceThreshold(0.01);
     Line* l = NULL;
     bool exit = false;
     int i = 0;
-    while(!exit){
+    while(l == NULL & !exit){
         ransac.computeModel();
         ransac.getInliers(inliers);
         ransac.getModelCoefficients(coefficients);
@@ -190,7 +284,7 @@ Line* lineFinding::findALineInYDirection(pcl::PointCloud<pcl::PointXYZRGB>::Ptr 
         float z = fabs(coefficients[5]);
         i++;
         if((y-x)>0 && (y-z)>0){
-            l = new Line(inliers, &coefficients);
+            l = new Line(inliers, coefficients);
             exit = true;
         }else{
             if(i >= 8){
@@ -199,102 +293,8 @@ Line* lineFinding::findALineInYDirection(pcl::PointCloud<pcl::PointXYZRGB>::Ptr 
         }
     }
 
-    return l;
-}
 
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::findLinesInClusters(std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> clusters){
-    std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr>::iterator it = clusters.begin();
-    std::vector<Line*> lines;
-    std::vector<Line*> temp;
-
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr res (new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp2 (new pcl::PointCloud<pcl::PointXYZRGB>);
-
-    for(it = clusters.begin(); it != clusters.end(); it++){
-
-        temp2 = findLines(*it);
-        *res += *temp2;
-//        temp = findLines(*it);
-
-        lines.insert(lines.end(), temp.begin(), temp.end());
-    }
-
-    return res;
-}
-
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr lineFinding::findLines(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud){
-
-    srand(time(NULL));
-
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp (new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored (new pcl::PointCloud<pcl::PointXYZRGB>);
-    std::vector<Line*> lines;
-    *temp = *cloud;
-
-    int i = 0;
-    while( i<25 && temp->size()>1000){
-        std::vector<int> inliers;
-        Eigen::VectorXf* coef;
-        Line* l = findBestLine(temp);
-        if(l!=NULL){
-            inliers = l->getInliers();
-            coef = l->getCoefficients();
-            Line* ltemp = new Line(l->getInliers(),l->getCoefficients());
-
-
-            lines.push_back(ltemp);
-
-            std::vector<int> color = colorRandomizer();
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr tempPlane (new pcl::PointCloud<pcl::PointXYZRGB>);
-
-            tempPlane = findOnePlane(temp, inliers);
-
-            colorEntirePlane(tempPlane, color);
-            *colored += *tempPlane;
-
-            temp = removeSetOfIndices(temp, inliers);
-
-        }
-        i++;
-    }
-
-    cloud->clear();
-//    return lines;
-    return colored;
-}
-
-
-Line* lineFinding::findBestLine(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud){
-
-    pcl::SampleConsensusModelLine<pcl::PointXYZRGB>::Ptr model (new pcl::SampleConsensusModelLine<pcl::PointXYZRGB> (cloud));
-    pcl::RandomSampleConsensus<pcl::PointXYZRGB> ransac (model);
-    std::vector<int> inliers;
-    Eigen::VectorXf coefficients;
-    ransac.setDistanceThreshold(0.01);
-    Line* l = NULL;
-    ransac.computeModel();
-    ransac.getInliers(inliers);
-    ransac.getModelCoefficients(coefficients);
-    l = new Line(inliers, &coefficients);
 
     return l;
-}
-
-std::vector<float> lineFinding::findIntersections(std::vector<Line*> lines){
-
-    int length = lines.size();
-    int i, j;
-    std::vector<float> angles;
-    Line* l = new Line();
-    float angle;
-
-    for(i = 0; i<length-1; i++){
-        for(j = i; j<length; j++){
-            angle = l->angleBetweenLines(lines.at(i), lines.at(j));
-            if(angle != 0) angles.push_back(angle);
-        }
-    }
-
-    return angles;
 }
