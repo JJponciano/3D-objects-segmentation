@@ -61,7 +61,6 @@ namespace cloud_object_segmentation
          * @param mixed_vector is the array to be converted
          * @param width is the width of the image
          * @param height is the height of the image
-         * @throw std::logic_error if x_epsilon is smaller or equal to 0
          * @return the resulted mixed image
          */
         image_mixed mixed_vector_to_image(
