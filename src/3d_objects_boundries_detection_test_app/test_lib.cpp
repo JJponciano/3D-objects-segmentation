@@ -87,7 +87,8 @@ int test::homogenize_cloud(std::string cloud_import_path, std::string cloud_expo
     return code;
 }
 
-int test::cloud_to_image(int img_type, std::string cloud_import_path, std::string img_export_path, float x_epsilon)
+int test::cloud_to_image(int img_type, std::string cloud_import_path, std::string img_export_path,
+                         size_t width, size_t height)
 {
     int code = 0;
 
@@ -95,11 +96,11 @@ int test::cloud_to_image(int img_type, std::string cloud_import_path, std::strin
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr = io::import_cloud(cloud_import_path);
         std::vector<point_xy_mixed> mixed_vector = cloud_manip::cloud_to_2d_mixed(cloud_ptr);
-        image_mixed mixed_img = image_processing::mixed_vector_to_image(mixed_vector, x_epsilon);
+        image_mixed mixed_img = image_processing::mixed_vector_to_image(mixed_vector, width, height);
 
         if (img_type == 0)
         {
-            image_greyscale gs_img = image_processing::cloud_to_depth_image(cloud_ptr, x_epsilon);
+            image_greyscale gs_img = image_processing::cloud_to_depth_image(cloud_ptr, width, height);
             io::export_greyscale_image(img_export_path + "/cloud_to_greyscale_image.pgm", 255, gs_img);
         }
 

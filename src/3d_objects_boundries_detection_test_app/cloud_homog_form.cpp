@@ -11,7 +11,6 @@ cloud_homog_form::cloud_homog_form(QWidget *parent) :
     ui->cloud_out_ledit->setEnabled(false);
     ui->epsilon_sb->setMinimum(1);
     ui->epsilon_sb->setMaximum(255);
-    ui->epsilon_sb->setSingleStep(25);
 }
 
 cloud_homog_form::~cloud_homog_form()

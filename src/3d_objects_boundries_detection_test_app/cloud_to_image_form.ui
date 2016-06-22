@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>472</width>
-    <height>287</height>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Cloud to Image Form</string>
   </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
@@ -62,8 +62,8 @@
   <widget class="QWidget" name="layoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>240</y>
+     <x>160</x>
+     <y>260</y>
      <width>299</width>
      <height>33</height>
     </rect>
@@ -92,25 +92,43 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget_3">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>160</y>
-     <width>151</width>
-     <height>33</height>
+     <y>170</y>
+     <width>221</width>
+     <height>71</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="varset_2">
-    <item>
-     <widget class="QLabel" name="epsilon_label">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="image_width_label">
       <property name="text">
-       <string>epsilon</string>
+       <string>image width</string>
       </property>
      </widget>
     </item>
-    <item>
-     <widget class="QDoubleSpinBox" name="epsilon_dsb"/>
+    <item row="0" column="1">
+     <widget class="QSpinBox" name="image_width_sb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="image_height_label">
+      <property name="text">
+       <string>image height</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QSpinBox" name="image_height_sb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

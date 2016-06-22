@@ -77,11 +77,15 @@
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="epsilon_sb"/>
+     <widget class="QSpinBox" name="epsilon_sb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>170</x>

@@ -22,7 +22,8 @@ namespace test
 
     int homogenize_cloud(std::string cloud_import_path, std::string cloud_export_path, short color_epsilon);
 
-    int cloud_to_image(int img_type, std::string cloud_import_path, std::string img_export_path, float x_epsilon);
+    int cloud_to_image(int img_type, std::string cloud_import_path, std::string img_export_path,
+                       size_t width, size_t height);
 
     int detect_contours(std::string img_import_path, std::string img_export_path);
 }

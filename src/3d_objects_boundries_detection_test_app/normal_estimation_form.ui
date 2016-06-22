@@ -31,7 +31,11 @@
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
-     <widget class="QSpinBox" name="max_neighbs_sb"/>
+     <widget class="QSpinBox" name="max_neighbs_sb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="max_fragm_depth_label">
@@ -41,7 +45,11 @@
      </widget>
     </item>
     <item row="0" column="1" colspan="2">
-     <widget class="QDoubleSpinBox" name="radius_dsb"/>
+     <widget class="QDoubleSpinBox" name="radius_dsb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
     </item>
     <item row="0" column="0">
      <widget class="QLabel" name="radius_label">
@@ -51,7 +59,11 @@
      </widget>
     </item>
     <item row="2" column="1" colspan="2">
-     <widget class="QSpinBox" name="max_fragm_depth_sb"/>
+     <widget class="QSpinBox" name="max_fragm_depth_sb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -73,7 +85,11 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QDoubleSpinBox" name="x_scale_dsb"/>
+     <widget class="QDoubleSpinBox" name="x_scale_dsb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="y_scale_label">
@@ -83,7 +99,11 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QDoubleSpinBox" name="y_scale_dsb"/>
+     <widget class="QDoubleSpinBox" name="y_scale_dsb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="z_scale_label">
@@ -93,7 +113,11 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QDoubleSpinBox" name="z_scale_dsb"/>
+     <widget class="QDoubleSpinBox" name="z_scale_dsb">
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -143,7 +167,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>171</x>

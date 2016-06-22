@@ -5,15 +5,15 @@ cloud_to_image_form::cloud_to_image_form(QWidget *parent, int img_type) :
     QDialog(parent),
     ui(new Ui::cloud_to_image_form)
 {
-    this->setFixedSize(472, 287);
+    this->setFixedSize(472, 307);
     ui->setupUi(this);
     ui->cloud_in_ledit->setEnabled(false);
     ui->image_out_ledit->setEnabled(false);
     ui->launch_test_btn->setEnabled(false);
-    ui->epsilon_dsb->setMinimum(0);
-    ui->epsilon_dsb->setMaximum(100.0);
-    ui->epsilon_dsb->setSingleStep(0.5);
-    ui->epsilon_dsb->setDecimals(1);
+    ui->image_width_sb->setMinimum(250);
+    ui->image_width_sb->setMaximum(10000);
+    ui->image_height_sb->setMinimum(250);
+    ui->image_height_sb->setMaximum(10000);
     _img_type = img_type;
 }
 
@@ -63,7 +63,7 @@ void cloud_to_image_form::on_launch_test_btn_clicked()
 
     test_function_return_code = test::cloud_to_image(_img_type, ui->cloud_in_ledit->text().toStdString(),
                                                      ui->image_out_ledit->text().toStdString(),
-                                                           ui->epsilon_dsb->value());
+                                                     ui->image_width_sb->value(), ui->image_height_sb->value());
 
     if (test_function_return_code)
         info_box.setText("Invalid input.");
@@ -88,7 +88,6 @@ void cloud_to_image_form::on_help_btn_clicked()
     help_msg = (std::string("This is a test for the cloud crop function.\n\n") +
                 std::string("> cloud in path - path of the input point cloud\n") +
                 std::string("> image out path - path of directory where the result image will be stored\n") +
-                std::string("> epsilon - used for delimiting the x cases of the image") +
                 std::string(" this parameter is, the smaller the number of colors in the end cloud\n"));
 
     help_box.setText(QString::fromUtf8(&help_msg[0], help_msg.size()));
