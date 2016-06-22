@@ -59,12 +59,14 @@ namespace cloud_object_segmentation
         /**
          * @brief mixed_vector_to_image converts a 2D mixed points array into a mixed image
          * @param mixed_vector is the array to be converted
-         * @param x_epsilon is used for delimiting the x cases of the image
+         * @param width is the width of the image
+         * @param height is the height of the image
          * @throw std::logic_error if x_epsilon is smaller or equal to 0
          * @return the resulted mixed image
          */
         image_mixed mixed_vector_to_image(
-                std::vector<cloud_object_segmentation::point_xy_mixed> mixed_vector, float x_epsilon);
+                std::vector<cloud_object_segmentation::point_xy_mixed> mixed_vector,
+                size_t width, size_t height);
 
         /**
          * @brief mixed_image_to_rgb turns a mixed image into an rgb image
@@ -83,11 +85,12 @@ namespace cloud_object_segmentation
         /**
          * @brief cloud_to_depth creates a depth image based on a point cloud
          * @param cloud_ptr is a pointer to our point cloud
-         * @param x_epsilon is used for delimiting the x cases of the image
+         * @param width is the width of the image
+         * @param height is the height of the image
          * @return the depth image
          */
         image_greyscale cloud_to_depth_image(
-                pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float x_epsilon);
+                pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, size_t width, size_t height);
 
         /**
          * @brief mixed_image_to_cloud creates a pointer to a point cloud based on a mixed image

@@ -83,46 +83,23 @@ std::vector<unsigned short> ns_cos::image_processing::greyscale_image_values(
 }
 
 ns_cos::image_mixed ns_cos::image_processing::mixed_vector_to_image(
-        std::vector<ns_cos::point_xy_mixed> mixed_vector, float x_epsilon)
+        std::vector<ns_cos::point_xy_mixed> mixed_vector, size_t width, size_t height)
 {
-    if (ns_cos::aux::float_cmp(x_epsilon, 0.000, 0.005) || x_epsilon < 0)
-    {
-        throw std::logic_error("x_epsilon must be bigger than 0.");
-    }
-
     std::vector<float> x_coords = ns_cos::image_processing::mixed_vector_x_coords(mixed_vector);
     std::vector<float> y_coords = ns_cos::image_processing::mixed_vector_y_coords(mixed_vector);
     float x_min = *(std::min_element(x_coords.begin(), x_coords.end()));
+    float x_max = *(std::max_element(x_coords.begin(), x_coords.end()));
     float y_min = *(std::min_element(y_coords.begin(), y_coords.end()));
     float y_max = *(std::max_element(y_coords.begin(), y_coords.end()));
-    unsigned long width = 0;    // rgb image width
-    unsigned long height = ((long)y_max - (long)y_min) + 1; // rgb image height
-
-    // determining image width
-    for (auto vector_it = mixed_vector.begin();
-         vector_it < mixed_vector.end(); vector_it++)
-
-    {
-        unsigned long point_x_cell = (unsigned long)((vector_it->x - x_min) * x_epsilon * 10);
-
-        if (point_x_cell > width)
-            width = point_x_cell + 1;
-    }
 
     ns_cos::image_mixed mixed_img(width, height);
-
     mixed_img.init();
 
     // writing data to image
-    for (auto vector_it = mixed_vector.begin();
-         vector_it < mixed_vector.end(); vector_it++)
+    for (auto vector_it = mixed_vector.begin(); vector_it < mixed_vector.end(); vector_it++)
     {
-        unsigned long image_x = (unsigned long)((vector_it->x - x_min) * x_epsilon * 10);
-        unsigned long image_y = vector_it->y - y_min;
-
-        // avoiding std::out_of_range
-        if (image_x >= mixed_img.width())
-            image_x = mixed_img.width() - 1;
+        size_t image_x = (size_t)(ns_cos::aux::map(vector_it->x, x_min, x_max, 0, (width - 1)));
+        size_t image_y = (size_t)(ns_cos::aux::map(vector_it->y, y_min, y_max, 0, (height - 1)));
 
         // the point with the highest grey scale value colors the pixel
         if (mixed_img.get_grey_at(image_y, image_x) < vector_it->greyscale())
@@ -164,13 +141,13 @@ ns_cos::image_greyscale ns_cos::image_processing::mixed_image_to_greyscale(
 }
 
 ns_cos::image_greyscale ns_cos::image_processing::cloud_to_depth_image(
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, float x_epsilon)
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_ptr, size_t width, size_t height)
 {
     std::vector<ns_cos::point_xy_mixed> mixed_pt_arr;
 
     mixed_pt_arr = ns_cos::cloud_manip::cloud_to_2d_mixed(cloud_ptr);
     ns_cos::image_mixed mixed_img = ns_cos::image_processing::mixed_vector_to_image(mixed_pt_arr,
-                                                                              x_epsilon);
+                                                                              width, height);
     ns_cos::image_greyscale gs_img = ns_cos::image_processing::mixed_image_to_greyscale(mixed_img);
 
     return gs_img;
